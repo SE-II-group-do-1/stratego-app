@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# script from https://github.com/Ne0Strix/open-realms/blob/develop/pre-commit, with their approval
+set -e
+
+files=()
+containsJava=0
+
+# iterate over all files in the staging area
+while IFS= read -r entry; do
+  status_code="${entry%% *}"
+  file="${entry#* }"
+
+  if [[ $status_code == M* ]]; then
+    files+=("$file")
+
+    if [[ $file == *.java ]]; then
+      containsJava=1
+    fi
+  fi
+done < <(git status --porcelain)
+
+# Format any javafiles with spotlessApply
+if [ "$containsJava" == "1" ]; then
+  echo "Formatting files using ./gradlew -PdisableSpotlessCheck spotlessApply"
+  ./gradlew -PdisableSpotlessCheck spotlessApply
+else
+  echo "Nothing to format"
+fi
+
+# Add back files to staging area
+for file in "${files[@]}"; do
+  trimmed_file="$(echo -e "${file}" | sed -e 's/^[[:space:]]*//')"
+  echo "re-adding $trimmed_file after formatting"
+  git add "$trimmed_file"
+done
