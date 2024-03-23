@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# script from https://github.com/Ne0Strix/open-realms/blob/develop/pre-commit, with their approval
 set -e
 
 files=()
