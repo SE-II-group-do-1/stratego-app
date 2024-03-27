@@ -1,4 +1,4 @@
-package com.example.stratego_app;
+package com.example.stratego_app.UI;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.stratego_app.R;
+import com.example.stratego_app.UI.GameBoardView;
 
 
 public class GameFragment extends Fragment {

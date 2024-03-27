@@ -1,4 +1,4 @@
-package com.example.stratego_app;
+package com.example.stratego_app.UI;
 
 import android.os.Bundle;
 
@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.View;
+
+import com.example.stratego_app.R;
+import com.example.stratego_app.UI.GameBoardView;
 
 
 public class SettingsFragment extends Fragment {
