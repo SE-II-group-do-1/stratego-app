@@ -33,7 +33,7 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-        Button startGame = view.findViewById(R.id.enterGame);
+        Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
