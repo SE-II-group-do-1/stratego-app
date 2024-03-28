@@ -10,11 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:text="Lobby"
+        android:text="waiting for opponents ... "
         android:textAlignment="viewStart"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         android:typeface="normal" />
 
 </FrameLayout>

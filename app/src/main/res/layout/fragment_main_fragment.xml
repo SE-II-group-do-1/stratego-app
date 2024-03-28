@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/board">
 
     <TextView
         android:id="@+id/gameTitle"
         android:layout_width="250dp"
         android:layout_height="75dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="84dp"
         android:fontFamily="@font/advent_pro"
         android:text="StrateGoo"
+        android:textColor="@color/black"
         android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,14 +25,17 @@
         android:id="@+id/enterUsername"
         android:layout_width="241dp"
         android:layout_height="53dp"
-        android:layout_marginTop="92dp"
-        android:autoText="false"
+        android:layout_marginTop="48dp"
+        android:background="@android:color/white"
         android:ems="10"
-        android:hint="Username"
+        android:foregroundTint="@color/AshGray"
+        android:hint="@string/username"
         android:inputType="text"
+        android:paddingStart="16dp"
+        android:textAlignment="textStart"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
+        app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gameTitle" />
 
@@ -60,7 +64,6 @@
         android:layout_height="52dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="68dp"
-        android:autoText="false"
         android:backgroundTint="@color/DeepRed"
         android:text="START Game"
         android:textColor="@color/black"
@@ -71,11 +74,14 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="com.example.stratego_app.UI.LobbyFragment"
-        android:layout_width="412dp"
-        android:layout_height="174dp"
+        android:layout_width="354dp"
+        android:layout_height="140dp"
         android:layout_marginBottom="174dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="-1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button"
@@ -87,5 +93,6 @@
         android:text="enter"
         app:layout_constraintStart_toEndOf="@+id/enterUsername"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
