@@ -31,6 +31,7 @@ public class GameFragment extends Fragment {
         // look up GameBoardView by ID - GameBoardView not implemented yet
         /*ToDo: implement GamBoardView*/
         GameBoardView gameBoardView = view.findViewById(R.id.gameBoardView);
+        gameBoardView.setConfigMode(true);
          /*
         place to add interaction modules for board game.
         Nature of implementation has not been decided on yet.

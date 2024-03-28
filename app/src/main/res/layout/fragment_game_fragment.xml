@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.stratego_app.GameBoardView
+    <com.example.stratego_app.UI.GameBoardView
         android:id="@+id/gameBoardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp" />
+
 </RelativeLayout>
