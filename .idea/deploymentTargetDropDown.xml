@@ -2,10 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MainActivity">
-        <State />
-      </entry>
-      <entry key="app">
+      <entry key="MainFragmentTest">
         <State>
           <runningDeviceTargetSelectedWithDropDown>
             <Target>
@@ -18,8 +15,23 @@
               </deviceKey>
             </Target>
           </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-26T17:03:47.047341900Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-29T06:07:04.093126200Z" />
         </State>
+      </entry>
+      <entry key="app">
+        <State />
+      </entry>
+      <entry key="testButtonsMainFragment()">
+        <State />
+      </entry>
+      <entry key="testFragmentUI()">
+        <State />
+      </entry>
+      <entry key="testMainFragmentDisplay()">
+        <State />
+      </entry>
+      <entry key="testStartGameButton()">
+        <State />
       </entry>
     </value>
   </component>

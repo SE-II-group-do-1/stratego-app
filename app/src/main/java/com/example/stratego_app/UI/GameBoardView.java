@@ -12,7 +12,7 @@ import android.view.View;
 public class GameBoardView extends View {
 
     private Paint paint;
-    private boolean isConfigMode = false; // to configurate Board in GameFragement
+    private boolean isConfigMode = false; // to configure Board in GameFragment
 
     // ToDo: check constructor if working
     // Used when creating the view in code
@@ -112,5 +112,8 @@ public class GameBoardView extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(0);
     }
+
+    //method to make squares on board clickable
+
 
 }
