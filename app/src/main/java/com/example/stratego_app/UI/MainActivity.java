@@ -4,7 +4,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.UI.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 

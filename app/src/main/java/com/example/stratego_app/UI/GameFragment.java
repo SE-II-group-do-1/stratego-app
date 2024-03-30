@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.UI.GameBoardView;
 
 
 public class GameFragment extends Fragment {
@@ -19,9 +18,6 @@ public class GameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        /*ToDo: read about how to use fragments*/
-        //Information for me: Inflating the XML file is how you create this View object from a static XML file.
-        //needed when working with fragments
         return inflater.inflate(R.layout.fragment_game_fragment, container, false);
     }
 
@@ -29,7 +25,6 @@ public class GameFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // look up GameBoardView by ID - GameBoardView not implemented yet
-        /*ToDo: implement GamBoardView*/
         GameBoardView gameBoardView = view.findViewById(R.id.gameBoardView);
         gameBoardView.setConfigMode(true);
          /*

@@ -3,9 +3,7 @@ package com.example.stratego_app.UI;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -14,7 +12,6 @@ public class GameBoardView extends View {
     private Paint paint;
     private boolean isConfigMode = false; // to configure Board in GameFragment
 
-    // ToDo: check constructor if working
     // Used when creating the view in code
     public GameBoardView(Context context) {
         super(context);

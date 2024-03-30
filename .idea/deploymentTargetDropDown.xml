@@ -2,22 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MainFragmentTest">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="RF8M3144DHB" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-29T06:07:04.093126200Z" />
-        </State>
-      </entry>
       <entry key="app">
         <State />
       </entry>
@@ -25,6 +9,9 @@
         <State />
       </entry>
       <entry key="testFragmentUI()">
+        <State />
+      </entry>
+      <entry key="testLaunchMainFragment()">
         <State />
       </entry>
       <entry key="testMainFragmentDisplay()">
