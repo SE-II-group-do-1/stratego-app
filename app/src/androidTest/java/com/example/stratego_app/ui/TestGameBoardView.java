@@ -1,4 +1,4 @@
-package com.example.stratego_app.UI;
+package com.example.stratego_app.ui;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

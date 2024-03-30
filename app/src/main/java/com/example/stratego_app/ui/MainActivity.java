@@ -1,4 +1,4 @@
-package com.example.stratego_app.UI;
+package com.example.stratego_app.ui;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

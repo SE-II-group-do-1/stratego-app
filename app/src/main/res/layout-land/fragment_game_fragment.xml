@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
 
-    <com.example.stratego_app.UI.GameBoardView
+    <com.example.stratego_app.ui.GameBoardView
         android:id="@+id/gameBoardView"
         android:layout_width="363dp"
         android:layout_height="395dp"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="435dp"
-        android:text="00:00"
+        android:text="@string/gameTime"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

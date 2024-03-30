@@ -1,4 +1,4 @@
-package com.example.stratego_app.UI;
+package com.example.stratego_app.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -65,10 +65,10 @@ public class GameBoardView extends View {
                     }
 
                 canvas.drawRect(
-                        col * cellWidth,
-                        row * cellHeight,
-                        (col + 1) * cellWidth,
-                        (row + 1) * cellHeight,
+                        (float)col * cellWidth,
+                        (float)row * cellHeight,
+                        (float)(col + 1) * cellWidth,
+                        (float)(row + 1) * cellHeight,
                         paint);
             }
         }
@@ -82,8 +82,8 @@ public class GameBoardView extends View {
         paint.setStrokeWidth(2);
 
         for (int i = 0; i <= 10; i++) {
-            canvas.drawLine(cellWidth * i, 0, cellWidth * i, getHeight(), paint);
-            canvas.drawLine(0, cellHeight * i, getWidth(), cellHeight * i, paint);
+            canvas.drawLine((float)cellWidth * i, 0, (float)cellWidth * i, getHeight(), paint);
+            canvas.drawLine(0, (float)cellHeight * i, getWidth(), (float)cellHeight * i, paint);
         }
 
         paint.setStrokeWidth(0);

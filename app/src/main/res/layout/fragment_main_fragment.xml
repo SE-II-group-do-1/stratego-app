@@ -12,7 +12,7 @@
         android:layout_height="75dp"
         android:layout_marginTop="84dp"
         android:fontFamily="@font/advent_pro"
-        android:text="StrateGoo"
+        android:text="@string/StrateGoo"
         android:textColor="@color/black"
         android:textSize="60sp"
         android:textStyle="bold"
@@ -32,6 +32,7 @@
         android:hint="@string/username"
         android:inputType="text"
         android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:textAlignment="textStart"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +47,8 @@
         android:layout_marginTop="68dp"
         android:backgroundTint="@color/AshGray"
         android:clickable="true"
-        android:text="settings editor"
+        android:focusable="true"
+        android:text="@string/settingsEditor"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -65,7 +67,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="68dp"
         android:backgroundTint="@color/DeepRed"
-        android:text="START Game"
+        android:text="@string/startGame"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +75,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.stratego_app.UI.LobbyFragment"
+        android:name="com.example.stratego_app.ui.LobbyFragment"
         android:layout_width="354dp"
         android:layout_height="140dp"
         android:layout_marginBottom="174dp"
@@ -90,7 +92,7 @@
         android:layout_marginStart="19dp"
         android:layout_marginTop="210dp"
         android:backgroundTint="@color/DarkSlateGray"
-        android:text="enter"
+        android:text="@string/enterUsername"
         app:layout_constraintStart_toEndOf="@+id/enterUsername"
         app:layout_constraintTop_toTopOf="parent" />
 
