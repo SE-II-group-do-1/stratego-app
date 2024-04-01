@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "stratego-app"
 include(":app")

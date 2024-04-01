@@ -5,6 +5,21 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="testButtonsMainFragment()">
+        <State />
+      </entry>
+      <entry key="testFragmentUI()">
+        <State />
+      </entry>
+      <entry key="testLaunchMainFragment()">
+        <State />
+      </entry>
+      <entry key="testMainFragmentDisplay()">
+        <State />
+      </entry>
+      <entry key="testStartGameButton()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
