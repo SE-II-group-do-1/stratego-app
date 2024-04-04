@@ -11,6 +11,7 @@ public class GameBoardView extends View {
 
     private Paint paint;
     private boolean isConfigMode = false; // to configure Board in GameFragment
+    private boolean displayLowerHalfOnly = false;
 
     // Used when creating the view in code
     public GameBoardView(Context context) {
@@ -35,6 +36,11 @@ public class GameBoardView extends View {
         paint.setAntiAlias(true);
     }
 
+    public void setDisplayLowerHalfOnly(boolean displayLowerHalfOnly) {
+        this.displayLowerHalfOnly = displayLowerHalfOnly;
+        invalidate(); // Redraw the view
+    }
+
     public void setConfigMode(boolean isConfigMode) {
         this.isConfigMode = isConfigMode;
         invalidate(); // Redraw the view with the new configuration
@@ -56,7 +62,9 @@ public class GameBoardView extends View {
         int cellWidth = getWidth() / 10;
         int cellHeight = getHeight() / 10;
 
-        for (int row = 0; row < 10; row++) {
+        int startRow = displayLowerHalfOnly ? 5 : 0;
+
+        for (int row = startRow; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
                     paint.setColor(Color.BLUE);
@@ -77,14 +85,21 @@ public class GameBoardView extends View {
     private void drawGridLines(Canvas canvas) {
         int cellWidth = getWidth() / 10;
         int cellHeight = getHeight() / 10;
+        int startRow = displayLowerHalfOnly ? 5 : 0; // Start row for drawing
+        int startY = displayLowerHalfOnly ? cellHeight * 5 : 0; // Y-coordinate to start drawing horizontal lines
 
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(2);
 
         for (int i = 0; i <= 10; i++) {
-            canvas.drawLine((float)cellWidth * i, 0, (float)cellWidth * i, getHeight(), paint);
-            canvas.drawLine(0, (float)cellHeight * i, getWidth(), (float)cellHeight * i, paint);
+            canvas.drawLine((float)cellWidth * i, startY, (float)cellWidth * i, getHeight(), paint);
         }
+
+        for (int i = startRow; i <= 10; i++) {
+            float y = (float)cellHeight * (i - startRow);
+            canvas.drawLine(0, y + startY, getWidth(), y + startY, paint);
+        }
+
 
         paint.setStrokeWidth(0);
     }

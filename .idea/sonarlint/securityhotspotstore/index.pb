@@ -93,3 +93,11 @@ z
 Japp/src/androidTest/java/com/example/stratego_app/ui/MainFragmentTest.java,c\6\c61aedc9b1feecbd0eb0a35c49e463971cd2e35b
 {
 Kapp/src/androidTest/java/com/example/stratego_app/ui/TestGameBoardView.java,2\c\2c842a2df06d765f15527f03b50037dff5b0ab79
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+p
+@app/src/main/java/com/example/stratego_app/ui/PiecesAdapter.java,c\a\ca400ae625db6fb76355938e57c92124ba14e791
+Å
+Q.idea/sonarlint/securityhotspotstore/c/a/ca400ae625db6fb76355938e57c92124ba14e791,2\8\284896e1132ad74cdc2e9327d9ee36afc51afbb7
+w
+G.idea/sonarlint/issuestore/c/a/ca400ae625db6fb76355938e57c92124ba14e791,5\8\58c1a3b87fe86ec129dfb534dce7688d4c5cf0c1
