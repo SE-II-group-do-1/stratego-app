@@ -93,3 +93,5 @@ z
 Japp/src/androidTest/java/com/example/stratego_app/ui/MainFragmentTest.java,c\6\c61aedc9b1feecbd0eb0a35c49e463971cd2e35b
 {
 Kapp/src/androidTest/java/com/example/stratego_app/ui/TestGameBoardView.java,2\c\2c842a2df06d765f15527f03b50037dff5b0ab79
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
