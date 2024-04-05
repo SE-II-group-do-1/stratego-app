@@ -41,8 +41,6 @@ public class LobbyFragment extends Fragment {
 
     private void displayUsernames() {
         if (playersContainer == null) {
-            // Log an error or return early if playersContainer is null.
-            Log.e("LobbyFragment", "playersContainer is null.");
             return;
         }
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences("LobbyPrefs", Context.MODE_PRIVATE);
