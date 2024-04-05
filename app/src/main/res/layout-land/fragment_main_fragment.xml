@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toStartOf="@+id/startGame"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/enterButton" />
 
     <Button
         android:id="@+id/startGame"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/gameTitle" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/enterButton"
         android:layout_width="90dp"
         android:layout_height="44dp"
         android:layout_marginStart="40dp"
