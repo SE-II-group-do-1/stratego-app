@@ -1,12 +1,9 @@
 package com.example.stratego_app.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
-
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -43,8 +38,7 @@ public class LobbyFragment extends Fragment {
         if (playersContainer == null) {
             return;
         }
-        SharedPreferences sharedPrefs = getActivity().getSharedPreferences("LobbyPrefs", Context.MODE_PRIVATE);
-        Set<String> usernames = sharedPrefs.getStringSet("usernames", new HashSet<>());
+        Set<String> usernames = MockSessionService.getUsernames();
 
         // Clear existing views to prevent duplication if this method is called again
         playersContainer.removeAllViews();

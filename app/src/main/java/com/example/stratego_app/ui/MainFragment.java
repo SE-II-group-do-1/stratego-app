@@ -1,7 +1,5 @@
 package com.example.stratego_app.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,12 +14,9 @@ import android.widget.EditText;
 
 import com.example.stratego_app.R;
 
-import java.util.HashSet;
-import java.util.Set;
 
 public class MainFragment extends Fragment {
 
-    private static final String PLAYER_USERNAME = "usernames";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +38,7 @@ public class MainFragment extends Fragment {
 
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
-            clearUsernames();
+            MockSessionService.clearUsernames();
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -56,37 +51,29 @@ public class MainFragment extends Fragment {
         Button enter = view.findViewById(R.id.enterButton);
         enter.setOnClickListener(view1 -> {
             EditText usernameEntry = view.findViewById(R.id.enterUsername);
-            String username = usernameEntry.getText().toString();
+            String username = usernameEntry.getText().toString().trim();
 
-            saveUsername(username);
+
+            if (!username.isEmpty()) {
+                MockSessionService.addUsername(username); // Add username to mock service
+                LobbyFragment lobbyFragment = new LobbyFragment();
+
+                // Create a bundle to pass the username
+                Bundle args = new Bundle();
+                args.putString("username", username);
+                lobbyFragment.setArguments(args);
+
+            }
             usernameEntry.setText("");
 
-            LobbyFragment lobbyFragment = new LobbyFragment();
 
-            // Create a bundle to pass the username
-            Bundle args = new Bundle();
-            args.putString("username", username);
-            lobbyFragment.setArguments(args);
 
             FragmentManager fragmentManger = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentContainerView, lobbyFragment); // Ensure you use the correct container ID
+            fragmentTransaction.replace(R.id.fragmentContainerView, new LobbyFragment()); // Ensure you use the correct container ID
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
 
-    }
-
-    private void saveUsername(String username) {
-        SharedPreferences sharedPrefs = getActivity().getSharedPreferences("LobbyPrefs", Context.MODE_PRIVATE);
-        Set<String> usernames = new HashSet<>(sharedPrefs.getStringSet(PLAYER_USERNAME, new HashSet<>()));
-        usernames.add(username);
-        sharedPrefs.edit().putStringSet(PLAYER_USERNAME, usernames).commit();
-    }
-
-    //this method needs to be adapted when the Server is ready.
-    private void clearUsernames() {
-        SharedPreferences sharedPrefs = getActivity().getSharedPreferences("LobbyPrefs", Context.MODE_PRIVATE);
-        sharedPrefs.edit().remove(PLAYER_USERNAME).apply();
     }
 }
