@@ -13,7 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/DeepRed"
-        android:text="leave game" />
+        android:text="@string/leave_game" />
 
     <LinearLayout
         android:id="@+id/linearTimeContainer"
@@ -31,7 +31,7 @@
             android:id="@+id/labelTimePlayed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time playing:"
+            android:text="@string/time_playing"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <TextView
