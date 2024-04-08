@@ -5,15 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.LobbyFragment">
 
-    <TextView
-        android:id="@+id/playerLobby"
+    <LinearLayout
+        android:id="@+id/playersContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="@string/lobby"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:typeface="normal" />
+        android:orientation="vertical"
+        android:padding="16dp">
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -8,4 +8,7 @@
     <string name="enterUsername">enter</string>
     <string name="gameTime">00:00</string>
     <string name="lobby">waiting for opponents ...</string>
+    <string name="flag" />
+    <string name="leave_game">leave game</string>
+    <string name="time_playing">Time playing:</string>
 </resources>

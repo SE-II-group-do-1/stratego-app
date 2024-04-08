@@ -10,15 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.stratego_app.R;
 
+
 public class MainFragment extends Fragment {
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_fragment, container, false);
     }
 
@@ -36,9 +38,39 @@ public class MainFragment extends Fragment {
 
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
+            MockSessionService.clearUsernames();
+
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
+
+
+        Button enter = view.findViewById(R.id.enterButton);
+        enter.setOnClickListener(view1 -> {
+            EditText usernameEntry = view.findViewById(R.id.enterUsername);
+            String username = usernameEntry.getText().toString().trim();
+
+
+            if (!username.isEmpty()) {
+                MockSessionService.addUsername(username); // Add username to mock service
+                LobbyFragment lobbyFragment = new LobbyFragment();
+
+                // Create a bundle to pass the username
+                Bundle args = new Bundle();
+                args.putString("username", username);
+                lobbyFragment.setArguments(args);
+
+            }
+            usernameEntry.setText("");
+
+
+
+            FragmentManager fragmentManger = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainerView, new LobbyFragment()); // Ensure you use the correct container ID
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
