@@ -3,12 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <com.example.stratego_app.ui.GameBoardView
-        android:id="@+id/gameBoardView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp" />
+    <TextView
+        android:id="@+id/labelTimePlayed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:text="Time playing:"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 
     <TextView
@@ -16,8 +19,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="435dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:text="@string/gameTime"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+
+    <com.example.stratego_app.ui.GameBoardView
+        android:id="@+id/gameBoardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeCounter"
+        android:layout_marginTop="16dp"
+        android:layout_margin="16dp" />
 
 </RelativeLayout>
