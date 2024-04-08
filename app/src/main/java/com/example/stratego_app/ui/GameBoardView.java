@@ -67,7 +67,7 @@ public class GameBoardView extends View {
         for (int row = startRow; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
-                    paint.setColor(Color.BLUE);
+                    paint.setColor(Color.parseColor("#4169E1"));
                 } else {
                     paint.setColor(Color.LTGRAY);
                     }
@@ -88,8 +88,8 @@ public class GameBoardView extends View {
         int startRow = displayLowerHalfOnly ? 5 : 0; // Start row for drawing
         int startY = displayLowerHalfOnly ? cellHeight * 5 : 0; // Y-coordinate to start drawing horizontal lines
 
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(2);
+        paint.setColor(Color.parseColor("#B2BEB5"));
+        paint.setStrokeWidth(7);
 
         for (int i = 0; i <= 10; i++) {
             canvas.drawLine((float)cellWidth * i, startY, (float)cellWidth * i, getHeight(), paint);
@@ -115,7 +115,7 @@ public class GameBoardView extends View {
     }
 
     private void drawBoardFrame(Canvas canvas) {
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.parseColor("#B2BEB5"));
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(30);
 
