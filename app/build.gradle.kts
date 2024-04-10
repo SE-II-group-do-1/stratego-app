@@ -70,7 +70,8 @@ sonar {
         property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         // Exclude UI tests from SonarQube analysis
-        property("sonar.test.exclusions", "**src/main/java/com/example/stratego_app/ui/**")
+        property("sonar.coverage.exclusions", "src/main/java/com/example/stratego_app/ui/**," +
+                "src/main/java/com/example/stratego_app/ui/MockSessionService.java")
     }
 }
 
