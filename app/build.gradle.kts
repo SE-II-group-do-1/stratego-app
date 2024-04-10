@@ -74,6 +74,9 @@ sonar {
     }
 }
 
+
+
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -90,5 +93,10 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.test:runner:1.4.0")
     androidTestImplementation("androidx.test:rules:1.4.0")
+    implementation(libs.okhttp)
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("com.google.code.gson:gson:2.3.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.5")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.0")
 
 }

@@ -2,22 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MainActivity">
-        <State />
-      </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="testButtonsMainFragment()">
-        <State />
-      </entry>
-      <entry key="testLaunchMainFragment()">
-        <State />
-      </entry>
-      <entry key="testMainFragmentDisplay()">
-        <State />
-      </entry>
-      <entry key="testStartGameButton()">
         <State />
       </entry>
     </value>
