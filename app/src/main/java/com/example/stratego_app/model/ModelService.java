@@ -30,28 +30,20 @@ public class ModelService implements ModelServiceI{
     }
     //validateMove could just be deactivated with a cheat button
     private boolean validateMove(int startX, int startY, int endX, int endY) {
-        Piece movingPiece = board.getField(startY, startX);
-        if (movingPiece == null || !movingPiece.isMovable()) return false;
-
-        if (endX < 0 || endY < 0 || endX >= 10 || endY >= 10) {
-            return false; // Move is out of bounds
-        }
-        Piece destinationPiece = board.getField(endY, endX);
-        if (destinationPiece != null && destinationPiece.getRank() != Rank.LAKE) {
-            return false; // Destination is blocked by another piece that cannot be captured
-            //TODO complete check if the moving piece is a different color and has a higher rank
-        }
-
-        return false;
+        return startX > startY && endX > endY;
     }
 
     @Override
     public void updateBoard(Piece[][] newBoard) {
-        // TODO update board with server
+        //update the board from the server
     }
 
     @Override
     public Piece getPieceAtPosition(int x, int y) {
         return null;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }
