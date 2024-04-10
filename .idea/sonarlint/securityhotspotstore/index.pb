@@ -95,3 +95,27 @@ Japp/src/androidTest/java/com/example/stratego_app/ui/MainFragmentTest.java,c\6
 Kapp/src/androidTest/java/com/example/stratego_app/ui/TestGameBoardView.java,2\c\2c842a2df06d765f15527f03b50037dff5b0ab79
 D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+r
+Bapp/src/main/java/com/example/stratego_app/model/ModelService.java,1/3/1356cba0dc2e739f2a673b73f573161ccb918396
+s
+Capp/src/main/java/com/example/stratego_app/model/ModelServiceI.java,c/3/c3c8c0b0076d81bfe0904a65914c08356daf11a4
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+r
+Bapp/src/main/java/com/example/stratego_app/model/Pieces/Board.java,a/c/ace9fda3593f599f44709e17f51fb864dce4c1f2
+r
+Bapp/src/main/java/com/example/stratego_app/model/Pieces/Color.java,a/8/a8c5aad4a01c13e6a022bb2122837a26da0a79fa
+r
+Bapp/src/main/java/com/example/stratego_app/model/Pieces/Piece.java,a/d/ada5efbbcccf3e39ec84bd7edb8a723e2f6069c1
+q
+Aapp/src/main/java/com/example/stratego_app/model/Pieces/Rank.java,c/4/c4eade3d975b2f9f3b593389d7f371ba474a3583
+w
+Gapp/src/androidTest/java/com/example/stratego_app/Pieces/PieceTest.java,7/2/7233c9fd76368c1071b71fd7decbb4a34d5f32e9
+r
+Bapp/src/main/java/com/example/stratego_app/model/pieces/Color.java,8/2/82d29b5796b7790514e5febeee18b52dc4172ebe
+r
+Bapp/src/main/java/com/example/stratego_app/model/pieces/Piece.java,2/e/2eaf96ed9e8ec1fcefceab817799b8db529265f8
+r
+Bapp/src/main/java/com/example/stratego_app/model/pieces/Board.java,7/c/7c30aa51a3b4570a3e9cfdfa04e6015b37ad82f5
+q
+Aapp/src/main/java/com/example/stratego_app/model/pieces/Rank.java,9/0/906c03403c6f5f3dee0e2d51924185d82e38a773

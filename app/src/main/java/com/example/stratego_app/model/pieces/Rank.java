@@ -1,4 +1,4 @@
-package com.example.stratego_app.model.Pieces;
+package com.example.stratego_app.model.pieces;
 
 public enum Rank {
     MARSHAL,

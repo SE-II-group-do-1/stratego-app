@@ -1,10 +1,9 @@
-package com.example.stratego_app.model.Pieces;
+package com.example.stratego_app.model.pieces;
 
 public class Piece {
     private Rank rank;
     private boolean isVisible;
-    private boolean isMovable;
-    private Color color; // Adding color to distinguish between players' pieces
+    private Color color; // Adding color to distinguish between players pieces
     private int id; // Optional: useful for tracking specific pieces in complex logic
 
     //normal Constructor
@@ -13,13 +12,12 @@ public class Piece {
         this.color = color;
         this.id = id;
         this.isVisible = false;
-        this.isMovable = rank != Rank.LAKE && rank != Rank.FLAG && rank != Rank.BOMB;
     }
     //Constructor for lakes
     public Piece(Rank rank) {
         this.rank = rank;
         this.isVisible = true; // Lakes are always visible
-        this.isMovable = false; // Lakes do not move
+
     }
 
     public Rank getRank() {
@@ -49,6 +47,8 @@ public class Piece {
             default:
                 return true;
         }
+
+
 
     }
 }

@@ -1,6 +1,6 @@
 package com.example.stratego_app.model;
 
-import com.example.stratego_app.model.Pieces.*;
+import com.example.stratego_app.model.pieces.*;
 
 public class ModelService implements ModelServiceI{
     private Board board;
@@ -39,6 +39,7 @@ public class ModelService implements ModelServiceI{
         Piece destinationPiece = board.getField(endY, endX);
         if (destinationPiece != null && destinationPiece.getRank() != Rank.LAKE) {
             return false; // Destination is blocked by another piece that cannot be captured
+            //TODO complete check if the moving piece is a different color and has a higher rank
         }
 
         return false;
@@ -46,7 +47,7 @@ public class ModelService implements ModelServiceI{
 
     @Override
     public void updateBoard(Piece[][] newBoard) {
-
+        // TODO update board with server
     }
 
     @Override
