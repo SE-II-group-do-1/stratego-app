@@ -1,9 +1,11 @@
 package com.example.stratego_app.ui;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
+import com.example.stratego_app.connection.clients.LobbyClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,5 +20,8 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, new MainFragment())
                     .commit();
         }
+
+        LobbyClient lc = new LobbyClient();
+        lc.connect();
     }
 }

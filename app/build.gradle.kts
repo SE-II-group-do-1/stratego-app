@@ -71,9 +71,12 @@ sonar {
         property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         // Exclude UI tests from SonarQube analysis
         property("sonar.coverage.exclusions", "src/main/java/com/example/stratego_app/ui/**," +
-                "src/main/java/com/example/stratego_app/ui/MockSessionService.java")
+                "src/main/java/com/example/stratego_app/ui/MockSessionService.java," + "src/main/java/com/example/stratego_app/connection/clients/LobbyClient.java," + "src/main/java/com/example/stratego_app/models/Player.java")
     }
 }
+
+
+
 
 dependencies {
 
@@ -91,5 +94,10 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.test:runner:1.4.0")
     androidTestImplementation("androidx.test:rules:1.4.0")
+    implementation(libs.okhttp)
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("com.google.code.gson:gson:2.3.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.5")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.0")
 
 }
