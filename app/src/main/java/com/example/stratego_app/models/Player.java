@@ -1,6 +1,4 @@
-package com.example.stratego_app.connection;
-
-import java.util.Objects;
+package com.example.stratego_app.models;
 
 public class Player {
     private String username;

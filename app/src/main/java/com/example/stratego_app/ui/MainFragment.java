@@ -1,20 +1,16 @@
 package com.example.stratego_app.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.Player;
-import com.example.stratego_app.connection.WebsocketLobbyClient;
 
 public class MainFragment extends Fragment {
 
@@ -45,10 +41,5 @@ public class MainFragment extends Fragment {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
-        WebsocketLobbyClient client = new WebsocketLobbyClient();
-        client.connect();
-        client.joinLobby(new Player(1, "Angi"));
-
-
     }
 }

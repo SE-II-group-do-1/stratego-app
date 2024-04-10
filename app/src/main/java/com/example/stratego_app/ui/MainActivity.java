@@ -1,12 +1,11 @@
 package com.example.stratego_app.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.WebsocketLobbyClient;
+import com.example.stratego_app.connection.clients.LobbyClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-
+        LobbyClient lc = new LobbyClient();
+        lc.connect();
     }
 }

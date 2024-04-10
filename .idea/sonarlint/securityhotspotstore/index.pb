@@ -95,3 +95,7 @@ Japp/src/androidTest/java/com/example/stratego_app/ui/MainFragmentTest.java,c\6
 Kapp/src/androidTest/java/com/example/stratego_app/ui/TestGameBoardView.java,2\c\2c842a2df06d765f15527f03b50037dff5b0ab79
 D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+~
+Napp/src/main/java/com/example/stratego_app/connection/clients/LobbyClient.java,f\8\f863fa2fa41ecf17b2c204cee3b4de69372a03fa
+m
+=app/src/main/java/com/example/stratego_app/models/Player.java,9\3\938a08eb0b9bf8b688fab32c8e2134abb6451bc0
