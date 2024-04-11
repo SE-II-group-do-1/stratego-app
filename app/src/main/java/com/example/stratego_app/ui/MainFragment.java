@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stratego_app.R;
+import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.models.Player;
 
 
 public class MainFragment extends Fragment {
@@ -47,32 +49,27 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-
         Button enter = view.findViewById(R.id.enterButton);
         enter.setOnClickListener(view1 -> {
             EditText usernameEntry = view.findViewById(R.id.enterUsername);
             String username = usernameEntry.getText().toString().trim();
 
-
             if (!username.isEmpty()) {
-                MockSessionService.addUsername(username); // Add username to mock service
+
+                Player player = new Player(2, username);
+                LobbyClient lc = new LobbyClient();
+                lc.connect();
+                lc.joinLobby(player);
+
+                // Navigate to LobbyFragment
                 LobbyFragment lobbyFragment = new LobbyFragment();
-
-                // Create a bundle to pass the username
-                Bundle args = new Bundle();
-                args.putString("username", username);
-                lobbyFragment.setArguments(args);
-
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainerView, lobbyFragment); // Use the correct ID
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
             usernameEntry.setText("");
-
-
-
-            FragmentManager fragmentManger = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentContainerView, new LobbyFragment()); // Ensure you use the correct container ID
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
         });
 
     }
