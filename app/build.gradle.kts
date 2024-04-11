@@ -42,9 +42,9 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
 
     reports {
-        xml.required = true
-        html.required = false
-        xml.getOutputLocation().set(file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
+        xml.required.set(true)
+        html.required.set(false)
+        xml.outputLocation.set(file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
     }
 
     val fileFilter = mutableSetOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
@@ -75,6 +75,9 @@ sonar {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+}
 
 
 
