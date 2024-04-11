@@ -58,9 +58,6 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     executionData.setFrom("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
 }
 
-tasks.named("jacocoTestReport") {
-    finalizedBy(this)
-}
 
 sonar {
     properties {
