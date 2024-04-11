@@ -11,10 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
-import java.util.Set;
+import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.connection.clients.LobbyClientListener;
+import com.example.stratego_app.models.Player;
+
+import java.util.List;
 
 
-public class LobbyFragment extends Fragment {
+public class LobbyFragment extends Fragment implements LobbyClientListener {
 
     private LinearLayout playersContainer;
     public LobbyFragment() {
@@ -25,27 +29,38 @@ public class LobbyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_lobby, container, false);
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         playersContainer = view.findViewById(R.id.playersContainer);
-        displayUsernames();
+
+        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
+        lobbyClient.registerListener(this);
+
     }
 
-    private void displayUsernames() {
-        if (playersContainer == null) {
-            return;
-        }
-        Set<String> usernames = MockSessionService.getUsernames();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
-        // Clear existing views to prevent duplication if this method is called again
-        playersContainer.removeAllViews();
+        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
+        lobbyClient.unregisterListener(this);
 
-        for (String username : usernames) {
-            addPlayerToView(username);
-        }
+    }
+
+    @Override
+    public void onLobbyUpdated(List<Player> players) {
+        if (getActivity() == null) return;
+
+        getActivity().runOnUiThread(() -> {
+            playersContainer.removeAllViews();
+            for (Player player : players) {
+                addPlayerToView(player.getUsername());
+            }
+        });
     }
     private void addPlayerToView(String playerName) {
         TextView playerView = new TextView(getContext());
