@@ -44,7 +44,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     reports {
         xml.required.set(true)
         html.required.set(false)
-        xml.outputLocation.set(file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
+        xml.outputLocation.set(file("${project.projectDir}/build/reports/jacoco/test/jacocoTestReport.xml"))
     }
 
     val fileFilter = mutableSetOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
@@ -65,7 +65,7 @@ sonar {
         property("sonar.organization", "se-ii-group-do-1")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/test/jacocoTestReport.xml")
         // Exclude UI tests from SonarQube analysis
         property("sonar.coverage.exclusions", "src/main/java/com/example/stratego_app/ui/**," +
                 "src/main/java/com/example/stratego_app/ui/MockSessionService.java," + "src/main/java/com/example/stratego_app/connection/clients/LobbyClient.java," + "src/main/java/com/example/stratego_app/models/Player.java")
