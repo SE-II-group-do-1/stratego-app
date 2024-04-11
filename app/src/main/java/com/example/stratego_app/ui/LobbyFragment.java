@@ -11,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
+import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.models.Player;
+
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,11 +34,24 @@ public class LobbyFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        playersContainer = view.findViewById(R.id.playersContainer);
-        displayUsernames();
     }
 
-    private void displayUsernames() {
+    private void displayUsernames(List<Player> players) {
+        // Ensure playersContainer is not null
+        if (playersContainer == null) {
+            return;
+        }
+
+        // Clear existing views to prevent duplication
+        playersContainer.removeAllViews();
+
+        // Iterate over the list of players and add each to the view
+        for (Player player : players) {
+            addPlayerToView(player.getUsername());
+        }
+    }
+
+    /*private void displayUsernames() {
         if (playersContainer == null) {
             return;
         }
@@ -46,7 +63,7 @@ public class LobbyFragment extends Fragment {
         for (String username : usernames) {
             addPlayerToView(username);
         }
-    }
+    }*/
     private void addPlayerToView(String playerName) {
         TextView playerView = new TextView(getContext());
         playerView.setLayoutParams(new ViewGroup.LayoutParams(

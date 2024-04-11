@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stratego_app.R;
+import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.models.Player;
 
 
 public class MainFragment extends Fragment {
@@ -52,21 +55,20 @@ public class MainFragment extends Fragment {
         enter.setOnClickListener(view1 -> {
             EditText usernameEntry = view.findViewById(R.id.enterUsername);
             String username = usernameEntry.getText().toString().trim();
-
+            Log.d("MainFragment", "Attempting to join lobby with username: " + username);
 
             if (!username.isEmpty()) {
-                MockSessionService.addUsername(username); // Add username to mock service
+
+                Log.d("MainFragment", "Username entered: " + username + ", joining lobby...");
+                usernameEntry.setText("");
+
                 LobbyFragment lobbyFragment = new LobbyFragment();
 
                 // Create a bundle to pass the username
                 Bundle args = new Bundle();
                 args.putString("username", username);
                 lobbyFragment.setArguments(args);
-
             }
-            usernameEntry.setText("");
-
-
 
             FragmentManager fragmentManger = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();

@@ -56,6 +56,7 @@ public class LobbyClient implements Disposable {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLobbyChange, throwable -> Log.e(TAG, "error", throwable));
 
+        Log.d(TAG, "Subscribed to /topic/lobby");
         disposable.add(lobby);
 
         client.connect();
@@ -64,11 +65,14 @@ public class LobbyClient implements Disposable {
     private void onLobbyChange(StompMessage stompMessage) {
         Log.d("stomp", stompMessage.getPayload());
         currentLobby = gson.<List<Player>>fromJson(stompMessage.getPayload(), List.class);
+        Log.d(TAG, "Number of players in current lobby: " + currentLobby.size());
     }
 
     public void joinLobby(Player player) {
         String data = gson.toJson(player);
+        Log.e(TAG, "Sending JSON to /app/join: " + data);
         client.send("/app/join", data);
+        Log.e(TAG, "JSON successfully sent to /app/join");
     }
 
     public void leaveLobby(Player player) {

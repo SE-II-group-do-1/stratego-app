@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.models.Player;
 
 public class MainActivity extends AppCompatActivity {
+
+    private LobbyClient lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,5 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         LobbyClient lc = new LobbyClient();
         lc.connect();
+
+        Player player = new Player(6, "test");
+        lc.joinLobby(player);
     }
+
 }
