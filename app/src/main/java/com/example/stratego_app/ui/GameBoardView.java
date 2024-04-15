@@ -60,7 +60,7 @@ public class GameBoardView extends View {
     }
 
 
-    private void drawBoard(Canvas canvas) {
+   private void drawBoard(Canvas canvas) {
         int cellWidth = getWidth() / 10;
         int cellHeight = getHeight() / 10;
 
@@ -83,6 +83,7 @@ public class GameBoardView extends View {
             }
         }
     }
+
 
     private void drawGridLines(Canvas canvas) {
         int cellWidth = getWidth() / 10;
@@ -113,7 +114,7 @@ public class GameBoardView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+        super.onMeasure(widthMeasureSpec, displayLowerHalfOnly ? widthMeasureSpec / 2 : widthMeasureSpec);
     }
 
     private void drawBoardFrame(Canvas canvas) {
