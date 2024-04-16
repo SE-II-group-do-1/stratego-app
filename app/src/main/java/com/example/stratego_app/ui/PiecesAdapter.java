@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -15,8 +16,8 @@ import com.example.stratego_app.R;
 
 import java.util.List;
 
-public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewHolder> {
 
+public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewHolder> {
     private List<String> pieces;
 
     public PiecesAdapter(List<String> pieces) {
@@ -35,13 +36,14 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
         String pieceType = pieces.get(position); // e.g., "bomb", "flag", etc.
         Context context = holder.imageView.getContext();
         int drawableId = context.getResources().getIdentifier(pieceType, "drawable", context.getPackageName());
-        int descriptionId = context.getResources().getIdentifier("piece_" + pieceType + "_desc", "string", context.getPackageName());
 
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);
-        String description = context.getString(descriptionId);
+        String description = context.getString(context.getResources().getIdentifier(
+                "piece_" + pieceType + "_desc", "string", context.getPackageName()));
 
         holder.imageView.setImageDrawable(drawable);
         holder.imageView.setContentDescription(description);
+        holder.nameTextView.setText(pieceType);
     }
 
     @Override
@@ -51,10 +53,12 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
 
     public static class PieceViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView nameTextView;
 
         public PieceViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.pieceImageView);
+            nameTextView = itemView.findViewById(R.id.pieceNameTextView);  // Connect the TextView
         }
     }
 }

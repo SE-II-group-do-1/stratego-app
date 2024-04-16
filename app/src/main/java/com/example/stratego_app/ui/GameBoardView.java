@@ -114,8 +114,13 @@ public class GameBoardView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, displayLowerHalfOnly ? widthMeasureSpec / 2 : widthMeasureSpec);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int size = Math.min(width, height);  // Ensures the view remains square
+        setMeasuredDimension(size, size);
     }
+
 
     private void drawBoardFrame(Canvas canvas) {
         paint.setColor(Color.parseColor("#B2BEB5"));
