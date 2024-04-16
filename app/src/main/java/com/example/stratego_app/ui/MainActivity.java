@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        LobbyClient lc = new LobbyClient();
+        lc = new LobbyClient();
         lc.connect();
     }
 
