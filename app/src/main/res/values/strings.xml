@@ -26,4 +26,8 @@
     <string name="piece_scout_desc">Scout</string>
     <string name="piece_sergeant_desc">Sergeant</string>
     <string name="piece_spion_desc">Spion</string>
+    <string name="settings_editor">Settings Editor</string>
+    <string name="clear">clear</string>
+    <string name="fill_board">fill board</string>
+    <string name="save">save</string>
 </resources>

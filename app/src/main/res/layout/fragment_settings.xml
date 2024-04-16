@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,27 +9,45 @@
     <view
         android:id="@+id/settingsGameBoardView"
         class="com.example.stratego_app.ui.GameBoardView"
-        android:layout_width="379dp"
-        android:layout_height="120dp"
+        android:layout_width="878dp"
+        android:layout_height="374dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="352dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="596dp"
+        android:backgroundTint="@color/OliveDrab"
+        android:text="@string/save"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/fillButton"
         android:layout_width="131dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="291dp"
         android:layout_marginEnd="115dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="596dp"
         android:backgroundTint="@color/AshGray"
-        android:text="fill board"
+        android:text="@string/fill_board"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/clearButton"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <Button
         android:id="@+id/clearButton"
@@ -38,44 +55,48 @@
         android:layout_height="46dp"
         android:layout_marginStart="182dp"
         android:layout_marginEnd="121dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="596dp"
         android:backgroundTint="@color/Cream"
-        android:text="clear"
+        android:text="@string/clear"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/saveButton"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="90dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="292dp"
-        android:layout_marginTop="291dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/OliveDrab"
-        android:text="save"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/piecesRecyclerView"
-        android:layout_width="381dp"
-        android:layout_height="281dp"
-        android:layout_margin="4dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="29dp"
+        android:layout_width="384dp"
+        android:layout_height="344dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="5dp"
         android:padding="4dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/clearButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsGameBoardView" />
+
+    <TextView
+        android:id="@+id/textSettingsEditor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="93dp"
+        android:layout_marginBottom="641dp"
+        android:text="@string/settings_editor"
+        android:textColor="@color/DarkSlateGray"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
