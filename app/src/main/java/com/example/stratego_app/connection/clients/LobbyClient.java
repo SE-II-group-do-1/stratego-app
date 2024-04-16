@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.stratego_app.models.Player;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,22 @@ public class LobbyClient implements Disposable {
     private final Gson gson = new Gson();
     private List<Player> currentLobby = new ArrayList<>();
     private StompClient client;
+
+    private final List<LobbyClientListener> listeners = new ArrayList<>();
+
+    public void registerListener(LobbyClientListener listener) {
+        listeners.add(listener);
+    }
+
+    public void unregisterListener(LobbyClientListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyListeners(List<Player> newLobby) {
+        for (LobbyClientListener listener : listeners) {
+            listener.onLobbyUpdated(newLobby);
+        }
+    }
 
 
     public void connect() {
@@ -56,23 +73,20 @@ public class LobbyClient implements Disposable {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLobbyChange, throwable -> Log.e(TAG, "error", throwable));
 
-        Log.d(TAG, "Subscribed to /topic/lobby");
         disposable.add(lobby);
 
         client.connect();
     }
-
     private void onLobbyChange(StompMessage stompMessage) {
         Log.d("stomp", stompMessage.getPayload());
-        currentLobby = gson.<List<Player>>fromJson(stompMessage.getPayload(), List.class);
-        Log.d(TAG, "Number of players in current lobby: " + currentLobby.size());
+        currentLobby = gson.<List<Player>>fromJson(stompMessage.getPayload(),
+                new TypeToken<List<Player>>() {}.getType());
+        notifyListeners(currentLobby);
     }
 
     public void joinLobby(Player player) {
         String data = gson.toJson(player);
-        Log.e(TAG, "Sending JSON to /app/join: " + data);
-        client.send("/app/join", data);
-        Log.e(TAG, "JSON successfully sent to /app/join");
+        client.send("/app/join", data).subscribe();
     }
 
     public void leaveLobby(Player player) {
