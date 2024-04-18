@@ -38,13 +38,18 @@ tasks.withType<Test>().configureEach{
     useJUnitPlatform()
 }
 
+//if report task is not executed automatically
+tasks.named("build").configure {
+    dependsOn("jacocoTestReport")
+}
+
 tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
 
     reports {
-        xml.required = true
-        html.required = false
-        xml.getOutputLocation().set(file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
+        xml.required.set(true)
+        html.required.set(false)
+        xml.outputLocation.set(file("${project.projectDir}/build/reports/jacoco/test/jacocoTestReport.xml"))
     }
 
     val fileFilter = mutableSetOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
@@ -58,23 +63,25 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     executionData.setFrom("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
 }
 
-tasks.named("jacocoTestReport") {
-    finalizedBy(this)
+tasks.withType<Test> {
+    finalizedBy("jacocoTestReport")
 }
-
 sonar {
     properties {
         property("sonar.projectKey", "SE-II-group-do-1_stratego-app")
         property("sonar.organization", "se-ii-group-do-1")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/test/jacocoTestReport.xml")
         // Exclude UI tests from SonarQube analysis
         property("sonar.coverage.exclusions", "src/main/java/com/example/stratego_app/ui/**," +
                 "src/main/java/com/example/stratego_app/ui/MockSessionService.java," + "src/main/java/com/example/stratego_app/connection/clients/LobbyClient.java," + "src/main/java/com/example/stratego_app/models/Player.java")
     }
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+}
 
 
 
