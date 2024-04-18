@@ -11,4 +11,23 @@
     <string name="flag" />
     <string name="leave_game">leave game</string>
     <string name="time_playing">Time playing:</string>
+
+
+    <string name="piece_image_desc">Description of the piece</string>
+    <string name="piece_bomb_desc">Bomb</string>
+    <string name="piece_flag_desc">Flag</string>
+    <string name="piece_captain_desc">Captain</string>
+    <string name="piece_colonel_desc">Colonel</string>
+    <string name="piece_general_desc">General</string>
+    <string name="piece_lieutnant_desc">Lieutnant</string>
+    <string name="piece_major_desc">Major</string>
+    <string name="piece_marshall_desc">Marshall</string>
+    <string name="piece_miner_desc">Miner</string>
+    <string name="piece_scout_desc">Scout</string>
+    <string name="piece_sergeant_desc">Sergeant</string>
+    <string name="piece_spion_desc">Spion</string>
+    <string name="settings_editor">Settings Editor</string>
+    <string name="clear">clear</string>
+    <string name="fill_board">fill board</string>
+    <string name="save">save</string>
 </resources>
