@@ -38,6 +38,11 @@ tasks.withType<Test>().configureEach{
     useJUnitPlatform()
 }
 
+//if report task is not executed automatically
+tasks.named("build").configure {
+    dependsOn("jacocoTestReport")
+}
+
 tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
 
@@ -58,7 +63,9 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     executionData.setFrom("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
 }
 
-
+tasks.withType<Test> {
+    finalizedBy("jacocoTestReport")
+}
 sonar {
     properties {
         property("sonar.projectKey", "SE-II-group-do-1_stratego-app")
