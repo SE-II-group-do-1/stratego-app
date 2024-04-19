@@ -40,7 +40,6 @@ public class MainFragment extends Fragment {
 
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
-            MockSessionService.clearUsernames();
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
