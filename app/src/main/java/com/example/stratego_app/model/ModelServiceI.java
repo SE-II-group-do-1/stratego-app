@@ -36,4 +36,13 @@ public interface ModelServiceI {
      * @return the Piece at the specified location, or null if no piece is present
      */
     Piece getPieceAtPosition(int x, int y);
+
+    /**
+     *
+     * @param attacker the Piece that makes the Move
+     * @param defender the Piece of the Opponent
+     * @return if you win with your attacker or lose
+     */
+
+    boolean fight(Piece attacker, Piece defender);
 }

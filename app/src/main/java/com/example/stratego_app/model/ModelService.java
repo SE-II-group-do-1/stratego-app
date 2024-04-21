@@ -30,7 +30,38 @@ public class ModelService implements ModelServiceI{
     }
     //validateMove could just be deactivated with a cheat button
     private boolean validateMove(int startX, int startY, int endX, int endY) {
-        return startX > startY && endX > endY;
+        //Check if all Coordinates are on the board
+        if (startX < 0 || startX > 9 || startY < 0 || startY > 9 ||
+                endX < 0 || endX > 9 || endY < 0 || endY > 9) {
+            // Any of the coordinates is outside the board bounds
+            return false;
+        }
+
+        //Initialize a moving Piece
+        Piece movingPiece = board.getField(startY, startX);
+        //Check if it is your piece
+
+        //Check if the Piece is allowed to move
+        if (!movingPiece.isMovable()){
+            return false;
+        }
+        //Check if the Piece is allowed to make this move(Scout?)
+        //Check if the field is empty
+        if(board.getField(endY,endX) == null) {
+            return true;
+        }
+        //Check if other piece is a Lake
+        //Check if other Piece is an opponent
+
+        Piece otherPiece = board.getField(endY,endX);
+        //Starting a Fight
+        return true;
+        }
+    //Fight after validate or before?
+    public boolean fight(Piece moving, Piece other){
+        moving.getRank();
+        other.getRank();
+        return true;
     }
 
     @Override
