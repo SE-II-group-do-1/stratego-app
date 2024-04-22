@@ -1,5 +1,6 @@
 package com.example.stratego_app.ui;
 
+import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.stratego_app.R;
+import com.example.stratego_app.model.ModelService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,36 +32,51 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        PiecesAdapter piecesAdapter;
         super.onViewCreated(view, savedInstanceState);
 
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
         gameBoardView.setConfigMode(false);
         gameBoardView.setDisplayLowerHalfOnly(true);
-
+        gameBoardView.setupDragListener();
 
         RecyclerView piecesRecyclerView = view.findViewById(R.id.piecesRecyclerView);
-        int numberOfColumns = 6;
-        piecesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numberOfColumns));
+        piecesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6));
 
-        PiecesAdapter piecesAdapter = new PiecesAdapter(getPiecesList());
+        piecesAdapter = new PiecesAdapter(getPiecesList(), new PiecesAdapter.OnPieceDragListener() {
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder, int position) {
+                ClipData data = ClipData.newPlainText("", "");//include relevant piece Data here to forward when connected to ModelSession
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(viewHolder.itemView);
+                viewHolder.itemView.startDrag(data, shadowBuilder, viewHolder.itemView, 0);
+                gameBoardView.setCurrentDragPosition(position);  // Track the position of the currently dragged item
+            }
+        });
+
+        gameBoardView.setDropListener((success, position) -> {
+            if (success) {
+                piecesAdapter.removeItem(position); // Remove the item only on successful drop
+            }
+        });
+
         piecesRecyclerView.setAdapter(piecesAdapter);
-
     }
-    // Helper method to get a list of your pieces
+
+
+    // Helper method to get a list of all pieces
     private List<String> getPiecesList() {
         List<String> pieces = new ArrayList<>();
 
         pieces.addAll(Collections.nCopies(1, "flag"));
-        pieces.addAll(Collections.nCopies(1, "marshall"));
+        pieces.addAll(Collections.nCopies(1, "marshal"));
         pieces.addAll(Collections.nCopies(1, "general"));
         pieces.addAll(Collections.nCopies(2, "colonel"));
         pieces.addAll(Collections.nCopies(3, "major"));
         pieces.addAll(Collections.nCopies(4, "captain"));
-        pieces.addAll(Collections.nCopies(4, "lieutnant"));
+        pieces.addAll(Collections.nCopies(4, "lieutenant"));
         pieces.addAll(Collections.nCopies(4, "sergeant"));
         pieces.addAll(Collections.nCopies(5, "miner"));
         pieces.addAll(Collections.nCopies(8, "scout"));
-        pieces.addAll(Collections.nCopies(1, "spion"));
+        pieces.addAll(Collections.nCopies(1, "spy"));
         pieces.addAll(Collections.nCopies(6, "bomb"));
         return pieces;
     }

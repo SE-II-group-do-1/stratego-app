@@ -1,6 +1,13 @@
 package com.example.stratego_app.model.pieces;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Board {
+    public static final String TAG = "GameBoardView";
     private Piece[][] fields;
 
     public Board(){
@@ -15,6 +22,22 @@ public class Board {
         fields[4][7] = new Piece(Rank.LAKE);
         fields[5][6] = new Piece(Rank.LAKE);
         fields[5][7] = new Piece(Rank.LAKE);
+    }
+
+    //newMethod fillBoard for settingsFragment
+    public void fillBoardRandomly(List<Piece> pieces) {
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            if (getField(i / 10, i % 10) == null || getField(i / 10, i % 10).getRank() != Rank.LAKE) {
+                positions.add(i);
+            }
+        }
+        Collections.shuffle(positions);
+
+        for (int i = 0; i < pieces.size(); i++) {
+            int pos = positions.get(i);
+            setField(pos / 10, pos % 10, pieces.get(i));
+        }
     }
 
     public void setField(int y, int x, Piece piece){
@@ -34,4 +57,33 @@ public class Board {
             }
         }
     }
+
+    //new method
+
+    public void clearBoardExceptLakes() {
+        for (int y = 0; y < fields.length; y++) {
+            for (int x = 0; x < fields[y].length; x++) {
+                if (fields[y][x] == null || fields[y][x].getRank() != Rank.LAKE) {
+                    fields[y][x] = null;
+                }
+            }
+        }
+    }
+
+    public boolean isValidLocation(int y, int x) {
+        if (y < 0 || y >= 10 || x < 0 || x >= 10) {
+            Log.d(TAG, "Invalid location: Out of board bounds.");
+            return false;
+        }
+        Piece existingPiece = getField(y, x);
+        if (existingPiece != null && existingPiece.getRank() == Rank.LAKE) {
+            Log.d(TAG, "Invalid location: Lake at position (" + y + ", " + x + ").");
+            return false;
+        }
+
+        Log.d(TAG, "Valid location for placement at (" + y + ", " + x + ").");
+        return true;
+    }
+
+
 }
