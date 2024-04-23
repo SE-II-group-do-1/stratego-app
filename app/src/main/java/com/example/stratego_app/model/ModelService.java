@@ -39,18 +39,63 @@ public class ModelService implements ModelServiceI{
 
         //Initialize a moving Piece
         Piece movingPiece = board.getField(startY, startX);
+
+
         //Check if it is your piece
 
         //Check if the Piece is allowed to move
         if (!movingPiece.isMovable()){
             return false;
         }
-        //Check if the Piece is allowed to make this move(Scout?)
+
+        //Check for a Lake
+        if (board.getField(endY, endX).getRank() == Rank.LAKE){ return false;}
+
+        //Check for diagonal move
+        if(startX != endX && startY != endY) {
+            return false;
+        }
+
+        //Check if the normal Piece is using the stepsize
+        if (movingPiece.getRank() != Rank.SCOUT){
+            int distanceX = Math.abs(endX - startX);
+            int distanceY = Math.abs(endY - startY);
+            if (distanceX > 1 || distanceY > 1) {
+                return false; // Move exceeds maximum step size
+            }
+        }
+
+        // Check if the piece is a Scout
+        if (movingPiece.getRank() == Rank.SCOUT) {
+            // Determine the direction of movement (horizontal or vertical)
+            boolean isHorizontal = startX == endX;
+            boolean isVertical = startY == endY;
+
+                // Calculate the step size
+                int step = isHorizontal ? Integer.signum(endY - startY) : Integer.signum(endX - startX);
+
+                // Iterate over all intermediate spaces between the start and end points
+                int currentX = startX;
+                int currentY = startY;
+                while ((isHorizontal && currentY != endY) || (isVertical && currentX != endX)) {
+                    // Move to the next intermediate space
+                    if (isHorizontal) {
+                        currentY += step;
+                    } else {
+                        currentX += step;
+                    }
+                    // Check if the intermediate space is empty
+                    if (board.getField(currentY, currentX) != null) {
+                        return false; // There is a piece in the way, invalid move for Scout
+                    }
+                }
+        }
+
+
         //Check if the field is empty
         if(board.getField(endY,endX) == null) {
             return true;
         }
-        //Check if other piece is a Lake
         //Check if other Piece is an opponent
 
         Piece otherPiece = board.getField(endY,endX);
@@ -58,9 +103,9 @@ public class ModelService implements ModelServiceI{
         return true;
         }
     //Fight after validate or before?
-    public boolean fight(Piece moving, Piece other){
-        moving.getRank();
-        other.getRank();
+    public boolean fight(Piece attacker, Piece defender){
+        attacker.getRank();
+        defender.getRank();
         return true;
     }
 
