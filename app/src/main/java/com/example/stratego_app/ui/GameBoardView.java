@@ -106,7 +106,6 @@ public class GameBoardView extends View{
     /**
      * methods drawBoard, draw GridLines, drawConfigElements, draw Boardframe, onMeasure
      * are used to display the gameboard in various fragements
-     * @param canvas
      */
     private void drawBoard(Canvas canvas) {
         int widthCell = getWidth() / 10;
@@ -184,7 +183,6 @@ public class GameBoardView extends View{
 
     /**
      * method drawPieces adds pieces to the board fetching them from a drawable cache, so a constant reload from res files is not necessary
-     * @param canvas
      */
     private void drawPieces(Canvas canvas) {
         Piece[][] boardArray = modelService.getBoard().getBoard();
@@ -252,31 +250,16 @@ public class GameBoardView extends View{
         String pieceType = item.getText().toString();
         Piece droppedPiece = createPieceFromType(pieceType);
 
-        // Log the coordinates and the piece trying to be dropped
-        Log.d(TAG, "Trying to drop piece at row: " + row + ", col: " + col);
-        if (droppedPiece != null) {
-            Log.d(TAG, "Piece is: " + droppedPiece.getRank());
-        } else {
-            Log.d(TAG, "No piece found in drag event.");
-        }
-
         boolean success = board.isValidLocation(row, col);
-        Log.d(TAG, "Is valid location for drop: " + success);
 
         if (success) {
             success = modelService.placePiece(col, row, droppedPiece);
             invalidate(); // Redraw the board
-            Log.d(TAG, "Piece placed on the board successfully.");
-        } else {
-            Log.d(TAG, "Drop failed: Location is not valid.");
         }
 
         if (dropListener != null && draggedPosition != -1) {
             dropListener.onDrop(success, draggedPosition);
-            Log.d(TAG, "Drop listener notified: success = " + success + ", position = " + draggedPosition);
             draggedPosition = -1; // Reset position after handling
-        } else {
-            Log.d(TAG, "Drop listener is not set or drag position is invalid.");
         }
 
         return success;
@@ -300,47 +283,5 @@ public class GameBoardView extends View{
             loadDrawableCache();
         }
     }
-
-    public static Drawable getDrawableForPiece(Context context, Piece piece) {
-        int drawableId = getDrawableIdByRank(piece.getRank());
-        return ContextCompat.getDrawable(context, drawableId);
-    }
-
-    private static int getDrawableIdByRank(Rank rank) {
-        switch (rank) {
-            case MARSHAL:
-                return R.drawable.marshal;
-            case GENERAL:
-                return R.drawable.general;
-            case CAPTAIN:
-                return R.drawable.captain;
-            case COLONEL:
-                return R.drawable.colonel;
-            case SCOUT:
-                return R.drawable.scout;
-            case SERGEANT:
-                return R.drawable.sergeant;
-            case SPY:
-                return R.drawable.spy;
-            case MAJOR:
-                return R.drawable.major;
-            case MINER:
-                return R.drawable.miner;
-            case FLAG:
-                return R.drawable.flag;
-            case BOMB:
-                return R.drawable.bomb;
-
-            default:
-                return -1;
-        }
-    }
-
-
-
-
-
-
-
 
 }
