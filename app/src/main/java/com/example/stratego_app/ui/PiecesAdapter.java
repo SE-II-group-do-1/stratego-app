@@ -42,7 +42,9 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
     public void onBindViewHolder(@NonNull PieceViewHolder holder, int position) {
         String pieceType = pieces.get(position);
         Context context = holder.imageView.getContext();
+
         int drawableId = context.getResources().getIdentifier(pieceType, "drawable", context.getPackageName());
+
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);
         holder.imageView.setImageDrawable(drawable);
         holder.nameTextView.setText(pieceType.toUpperCase());
@@ -51,7 +53,7 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
         holder.imageView.setOnLongClickListener(v -> {
             ClipData data = ClipData.newPlainText("pieceType", pieceType);
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-            v.startDrag(data, shadowBuilder, pieceType, 0);  // No need to pass the whole view, just the image
+            v.startDragAndDrop(data, shadowBuilder, null, 0);
             if (dragListener != null) {
                 dragListener.onStartDrag(holder, position);
             }

@@ -58,10 +58,15 @@ public class ModelService implements ModelServiceI{
 
 
     /**
-     * methods needed for game set-up
+     * Place a piece on the board during the game setup.
+     *
+     * @param x     The x-coordinate (column) of the board.
+     * @param y     The y-coordinate (row) of the board.
+     * @param piece The piece to place on the board.
+     * @return true if the piece was placed successfully, false otherwise.
      */
     public boolean placePiece(int x, int y, Piece piece) {
-        if (gameSetupMode) { // Only allow placing pieces in setup mode
+        if (gameSetupMode && y >= 6 && y <= 9) { // Only allow placing pieces in the lower half of the board during setup
             board.setField(y, x, piece);
             return true;
         }
@@ -74,9 +79,6 @@ public class ModelService implements ModelServiceI{
     // ---------------- methods to fill Board randomly in settings Fragment  ----------------------------------------
 
     //----- method to set Board ----
-    public void setPiecesOnGameBoard()  {
-        fillBoardRandomly();
-    }
 
     private void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
@@ -86,10 +88,9 @@ public class ModelService implements ModelServiceI{
 
     private List<Piece> generatePieces() {
         List<Piece> pieces = new ArrayList<>();
-
-        pieces.add(new Piece(Rank.FLAG, null, 1));
-        pieces.add(new Piece(Rank.MARSHAL, null, 2));
-        pieces.add(new Piece(Rank.GENERAL, null, 3));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, null, 1)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.MARSHAL, null, 2)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.GENERAL, null, 3)));
         pieces.addAll(Collections.nCopies(2, new Piece(Rank.COLONEL, null, 4)));
         pieces.addAll(Collections.nCopies(3, new Piece(Rank.MAJOR, null, 5)));
         pieces.addAll(Collections.nCopies(4, new Piece(Rank.CAPTAIN, null, 6)));
@@ -97,7 +98,7 @@ public class ModelService implements ModelServiceI{
         pieces.addAll(Collections.nCopies(4, new Piece(Rank.SERGEANT, null, 8)));
         pieces.addAll(Collections.nCopies(5, new Piece(Rank.MINER, null, 9)));
         pieces.addAll(Collections.nCopies(8, new Piece(Rank.SCOUT, null, 10)));
-        pieces.add(new Piece(Rank.SPY, null, 11));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.SPY, null, 11)));
         pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, null, 12)));
 
         return pieces;
