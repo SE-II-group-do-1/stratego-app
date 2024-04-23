@@ -43,13 +43,11 @@ public class SettingsFragment extends Fragment {
         RecyclerView piecesRecyclerView = view.findViewById(R.id.piecesRecyclerView);
         piecesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6));
 
-        piecesAdapter = new PiecesAdapter(getPiecesList(), new PiecesAdapter.OnPieceDragListener() {
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder, int position) {
-                ClipData data = ClipData.newPlainText("", "");//include relevant piece Data here to forward when connected to ModelSession
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(viewHolder.itemView);
-                viewHolder.itemView.startDrag(data, shadowBuilder, viewHolder.itemView, 0);
-                gameBoardView.setCurrentDragPosition(position);  // Track the position of the currently dragged item
-            }
+        piecesAdapter = new PiecesAdapter(getPiecesList(), (viewHolder, position) -> {
+            ClipData data = ClipData.newPlainText("", "");//include relevant piece Data here to forward when connected to ModelSession
+            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(viewHolder.itemView);
+            viewHolder.itemView.startDrag(data, shadowBuilder, viewHolder.itemView, 0);
+            gameBoardView.setCurrentDragPosition(position);  // Track the position of the currently dragged item
         });
 
         gameBoardView.setDropListener((success, position) -> {
@@ -59,6 +57,23 @@ public class SettingsFragment extends Fragment {
         });
 
         piecesRecyclerView.setAdapter(piecesAdapter);
+
+        /*
+         * call to fill board randomly by clicking button
+         */
+
+        Button fillBoard = view.findViewById(R.id.fillButton);
+    }
+
+    //Helper methods
+
+
+
+    private void updateGameBoardView() {
+        GameBoardView gameBoardView = getView().findViewById(R.id.settingsGameBoardView);
+        if (gameBoardView != null) {
+            gameBoardView.invalidate(); // Redraw the game board view to reflect new pieces
+        }
     }
 
 

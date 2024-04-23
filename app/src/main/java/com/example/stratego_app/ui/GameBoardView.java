@@ -34,7 +34,8 @@ public class GameBoardView extends View{
 
     ModelService modelService = new ModelService();
 
-    private int cellWidth, cellHeight; // Cache cell dimensions to improve performance
+    private int cellWidth;
+    private int cellHeight;
 
     // Used when creating the view in code
     public GameBoardView(Context context) {
@@ -60,6 +61,9 @@ public class GameBoardView extends View{
         setupDragListener();
     }
 
+    /**
+     * loading and caching drawable pieces associated with different ranks
+     */
     private void loadDrawableCache() {
         drawableCache.clear();
         for (Rank rank : Rank.values()) {
@@ -99,9 +103,14 @@ public class GameBoardView extends View{
     }
 
 
+    /**
+     * methods drawBoard, draw GridLines, drawConfigElements, draw Boardframe, onMeasure
+     * are used to display the gameboard in various fragements
+     * @param canvas
+     */
     private void drawBoard(Canvas canvas) {
-        int cellWidth = getWidth() / 10;
-        int cellHeight = getHeight() / 10;
+        int widthCell = getWidth() / 10;
+        int heightCell = getHeight() / 10;
 
         int startRow = displayLowerHalfOnly ? 5 : 0;
 
@@ -114,10 +123,10 @@ public class GameBoardView extends View{
                 }
 
                 canvas.drawRect(
-                        (float) col * cellWidth,
-                        (float) row * cellHeight,
-                        (float) (col + 1) * cellWidth,
-                        (float) (row + 1) * cellHeight,
+                        (float) col * widthCell,
+                        (float) row * heightCell,
+                        (float) (col + 1) * widthCell,
+                        (float) (row + 1) * heightCell,
                         paint);
 
             }
@@ -126,20 +135,20 @@ public class GameBoardView extends View{
 
 
     private void drawGridLines(Canvas canvas) {
-        int cellWidth = getWidth() / 10;
-        int cellHeight = getHeight() / 10;
+        int widthCell = getWidth() / 10;
+        int heightCell = getHeight() / 10;
         int startRow = displayLowerHalfOnly ? 5 : 0; // Start row for drawing
-        int startY = displayLowerHalfOnly ? cellHeight * 5 : 0; // Y-coordinate to start drawing horizontal lines
+        int startY = displayLowerHalfOnly ? heightCell * 5 : 0; // Y-coordinate to start drawing horizontal lines
 
         paint.setColor(Color.parseColor("#B2BEB5"));
         paint.setStrokeWidth(7);
 
         for (int i = 0; i <= 10; i++) {
-            canvas.drawLine((float) cellWidth * i, startY, (float) cellWidth * i, getHeight(), paint);
+            canvas.drawLine((float) widthCell * i, startY, (float) widthCell * i, getHeight(), paint);
         }
 
         for (int i = startRow; i <= 10; i++) {
-            float y = (float) cellHeight * (i - startRow);
+            float y = (float) heightCell * (i - startRow);
             canvas.drawLine(0, y + startY, getWidth(), y + startY, paint);
         }
 
@@ -173,7 +182,10 @@ public class GameBoardView extends View{
         paint.setStrokeWidth(0);
     }
 
-    // ------- PIECES --------------
+    /**
+     * method drawPieces adds pieces to the board fetching them from a drawable cache, so a constant reload from res files is not necessary
+     * @param canvas
+     */
     private void drawPieces(Canvas canvas) {
         Piece[][] boardArray = modelService.getBoard().getBoard();
 
@@ -192,7 +204,9 @@ public class GameBoardView extends View{
     }
 
 
-    //----------------- Drag and Drop ------------
+    /*
+     * Drag and Drop to facilitate an individual board set-up
+     */
     public void setupDragListener() {
         this.setOnDragListener((v, event) -> {
             int action = event.getAction();
@@ -200,8 +214,6 @@ public class GameBoardView extends View{
                 case DragEvent.ACTION_DRAG_STARTED:
                     return true;
                 case DragEvent.ACTION_DROP:
-                    ClipData.Item item = event.getClipData().getItemAt(0);
-                    String pieceType = item.getText().toString();
                     handleDrop(event.getX(), event.getY(), event);
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
@@ -213,8 +225,6 @@ public class GameBoardView extends View{
         });
     }
 
-
-    // ------------------- drop listener
 
     private DropListener dropListener;
     private int draggedPosition = -1; // To track the position of the dragged item
@@ -254,7 +264,7 @@ public class GameBoardView extends View{
         Log.d(TAG, "Is valid location for drop: " + success);
 
         if (success) {
-            board.setField(row, col, droppedPiece);
+            success = modelService.placePiece(col, row, droppedPiece);
             invalidate(); // Redraw the board
             Log.d(TAG, "Piece placed on the board successfully.");
         } else {
@@ -299,10 +309,28 @@ public class GameBoardView extends View{
     private static int getDrawableIdByRank(Rank rank) {
         switch (rank) {
             case MARSHAL:
-                return R.drawable.marshal; // Replace with actual drawable resource ID
+                return R.drawable.marshal;
             case GENERAL:
-                return R.drawable.general; // and so forth for each rank
-            // Add more cases as per your drawable resources
+                return R.drawable.general;
+            case CAPTAIN:
+                return R.drawable.captain;
+            case COLONEL:
+                return R.drawable.colonel;
+            case SCOUT:
+                return R.drawable.scout;
+            case SERGEANT:
+                return R.drawable.sergeant;
+            case SPY:
+                return R.drawable.spy;
+            case MAJOR:
+                return R.drawable.major;
+            case MINER:
+                return R.drawable.miner;
+            case FLAG:
+                return R.drawable.flag;
+            case BOMB:
+                return R.drawable.bomb;
+
             default:
                 return -1;
         }

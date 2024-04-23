@@ -24,7 +24,10 @@ public class Board {
         fields[5][7] = new Piece(Rank.LAKE);
     }
 
-    //newMethod fillBoard for settingsFragment
+    /**
+     * fills board with all pieces randomly placed on the gameboard
+     * @param pieces
+     */
     public void fillBoardRandomly(List<Piece> pieces) {
         List<Integer> positions = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -69,6 +72,13 @@ public class Board {
             }
         }
     }
+
+    /**
+     * checks if the piece is dropped at a valid location
+     * @param y
+     * @param x
+     * @return
+     */
 
     public boolean isValidLocation(int y, int x) {
         if (y < 0 || y >= 10 || x < 0 || x >= 10) {

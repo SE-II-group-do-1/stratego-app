@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.model.ModelService;
 
 public class MainActivity extends AppCompatActivity {
     private LobbyClient lc;
@@ -30,3 +31,5 @@ public class MainActivity extends AppCompatActivity {
         return lc;
     }
 }
+
+
