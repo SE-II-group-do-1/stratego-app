@@ -72,6 +72,11 @@ public class SettingsFragment extends Fragment {
             modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
         });
+
+        Button saveGameSetUp = view.findViewById(R.id.saveButton);
+        saveGameSetUp.setOnClickListener(v -> {
+            modelService.saveGameSetup();
+        });
     }
 
     //Helper methods

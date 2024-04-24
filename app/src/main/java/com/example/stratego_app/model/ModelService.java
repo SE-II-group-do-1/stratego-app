@@ -4,8 +4,6 @@ package com.example.stratego_app.model;
 import android.util.Log;
 
 import com.example.stratego_app.model.pieces.*;
-import com.example.stratego_app.ui.PiecesAdapter;
-import com.example.stratego_app.ui.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,9 +112,33 @@ START observer methods to notify e.g. gameboardview when changes arise
         return placed;
 
     }
+
+    /*
+    START managing lifecycle of game setup
+     */
     public void startGame() {
-        this.gameSetupMode = false;
+        if (gameSetupMode) {
+            // addional setups and checks if needed
+            gameSetupMode = false;
+            notifyObservers();
+        } else {
+            Log.d("ModelService", "Attempted to start game without being in setup mode.");
+        }
     }
+
+    public void saveGameSetup() {
+
+    }
+
+    public Board getCurrentGameBoard() {
+        return board;
+    }
+
+        /*
+    END
+     */
+
+
 
     /**
      * clear gameboard in settings editor
