@@ -2,6 +2,7 @@ package com.example.stratego_app.connection.clients;
 
 import android.util.Log;
 
+import com.example.stratego_app.model.pieces.Piece;
 import com.example.stratego_app.models.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,8 +25,12 @@ public class LobbyClient implements Disposable {
     private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
     private final CompositeDisposable disposable = new CompositeDisposable();
     private final Gson gson = new Gson();
-    private List<Player> currentLobby = new ArrayList<>();
+    private int currentLobbyID;
     private StompClient client;
+
+    Disposable lobby;
+    Disposable errors;
+    Disposable currentLobby;
 
     private final List<LobbyClientListener> listeners = new ArrayList<>();
 
@@ -37,11 +42,6 @@ public class LobbyClient implements Disposable {
         listeners.remove(listener);
     }
 
-    private void notifyListeners(List<Player> newLobby) {
-        for (LobbyClientListener listener : listeners) {
-            listener.onLobbyUpdated(newLobby);
-        }
-    }
 
 
     public void connect() {
@@ -68,34 +68,60 @@ public class LobbyClient implements Disposable {
 
         disposable.add(lifecycle);
 
-        Disposable lobby = client.topic("/topic/lobby")
+        lobby = client.topic("/topic/lobby")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onLobbyChange, throwable -> Log.e(TAG, "error", throwable));
+                .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, "error", throwable));
+
+        errors = client.topic("/topic/errors")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleException, throwable -> Log.e(TAG, "error", throwable));
 
         disposable.add(lobby);
+        disposable.add(errors);
 
         client.connect();
     }
-    private void onLobbyChange(StompMessage stompMessage) {
+    private void onLobbyResponse(StompMessage stompMessage) {
         Log.d("stomp", stompMessage.getPayload());
-        currentLobby = gson.<List<Player>>fromJson(stompMessage.getPayload(),
-                new TypeToken<List<Player>>() {}.getType());
-        notifyListeners(currentLobby);
+        currentLobbyID = Integer.parseInt(stompMessage.getPayload());
     }
 
     public void joinLobby(Player player) {
         String data = gson.toJson(player);
         client.send("/app/join", data).subscribe();
+
+        //subscribe to assigned lobby
+        currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateLobby, throwable -> Log.e(TAG, "error", throwable));
+        disposable.add(currentLobby);
+        disposable.remove(lobby);
+    }
+
+    private void updateLobby(StompMessage message){
+
+    }
+
+    public void sendUpdate(int y, int x, Piece piece, Player initiator){
+        String data = gson.toJson(piece);
+        client.send("/topic/lobby-"+currentLobbyID, data);
+    }
+
+    private void handleException(StompMessage message){
+
     }
 
     public void leaveLobby(Player player) {
         String data = gson.toJson(player);
         client.send("/app/leave", data);
+        disposable.remove(currentLobby);
     }
 
-    public List<Player> getCurrentLobby() {
-        return currentLobby;
+    public int getCurrentLobby() {
+        return currentLobbyID;
     }
 
     @Override
