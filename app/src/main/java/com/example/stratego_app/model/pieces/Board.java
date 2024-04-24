@@ -26,7 +26,6 @@ public class Board {
 
     /**
      * fills board with all pieces randomly placed on the gameboard
-     * @param pieces
      */
     public void fillBoardRandomly(List<Piece> pieces) {
         List<Integer> positions = new ArrayList<>();
@@ -61,17 +60,6 @@ public class Board {
         }
     }
 
-    //new method
-
-    public void clearBoardExceptLakes() {
-        for (int y = 0; y < fields.length; y++) {
-            for (int x = 0; x < fields[y].length; x++) {
-                if (fields[y][x] == null || fields[y][x].getRank() != Rank.LAKE) {
-                    fields[y][x] = null;
-                }
-            }
-        }
-    }
 
     /**
      * checks if the piece is dropped at a valid location

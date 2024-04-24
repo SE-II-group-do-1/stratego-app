@@ -43,6 +43,13 @@ public class GameBoardView extends View{
         init();
     }
 
+    /*public GameBoardView(Context context, ModelService modelService) {
+        super(context);
+        this.modelService = modelService;
+        this.board = modelService.getBoard();  // Use the same board from ModelService
+        init();
+    }*/
+
     // Used when inflating the view from XML
     public GameBoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -184,22 +191,56 @@ public class GameBoardView extends View{
     /**
      * method drawPieces adds pieces to the board fetching them from a drawable cache, so a constant reload from res files is not necessary
      */
+/*
     private void drawPieces(Canvas canvas) {
         Piece[][] boardArray = modelService.getBoard().getBoard();
 
         for (int row = 0; row < boardArray.length; row++) {
             for (int col = 0; col < boardArray[row].length; col++) {
                 Piece piece = boardArray[row][col];
-                if (piece != null) {
-                    Drawable drawable = drawableCache.get(piece.getRank());
-                    if (drawable != null) {
-                        drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
-                        drawable.draw(canvas);
-                    }
+                if (piece == null) {
+                    continue;  // Skip drawing if no piece is present
+                }
+                Drawable drawable = drawableCache.get(piece.getRank());
+                if (drawable != null) {
+                    drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
+                    drawable.draw(canvas);  // Draw the piece
                 }
             }
         }
     }
+*/
+
+    private void drawPieces(Canvas canvas) {
+        Piece[][] boardArray = modelService.getBoard().getBoard();  // Fetch the current state of the board
+
+        for (int row = 0; row < boardArray.length; row++) {
+            for (int col = 0; col < boardArray[row].length; col++) {
+                Piece piece = boardArray[row][col];
+                if (piece == null) {
+                    Log.d(TAG, "No piece to draw at (" + row + ", " + col + ")");  // Log when no piece is present
+                    continue;  // Skip drawing if no piece is present
+                }
+                Drawable drawable = drawableCache.get(piece.getRank());
+                if (drawable != null) {
+                    drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
+                    drawable.draw(canvas);  // Draw the piece
+                    Log.d(TAG, "Drawing piece " + piece.getRank() + " at (" + row + ", " + col + ")");  // Log the drawing of a piece
+                } else {
+                    Log.e(TAG, "Drawable not found for piece " + piece.getRank() + " at (" + row + ", " + col + ")");  // Log when a drawable is missing
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 
     /*

@@ -1,6 +1,8 @@
 package com.example.stratego_app.model;
 
 
+import android.util.Log;
+
 import com.example.stratego_app.model.pieces.*;
 
 import java.util.ArrayList;
@@ -75,6 +77,32 @@ public class ModelService implements ModelServiceI{
     public void startGame() {
         this.gameSetupMode = false;
     }
+
+    /**
+     * clear gameboard in settings editor
+     */
+    public void clearBoardExceptLakes() {
+        for (int y = 0; y < board.getBoard().length; y++) {
+            for (int x = 0; x < board.getBoard()[y].length; x++) {
+                Piece piece = board.getField(y, x);
+                if (piece != null && piece.getRank() != Rank.LAKE) {
+                    board.setField(y, x, null);
+                }
+                // Additional log to verify the current state of the board after clearing
+                Piece updatedPiece = board.getField(y, x);
+                if (updatedPiece == null) {
+                    Log.d("VERIFY", "Piece at (" + y + "," + x + ") is now null.");
+                } else {
+                    Log.d("VERIFY", "Piece at (" + y + "," + x + ") is not null.");
+                }
+            }
+        }
+    }
+
+
+
+
+
 
     // ---------------- methods to fill Board randomly in settings Fragment  ----------------------------------------
 

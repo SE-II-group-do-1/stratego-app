@@ -18,6 +18,7 @@ import com.example.stratego_app.R;
 import com.example.stratego_app.model.pieces.Piece;
 import com.example.stratego_app.model.pieces.Rank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -73,6 +74,10 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
             pieces.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void setPieces(List<String> pieces) {
+        this.pieces = new ArrayList<>(pieces);
     }
 
     //------- Drag and Drop -----

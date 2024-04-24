@@ -24,15 +24,17 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
+    ModelService modelService = new ModelService();
+    PiecesAdapter piecesAdapter;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        PiecesAdapter piecesAdapter;
         super.onViewCreated(view, savedInstanceState);
 
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
@@ -43,12 +45,15 @@ public class SettingsFragment extends Fragment {
         RecyclerView piecesRecyclerView = view.findViewById(R.id.piecesRecyclerView);
         piecesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6));
 
+        // Initialize the class field directly, removing the local declaration
         piecesAdapter = new PiecesAdapter(getPiecesList(), (viewHolder, position) -> {
-            ClipData data = ClipData.newPlainText("", "");//include relevant piece Data here to forward when connected to ModelSession
+            ClipData data = ClipData.newPlainText("", ""); // Include relevant piece data here
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(viewHolder.itemView);
             viewHolder.itemView.startDrag(data, shadowBuilder, viewHolder.itemView, 0);
-            gameBoardView.setCurrentDragPosition(position);  // Track the position of the currently dragged item
+            gameBoardView.setCurrentDragPosition(position); // Track the position of the currently dragged item
         });
+
+        piecesRecyclerView.setAdapter(piecesAdapter);
 
         gameBoardView.setDropListener((success, position) -> {
             if (success) {
@@ -56,24 +61,30 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        piecesRecyclerView.setAdapter(piecesAdapter);
-
-        /*
-         * call to fill board randomly by clicking button
-         */
-
         Button fillBoard = view.findViewById(R.id.fillButton);
+
+        Button clearBoard = view.findViewById(R.id.clearButton);
+        clearBoard.setOnClickListener(v -> {
+            modelService.clearBoardExceptLakes();
+            gameBoardView.invalidate();
+            updateGameBoardView();
+            resetPiecesInRecycleView();
+        });
     }
 
+
+
     //Helper methods
-
-
-
     private void updateGameBoardView() {
         GameBoardView gameBoardView = getView().findViewById(R.id.settingsGameBoardView);
         if (gameBoardView != null) {
             gameBoardView.invalidate(); // Redraw the game board view to reflect new pieces
         }
+    }
+
+    private void resetPiecesInRecycleView() {
+        piecesAdapter.setPieces(getPiecesList());
+        piecesAdapter.notifyDataSetChanged();
     }
 
 
