@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
-    ModelService modelService = new ModelService();
+    ModelService modelService = ModelService.getInstance();
     PiecesAdapter piecesAdapter;
 
 
@@ -66,21 +66,11 @@ public class SettingsFragment extends Fragment {
         Button clearBoard = view.findViewById(R.id.clearButton);
         clearBoard.setOnClickListener(v -> {
             modelService.clearBoardExceptLakes();
-            gameBoardView.invalidate();
-            updateGameBoardView();
             resetPiecesInRecycleView();
         });
     }
 
-
-
     //Helper methods
-    private void updateGameBoardView() {
-        GameBoardView gameBoardView = getView().findViewById(R.id.settingsGameBoardView);
-        if (gameBoardView != null) {
-            gameBoardView.invalidate(); // Redraw the game board view to reflect new pieces
-        }
-    }
 
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());

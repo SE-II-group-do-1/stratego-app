@@ -4,14 +4,23 @@ package com.example.stratego_app.model;
 import android.util.Log;
 
 import com.example.stratego_app.model.pieces.*;
-import com.example.stratego_app.ui.GameBoardView;
-import com.example.stratego_app.ui.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ModelService implements ModelServiceI{
+
+    //implement singelton pattern
+    private static ModelService instance;
+
+    public static synchronized ModelService getInstance() {
+        if (instance == null) {
+            instance = new ModelService();
+        }
+        return instance;
+    }
+
     private Board board;
     private boolean gameSetupMode = true;
     private List<ObserverModelService> observers = new ArrayList<>();
@@ -138,6 +147,7 @@ START observer methods to notify e.g. gameboardview when changes arise
     private void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
         board.fillBoardRandomly(pieces);
+        notifyObservers();
     }
 
 
