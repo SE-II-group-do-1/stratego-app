@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.pieces.Board;
 import com.example.stratego_app.model.pieces.Piece;
 import com.example.stratego_app.model.pieces.Rank;
@@ -23,7 +24,7 @@ import com.example.stratego_app.model.pieces.Rank;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameBoardView extends View{
+public class GameBoardView extends View implements ObserverModelService {
 
     private static final String TAG = "gbv";
     private Paint paint;
@@ -66,6 +67,21 @@ public class GameBoardView extends View{
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         loadDrawableCache();
         setupDragListener();
+
+        modelService.addObserver(this);
+    }
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (modelService != null) {
+            modelService.removeObserver(this); // Unregister to prevent memory leaks
+        }
+    }
+
+
+    @Override
+    public void onBoardUpdated() {
+        invalidate();
     }
 
     /**
@@ -294,7 +310,7 @@ public class GameBoardView extends View{
         boolean success = board.isValidLocation(row, col);
 
         if (success) {
-            success = modelService.placePiece(col, row, droppedPiece);
+            success = modelService.placePieceAtGameSetUp(col, row, droppedPiece);
             invalidate(); // Redraw the board
         }
 

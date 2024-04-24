@@ -4,6 +4,8 @@ package com.example.stratego_app.model;
 import android.util.Log;
 
 import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.ui.GameBoardView;
+import com.example.stratego_app.ui.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,10 +14,33 @@ import java.util.List;
 public class ModelService implements ModelServiceI{
     private Board board;
     private boolean gameSetupMode = true;
+    private List<ObserverModelService> observers = new ArrayList<>();
 
     public ModelService() {
         this.board = new Board();
     }
+
+/*
+START observer methods to notify e.g. gameboardview when changes arise
+ */
+    public void addObserver(ObserverModelService observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(ObserverModelService observer) {
+        observers.remove(observer);
+    }
+
+    protected void notifyObservers() {
+        for (ObserverModelService observer : observers) {
+            observer.onBoardUpdated();
+        }
+    }
+
+    /*
+    END observer methods
+     */
+
     @Override
     public void initializeGame() {
         this.gameSetupMode = true;
@@ -67,12 +92,17 @@ public class ModelService implements ModelServiceI{
      * @param piece The piece to place on the board.
      * @return true if the piece was placed successfully, false otherwise.
      */
-    public boolean placePiece(int x, int y, Piece piece) {
-        if (gameSetupMode && y >= 6 && y <= 9) { // Only allow placing pieces in the lower half of the board during setup
+    public boolean placePieceAtGameSetUp(int x, int y, Piece piece) {
+        boolean placed = false;
+        if (gameSetupMode && y >= 6 && y <= 9) {
             board.setField(y, x, piece);
-            return true;
+            placed = true;
         }
-        return false;
+        if (placed) {
+            notifyObservers();
+        }
+        return placed;
+
     }
     public void startGame() {
         this.gameSetupMode = false;
@@ -97,11 +127,8 @@ public class ModelService implements ModelServiceI{
                 }
             }
         }
+        notifyObservers();
     }
-
-
-
-
 
 
     // ---------------- methods to fill Board randomly in settings Fragment  ----------------------------------------
