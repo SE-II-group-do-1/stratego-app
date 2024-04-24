@@ -4,6 +4,8 @@ package com.example.stratego_app.model;
 import android.util.Log;
 
 import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.ui.PiecesAdapter;
+import com.example.stratego_app.ui.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -92,7 +94,6 @@ START observer methods to notify e.g. gameboardview when changes arise
         return board;
     }
 
-
     /**
      * Place a piece on the board during the game setup.
      *
@@ -144,11 +145,14 @@ START observer methods to notify e.g. gameboardview when changes arise
 
     //----- method to set Board ----
 
-    private void fillBoardRandomly() {
+
+
+    public void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
         board.fillBoardRandomly(pieces);
         notifyObservers();
     }
+
 
 
     private List<Piece> generatePieces() {

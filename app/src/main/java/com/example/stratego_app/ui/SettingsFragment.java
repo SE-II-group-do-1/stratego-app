@@ -62,6 +62,10 @@ public class SettingsFragment extends Fragment {
         });
 
         Button fillBoard = view.findViewById(R.id.fillButton);
+        fillBoard.setOnClickListener(v -> {
+            modelService.fillBoardRandomly();
+            clearPiecesInRecyclerView();
+        });
 
         Button clearBoard = view.findViewById(R.id.clearButton);
         clearBoard.setOnClickListener(v -> {
@@ -75,6 +79,10 @@ public class SettingsFragment extends Fragment {
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());
         piecesAdapter.notifyDataSetChanged();
+    }
+    private void clearPiecesInRecyclerView() {
+        piecesAdapter.clearPieces(); // Clears the list of pieces in the adapter.
+        piecesAdapter.notifyDataSetChanged(); // Notifies that the data has changed.
     }
 
 

@@ -75,6 +75,9 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
             notifyItemRemoved(position);
         }
     }
+    public void clearPieces() {
+        pieces.clear(); // Clear the list of pieces
+    }
 
     public void setPieces(List<String> pieces) {
         this.pieces = new ArrayList<>(pieces);

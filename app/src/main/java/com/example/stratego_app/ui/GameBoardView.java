@@ -219,9 +219,6 @@ public class GameBoardView extends View implements ObserverModelService {
         }
     }
 
-
-
-
     /*
      * Drag and Drop to facilitate an individual board set-up
      */
@@ -258,8 +255,6 @@ public class GameBoardView extends View implements ObserverModelService {
     public interface DropListener {
         void onDrop(boolean success, int position);
     }
-
-
 
 
    private boolean handleDrop(float x, float y, DragEvent event) {
