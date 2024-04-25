@@ -126,6 +126,7 @@ START observer methods to notify e.g. gameboardview when changes arise
         }
     }
     public void saveGameSetup() {
+        //Method implementieren
             }
 
     public Board getCurrentGameBoard() {
