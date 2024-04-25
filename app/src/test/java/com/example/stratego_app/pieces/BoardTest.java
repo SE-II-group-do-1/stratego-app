@@ -2,6 +2,7 @@ package com.example.stratego_app.pieces;
 
 //import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 
@@ -16,15 +17,19 @@ import com.example.stratego_app.model.pieces.*;
  */
 //@RunWith(AndroidJUnit4.class)
 class BoardTest {
+    private Board board = new Board();
+    @BeforeEach
+    void setUp() {
+        board = new Board();
+    }
 
     @Test
     void testBoardInitialization() {
-        Board board = new Board();
         assertNotNull("Piece at lake position should be initialized", board.getField(4, 2));
         assertEquals("Should be a lake", Rank.LAKE, board.getField(4, 2).getRank());
     }
 
-    private Board board = new Board();
+
 
     @Test
     void testConstructor() {
@@ -49,11 +54,43 @@ class BoardTest {
     }
     @Test
     void testSetAndGetBoard(){
-        Board secondBoard = new Board();
-        secondBoard.setField(1,2, new Piece(Rank.MAJOR));
-        board.setBoard(secondBoard);
-        assertArrayEquals(secondBoard.getBoard(), board.getBoard());
+        board.setField(1,2, new Piece(Rank.MAJOR));
+        this.board.setBoard(board);
+        assertArrayEquals(board.getBoard(), this.board.getBoard());
 
+    }
+
+    @Test
+    void testIsValidLocation_withValidCoordinates() {
+        assertTrue(board.isValidLocation(1, 1));
+    }
+
+    @Test
+    void testIsValidLocation_withBoundaryCoordinates() {
+        assertTrue(board.isValidLocation(0, 0));
+        assertTrue(board.isValidLocation(9, 9));
+        assertTrue(board.isValidLocation(0, 9));
+        assertTrue(board.isValidLocation(9, 0));
+    }
+
+    @Test
+    void testIsValidLocation_withInvalidCoordinates() {
+        assertFalse(board.isValidLocation(-1, 5));
+        assertFalse(board.isValidLocation(10, 5));
+        assertFalse(board.isValidLocation(5, -1));
+        assertFalse(board.isValidLocation(5, 10));
+    }
+
+    @Test
+    void testIsValidLocation_withLakePositions() {
+        assertFalse(board.isValidLocation(4, 2));
+        assertFalse(board.isValidLocation(4, 3));
+        assertFalse(board.isValidLocation(5, 2));
+        assertFalse(board.isValidLocation(5, 3));
+        assertFalse(board.isValidLocation(4, 6));
+        assertFalse(board.isValidLocation(4, 7));
+        assertFalse(board.isValidLocation(5, 6));
+        assertFalse(board.isValidLocation(5, 7));
     }
 
     
