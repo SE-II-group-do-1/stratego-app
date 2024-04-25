@@ -50,6 +50,7 @@ public class LobbyClient implements Disposable {
      * - adapt LobbyClientListener Interface
      * - sequence diagram
      * - test
+     * - docs
      */
 
     public void connect() {
