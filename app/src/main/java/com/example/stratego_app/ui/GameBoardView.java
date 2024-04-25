@@ -256,7 +256,6 @@ public class GameBoardView extends View implements ObserverModelService {
         void onDrop(boolean success, int position);
     }
 
-
    private boolean handleDrop(float x, float y, DragEvent event) {
         int col = (int) (x / cellWidth);
         int row = (int) (y / cellHeight);
@@ -280,13 +279,12 @@ public class GameBoardView extends View implements ObserverModelService {
         return success;
     }
 
+
     private Piece createPieceFromType(String type) {
         // Example conversion logic
         Rank rank = Rank.valueOf(type.toUpperCase());
         return new Piece(rank, null, 0); // Assuming a constructor exists
     }
-
-
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {

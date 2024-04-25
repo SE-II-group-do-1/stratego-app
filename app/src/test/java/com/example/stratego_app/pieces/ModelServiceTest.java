@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.Before;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.pieces.*;
@@ -19,8 +20,11 @@ import com.example.stratego_app.model.pieces.*;
 class ModelServiceTest {
 
     private ModelService modelService = new ModelService();
+    private Board board = new Board();
+
+
     @Test
-    public void testMovePiece_ValidMove() {
+     void testMovePiece_ValidMove() {
         // Arrange: Assuming you have a valid setup
         int startX = 2, startY = 1, endX = 2, endY = 1;
         modelService.getBoard().setField(startY, startX, new Piece(Rank.MINER));
@@ -32,7 +36,7 @@ class ModelServiceTest {
         assertEquals("Valid move should be successful", expected, result);
     }
     @Test
-    public void testMovePiece_NotValidMove() {
+     void testMovePiece_NotValidMove() {
         // Arrange: Assuming you have a valid setup
         int startX = 1, startY = 1, endX = 2, endY = 2;
         modelService.getBoard().setField(startY, startX, new Piece(Rank.MINER));
@@ -44,14 +48,13 @@ class ModelServiceTest {
         assertEquals("Move should not be successful", expected, result);
     }
     @Test
-    public void getPieceTest() {
+     void getPieceTest() {
         assertNull(modelService.getPieceAtPosition(1,1));
     }
 
     @Test
-    public void getBoard() {
+     void getBoard() {
         assertNotNull(modelService.getBoard());
     }
-
 
 }

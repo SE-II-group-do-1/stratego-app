@@ -76,6 +76,7 @@ public class SettingsFragment extends Fragment {
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
             modelService.saveGameSetup();
+
         });
     }
 
@@ -86,8 +87,8 @@ public class SettingsFragment extends Fragment {
         piecesAdapter.notifyDataSetChanged();
     }
     private void clearPiecesInRecyclerView() {
-        piecesAdapter.clearPieces(); // Clears the list of pieces in the adapter.
-        piecesAdapter.notifyDataSetChanged(); // Notifies that the data has changed.
+        piecesAdapter.clearPieces();
+        piecesAdapter.notifyDataSetChanged();
     }
 
 

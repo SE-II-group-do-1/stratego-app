@@ -16,14 +16,22 @@ import com.example.stratego_app.model.pieces.*;
  */
 //@RunWith(AndroidJUnit4.class)
 class BoardTest {
+
+    @Test
+    void testBoardInitialization() {
+        Board board = new Board();
+        assertNotNull("Piece at lake position should be initialized", board.getField(4, 2));
+        assertEquals("Should be a lake", Rank.LAKE, board.getField(4, 2).getRank());
+    }
+
     private Board board = new Board();
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertNotNull(board.getBoard());
     }
     @Test
-    public void testLakes() {
+    void testLakes() {
         assertEquals(Rank.LAKE, board.getField(4,2).getRank());
         assertEquals(Rank.LAKE, board.getField(4,3).getRank());
         assertEquals(Rank.LAKE, board.getField(4,6).getRank());
@@ -35,18 +43,22 @@ class BoardTest {
     }
 
     @Test
-    public void testSetandGetField(){
+    void testSetandGetField(){
         board.setField(1,1, new Piece(Rank.FLAG));
         assertEquals(Rank.FLAG, board.getField(1, 1).getRank());
     }
     @Test
-    public void testSetAndGetBoard(){
+    void testSetAndGetBoard(){
         Board secondBoard = new Board();
         secondBoard.setField(1,2, new Piece(Rank.MAJOR));
         board.setBoard(secondBoard);
         assertArrayEquals(secondBoard.getBoard(), board.getBoard());
 
     }
+
+    
+
+
 
 
 }

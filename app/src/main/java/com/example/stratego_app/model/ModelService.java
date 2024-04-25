@@ -21,7 +21,7 @@ public class ModelService implements ModelServiceI{
         return instance;
     }
 
-    private Board board;
+    private final Board board;
     private boolean gameSetupMode = true;
     private List<ObserverModelService> observers = new ArrayList<>();
 
@@ -85,7 +85,7 @@ START observer methods to notify e.g. gameboardview when changes arise
 
     @Override
     public Piece getPieceAtPosition(int x, int y) {
-        return null;
+        return board.getField(y, x);
     }
 
     public Board getBoard() {
@@ -150,13 +150,6 @@ START observer methods to notify e.g. gameboardview when changes arise
                 if (piece != null && piece.getRank() != Rank.LAKE) {
                     board.setField(y, x, null);
                 }
-                // Additional log to verify the current state of the board after clearing
-                Piece updatedPiece = board.getField(y, x);
-                if (updatedPiece == null) {
-                    Log.d("VERIFY", "Piece at (" + y + "," + x + ") is now null.");
-                } else {
-                    Log.d("VERIFY", "Piece at (" + y + "," + x + ") is not null.");
-                }
             }
         }
         notifyObservers();
@@ -174,7 +167,6 @@ START observer methods to notify e.g. gameboardview when changes arise
         board.fillBoardRandomly(pieces);
         notifyObservers();
     }
-
 
 
     private List<Piece> generatePieces() {

@@ -98,7 +98,5 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
     public interface OnPieceDragListener {
         void onStartDrag(RecyclerView.ViewHolder viewHolder, int position);
     }
-
-
 }
 
