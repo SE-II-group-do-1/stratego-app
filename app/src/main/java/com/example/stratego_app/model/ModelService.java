@@ -125,7 +125,6 @@ START observer methods to notify e.g. gameboardview when changes arise
             Log.d("ModelService", "Attempted to start game without being in setup mode.");
         }
     }
-
     public void saveGameSetup() {
 
     }
