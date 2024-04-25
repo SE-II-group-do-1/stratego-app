@@ -43,6 +43,14 @@ public class LobbyClient implements Disposable {
     }
 
 
+    /**
+     * TODO:
+     * - determine payload
+     * - subscribeOn, observeOn?
+     * - adapt LobbyClientListener Interface
+     * - sequence diagram
+     * - test
+     */
 
     public void connect() {
         client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
