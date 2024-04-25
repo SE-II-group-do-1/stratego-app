@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ModelService implements ModelServiceI{
 
-    //implement singelton pattern
+    //implement singleton pattern
     private static ModelService instance;
 
     public static synchronized ModelService getInstance() {
@@ -118,7 +118,7 @@ START observer methods to notify e.g. gameboardview when changes arise
      */
     public void startGame() {
         if (gameSetupMode) {
-            // addional setups and checks if needed
+            // additional setups and checks if needed
             gameSetupMode = false;
             notifyObservers();
         } else {
@@ -126,8 +126,7 @@ START observer methods to notify e.g. gameboardview when changes arise
         }
     }
     public void saveGameSetup() {
-
-    }
+            }
 
     public Board getCurrentGameBoard() {
         return board;

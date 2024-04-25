@@ -49,7 +49,7 @@ public class SettingsFragment extends Fragment {
         piecesAdapter = new PiecesAdapter(getPiecesList(), (viewHolder, position) -> {
             ClipData data = ClipData.newPlainText("", ""); // Include relevant piece data here
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(viewHolder.itemView);
-            viewHolder.itemView.startDrag(data, shadowBuilder, viewHolder.itemView, 0);
+            viewHolder.itemView.startDragAndDrop(data, shadowBuilder, viewHolder.itemView, 0);
             gameBoardView.setCurrentDragPosition(position); // Track the position of the currently dragged item
         });
 
