@@ -128,7 +128,6 @@ public class ModelService implements ModelServiceI{
         return startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
     }
-    //TODO Fight
     public boolean fight(Piece attacker, Piece defender){
         // Get the ranks of the attacking and defending pieces
         Rank attackerRank = attacker.getRank();
