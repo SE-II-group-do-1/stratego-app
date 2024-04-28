@@ -130,10 +130,34 @@ public class ModelService implements ModelServiceI{
     }
     //TODO Fight
     public boolean fight(Piece attacker, Piece defender){
-        //TODO connect it with UI so that the loserpiece gets removed
-        attacker.getRank();
-        defender.getRank();
-        return true;
+        // Get the ranks of the attacking and defending pieces
+        Rank attackerRank = attacker.getRank();
+        Rank defenderRank = defender.getRank();
+
+        // Compare the ranks to determine the outcome of the fight
+        if (defenderRank == Rank.FLAG){
+            //TODO Game Won
+            return true;
+        }else if (attackerRank == Rank.MINER && defenderRank == Rank.BOMB) {
+            // Miner defuses bomb
+            return true; // Attacker wins
+        } else if (defenderRank == Rank.BOMB && attackerRank != Rank.MINER) {
+            // Defender wins if it's a bomb and attacker is not a miner
+            return false; // Defender wins
+        } else if (attackerRank == Rank.SPY && defenderRank == Rank.MARSHAL) {
+            // Spy defeats Marshal
+            return true; // Attacker wins
+        } else if (attackerRank.getValue() > defenderRank.getValue()) {
+            // Attacker wins if its rank value is higher than defender's
+            return true; // Attacker wins
+        } else if (attackerRank.getValue() < defenderRank.getValue()) {
+            // Defender wins if its rank value is higher than attacker's
+            return false; // Defender wins
+        } else {
+            // If ranks are equal, it's a tie
+            //TODO Remove both
+            return false; // Defender wins (for simplicity)
+        }
     }
 
     @Override
