@@ -61,9 +61,16 @@ public class ModelService implements ModelServiceI{
             return true;
         }
         //Check if other Piece is an opponent
-
         Piece otherPiece = board.getField(endY,endX);
-        //Starting a Fight
+        if (otherPiece.getColor() != movingPiece.getColor()){
+            //Starting a Fight
+            if(!fight(movingPiece,otherPiece)){
+                return false;
+            }
+        } else {
+            return false;
+        }
+
         return true;
         }
 
@@ -121,8 +128,9 @@ public class ModelService implements ModelServiceI{
         return startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
     }
-    //Fight after validate or before?
+    //TODO Fight
     public boolean fight(Piece attacker, Piece defender){
+        //TODO connect it with UI so that the loserpiece gets removed
         attacker.getRank();
         defender.getRank();
         return true;
