@@ -1,5 +1,7 @@
 package com.example.stratego_app.connection.clients;
 
+import static java.util.Map.entry;
+
 import android.util.Log;
 
 import com.example.stratego_app.model.pieces.Piece;
@@ -8,7 +10,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,7 +32,7 @@ public class LobbyClient implements Disposable {
     private int currentLobbyID;
     private StompClient client;
 
-    Disposable lobby;
+    Disposable reply;
     Disposable errors;
     Disposable currentLobby;
 
@@ -45,8 +49,11 @@ public class LobbyClient implements Disposable {
 
     /**
      * TODO:
-     * - determine payload
-     * - subscribeOn, observeOn?
+     * - determine payload -> HashMap
+     * - /topic/lobby -> /topic/reply
+     * - impl updateLobby
+     * - impl setBoard
+     * - connect to UI
      * - adapt LobbyClientListener Interface
      * - sequence diagram
      * - test
@@ -77,17 +84,19 @@ public class LobbyClient implements Disposable {
 
         disposable.add(lifecycle);
 
-        lobby = client.topic("/topic/lobby")
+
+        reply = client.topic("/topic/reply")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, "error", throwable));
+
 
         errors = client.topic("/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleException, throwable -> Log.e(TAG, "error", throwable));
 
-        disposable.add(lobby);
+        disposable.add(reply);
         disposable.add(errors);
 
         client.connect();
@@ -95,19 +104,17 @@ public class LobbyClient implements Disposable {
     private void onLobbyResponse(StompMessage stompMessage) {
         Log.d("stomp", stompMessage.getPayload());
         currentLobbyID = Integer.parseInt(stompMessage.getPayload());
-    }
-
-    public void joinLobby(Player player) {
-        String data = gson.toJson(player);
-        client.send("/app/join", data).subscribe();
-
         //subscribe to assigned lobby
         currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateLobby, throwable -> Log.e(TAG, "error", throwable));
         disposable.add(currentLobby);
-        disposable.remove(lobby);
+    }
+
+    public void joinLobby(Player player) {
+        String data = gson.toJson(player);
+        client.send("/app/join", data).subscribe();
     }
 
     private void updateLobby(StompMessage message){
@@ -115,16 +122,16 @@ public class LobbyClient implements Disposable {
     }
 
     public void sendUpdate(int y, int x, Piece piece, Player initiator){
-        String data = gson.toJson(piece);
+        String data = gson.toJson(updateToObject(y,x,piece, initiator));
         client.send("/topic/lobby-"+currentLobbyID, data);
     }
 
     private void handleException(StompMessage message){
-
+        Log.e(TAG, message.getPayload());
     }
 
     public void leaveLobby(Player player) {
-        String data = gson.toJson(player);
+        String data = gson.toJson(leaveToObject(player));
         client.send("/app/leave", data);
         disposable.remove(currentLobby);
     }
@@ -141,5 +148,21 @@ public class LobbyClient implements Disposable {
     @Override
     public boolean isDisposed() {
         return disposable.isDisposed();
+    }
+
+    private Map<String, Object> updateToObject(int y, int x, Piece piece, Player initiator){
+        Map<String, Object> toReturn = new HashMap<>();
+        toReturn.put("y", y);
+        toReturn.put("x", x);
+        toReturn.put("piece", piece);
+        toReturn.put("initiator", initiator);
+        return toReturn;
+    }
+
+    private Map<String, Object> leaveToObject(Player player){
+        Map<String, Object> toReturn = new HashMap<>();
+        toReturn.put("id", currentLobbyID);
+        toReturn.put("player", player);
+        return toReturn;
     }
 }
