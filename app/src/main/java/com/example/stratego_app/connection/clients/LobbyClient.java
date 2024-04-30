@@ -118,6 +118,17 @@ public class LobbyClient implements Disposable {
     }
 
     private void updateLobby(StompMessage message){
+        Map<String,Object> payload = gson.<Map<String,Object>>fromJson(message.getPayload(),
+                new TypeToken<Map<String, Object>>() {}.getType());
+        try{
+            Integer y = (Integer) payload.get("y");
+            Integer x = (Integer) payload.get("x");
+            Piece piece = (Piece) payload.get("piece");
+        }
+        catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+
 
     }
 
