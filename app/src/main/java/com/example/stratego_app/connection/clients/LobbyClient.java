@@ -4,6 +4,7 @@ import static java.util.Map.entry;
 
 import android.util.Log;
 
+import com.example.stratego_app.model.pieces.Board;
 import com.example.stratego_app.model.pieces.Piece;
 import com.example.stratego_app.models.Player;
 import com.google.gson.Gson;
@@ -33,6 +34,7 @@ public class LobbyClient implements Disposable {
     private StompClient client;
 
     Disposable reply;
+    Disposable setup;
     Disposable errors;
     Disposable currentLobby;
 
@@ -115,17 +117,31 @@ public class LobbyClient implements Disposable {
             Log.e(TAG, e.toString());
         }
         //TODO: assign player selfInfo and color
-        //subscribe to assigned lobby
+        //subscribe to assigned lobby and setup
         currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateLobby, throwable -> Log.e(TAG, "error", throwable));
+                .subscribe(this::updateLobby, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
         disposable.add(currentLobby);
+
+        setup = client.topic("/topic/setup-"+currentLobbyID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setupBoardResponse, throwable -> Log.e(TAG, "error subscribing to setup", throwable));
     }
 
     public void joinLobby(String username) {
         String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
+    }
+
+    public void sendBoard(Board board, Player player){
+        String data = gson.toJson(setupToObject(player, board));
+        client.send("/setup", data);
+    }
+
+    public void setupBoardResponse(StompMessage message){
+        //TODO: use finished Model service
     }
 
     private void updateLobby(StompMessage message){
@@ -140,7 +156,7 @@ public class LobbyClient implements Disposable {
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
-
+        //TODO: connect to Model
 
     }
 
@@ -188,4 +204,12 @@ public class LobbyClient implements Disposable {
         toReturn.put("player", player);
         return toReturn;
     }
+
+    private Map<String, Object> setupToObject(Player player, Board board){
+        Map<String, Object> toReturn = new HashMap<>();
+        toReturn.put("board", board);
+        toReturn.put("player", player);
+        return toReturn;
+    }
+
 }
