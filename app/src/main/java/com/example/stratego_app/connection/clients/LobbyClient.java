@@ -101,9 +101,20 @@ public class LobbyClient implements Disposable {
 
         client.connect();
     }
-    private void onLobbyResponse(StompMessage stompMessage) {
-        Log.d("stomp", stompMessage.getPayload());
-        currentLobbyID = Integer.parseInt(stompMessage.getPayload());
+    private void onLobbyResponse(StompMessage message) {
+        Log.d("stomp", message.getPayload());
+        Map<String,Object> payload = gson.<Map<String,Object>>fromJson(message.getPayload(),
+                new TypeToken<Map<String, Object>>() {}.getType());
+        try{
+            currentLobbyID = (Integer) payload.get("id");
+            String color = (String) payload.get("color");
+            Player selfInfo = (Player) payload.get("player");
+            Log.i(TAG, payload.toString());
+        }
+        catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+        //TODO: assign player selfInfo and color
         //subscribe to assigned lobby
         currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
                 .subscribeOn(Schedulers.io())
@@ -124,6 +135,7 @@ public class LobbyClient implements Disposable {
             Integer y = (Integer) payload.get("y");
             Integer x = (Integer) payload.get("x");
             Piece piece = (Piece) payload.get("piece");
+            Log.i(TAG, payload.toString());
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
