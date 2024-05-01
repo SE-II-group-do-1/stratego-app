@@ -123,8 +123,8 @@ public class LobbyClient implements Disposable {
         disposable.add(currentLobby);
     }
 
-    public void joinLobby(Player player) {
-        String data = gson.toJson(player);
+    public void joinLobby(String username) {
+        String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
     }
 
