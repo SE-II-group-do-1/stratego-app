@@ -1,14 +1,26 @@
 package com.example.stratego_app.pieces;
-import org.junit.jupiter.api.Test;
-import static org.junit.Assert.*;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.model.pieces.Piece;
+import com.example.stratego_app.model.pieces.Rank;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ModelServiceTest {
 
-    private ModelService modelService = new ModelService();
+    private ModelService modelService = ModelService.getInstance();
+
+
+    @BeforeEach
+    void setUp() {
+        modelService = ModelService.getInstance();
+        modelService.clearBoardExceptLakes();
+    }
 
 
     @Test

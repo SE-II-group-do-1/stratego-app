@@ -11,17 +11,18 @@ import com.example.stratego_app.model.pieces.Board;
 import com.example.stratego_app.model.pieces.Piece;
 import com.example.stratego_app.model.pieces.Rank;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class modelServiceTestClass {
+public class ModelServiceTestClass {
 
-    private ModelService modelService = new ModelService();
+    private ModelService modelService = ModelService.getInstance();
     private Board board = new Board();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         modelService = ModelService.getInstance();
+        modelService.clearBoardExceptLakes();
         board = modelService.getBoard();
     }
 

@@ -3,7 +3,9 @@ package com.example.stratego_app.model;
 
 import android.util.Log;
 
-import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.model.pieces.Board;
+import com.example.stratego_app.model.pieces.Piece;
+import com.example.stratego_app.model.pieces.Rank;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +27,9 @@ public class ModelService implements ModelServiceI{
     private boolean gameSetupMode = true;
     private List<ObserverModelService> observers = new ArrayList<>();
 
-    public ModelService() {
+
+    // To be an actual singleton, the constructor should be private
+    private ModelService() {
         this.board = new Board();
     }
 
@@ -128,11 +132,6 @@ START observer methods to notify e.g. gameboardview when changes arise
     public void saveGameSetup() {
         //Method implementieren
             }
-
-    public Board getCurrentGameBoard() {
-        return board;
-    }
-
         /*
     END
      */
