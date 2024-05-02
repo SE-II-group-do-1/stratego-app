@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.connection.clients.LobbyClientI;
+
 public class MainActivity extends AppCompatActivity {
-    private LobbyClient lc;
+    private LobbyClientI lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         lc.connect();
     }
 
-    public LobbyClient getLobbyClient() {
+    public LobbyClientI getLobbyClient() {
         return lc;
     }
 }

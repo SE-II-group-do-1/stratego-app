@@ -2,16 +2,16 @@ package com.example.stratego_app.ui;
 
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.connection.clients.LobbyClientI;
 import com.example.stratego_app.connection.clients.LobbyClientListener;
 import com.example.stratego_app.models.Player;
 
@@ -37,7 +37,7 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
         super.onViewCreated(view, savedInstanceState);
         playersContainer = view.findViewById(R.id.playersContainer);
 
-        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
+        LobbyClientI lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
         lobbyClient.registerListener(this);
 
     }
@@ -46,7 +46,7 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
     public void onDestroyView() {
         super.onDestroyView();
 
-        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
+        LobbyClientI lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
         lobbyClient.unregisterListener(this);
 
     }

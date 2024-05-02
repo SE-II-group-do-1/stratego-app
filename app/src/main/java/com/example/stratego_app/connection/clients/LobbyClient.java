@@ -12,15 +12,15 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
-public class LobbyClient implements Disposable {
+public class LobbyClient implements LobbyClientI, Disposable {
 
     private static final String TAG = "LobbyClient";
-
     private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
     private final CompositeDisposable disposable = new CompositeDisposable();
     private final Gson gson = new Gson();
@@ -44,6 +44,39 @@ public class LobbyClient implements Disposable {
     }
 
 
+    /**
+     * Subscribe to a topic
+     *
+     * @param client   the stomp client
+     * @param topic    the topic to subscribe to
+     * @param consumer the consumer to handle the messages
+     * @return the disposable
+     */
+    private static Disposable subscribeTo(StompClient client, String topic, Consumer<? super StompMessage> consumer) {
+        return client.topic(topic)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer, throwable -> Log.e(TAG, String.format("Subscribe Error for topic %s", topic), throwable));
+    }
+
+    /**
+     * Send a message to the server
+     *
+     * @param client      the stomp client
+     * @param destination the destination to send the message to
+     * @param message     the message to send
+     */
+    private static void sendMessage(StompClient client, String destination, String message) {
+        client
+                .send(destination, message)
+                .doOnError(throwable -> Log.e(TAG, String.format("Error sending message to %s", destination), throwable))
+                .subscribe();
+    }
+
+    /**
+     * Connect to the websocket and subscribe to the lobby topic
+     * Also subscribe to the lifecycle events, so we can log them
+     */
     public void connect() {
         client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
         client.withClientHeartbeat(1000).withServerHeartbeat(1000);
@@ -53,13 +86,13 @@ public class LobbyClient implements Disposable {
                 .subscribe((lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case ERROR:
-                            Log.e(TAG, "error", lifecycleEvent.getException());
+                            Log.e(TAG, "STOMP Connection failed", lifecycleEvent.getException());
                             break;
                         case OPENED:
-                            Log.e(TAG, "opened");
+                            Log.e(TAG, "STOMP Connection opened");
                             break;
                         case CLOSED:
-                            Log.e(TAG, "closed");
+                            Log.e(TAG, "STOMP Connection closed");
                             break;
                         default:
                             break;
@@ -68,32 +101,48 @@ public class LobbyClient implements Disposable {
 
         disposable.add(lifecycle);
 
-        Disposable lobby = client.topic("/topic/lobby")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onLobbyChange, throwable -> Log.e(TAG, "error", throwable));
+        Disposable lobby =
+                subscribeTo(client, "/topic/lobby", this::onLobbyChange);
 
         disposable.add(lobby);
 
         client.connect();
     }
+
+    /**
+     * Handle a message on the lobby topic
+     *
+     * @param stompMessage the message
+     */
     private void onLobbyChange(StompMessage stompMessage) {
-        Log.d("stomp", stompMessage.getPayload());
-        currentLobby = gson.<List<Player>>fromJson(stompMessage.getPayload(),
+        Log.d(TAG, String.format("Received message: %s", stompMessage.getPayload()));
+        currentLobby = gson.fromJson(stompMessage.getPayload(),
                 new TypeToken<List<Player>>() {}.getType());
         notifyListeners(currentLobby);
     }
 
+    /**
+     * Join the lobby
+     * @param player the player to join the lobby
+     */
     public void joinLobby(Player player) {
         String data = gson.toJson(player);
-        client.send("/app/join", data).subscribe();
+        sendMessage(client, "/app/join", data);
     }
 
+    /**
+     * Leave the lobby
+     * @param player the player to leave the lobby
+     */
     public void leaveLobby(Player player) {
         String data = gson.toJson(player);
-        client.send("/app/leave", data);
+        sendMessage(client, "/app/leave", data);
     }
 
+    /**
+     * Get the current lobby
+     * @return the current lobby
+     */
     public List<Player> getCurrentLobby() {
         return currentLobby;
     }
