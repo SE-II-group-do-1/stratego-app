@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,17 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewHolder> {
-    private List<String> pieces;
+    private List<Piece> pieces;
     private final OnPieceDragListener dragListener;
 
-    public PiecesAdapter(List<String> pieces, OnPieceDragListener dragListener) {
+    public PiecesAdapter(List<Piece> pieces, OnPieceDragListener dragListener) {
         this.pieces = pieces;
         this.dragListener = dragListener;
     }
@@ -41,20 +39,24 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
 
     @Override
     public void onBindViewHolder(@NonNull PieceViewHolder holder, int position) {
-        String pieceType = pieces.get(position);
+        Piece piece = pieces.get(position);
+        String pieceType = piece.getRank().name();
         Context context = holder.imageView.getContext();
 
-        int drawableId = context.getResources().getIdentifier(pieceType, "drawable", context.getPackageName());
+        int drawableId = context.getResources().getIdentifier(pieceType.toLowerCase(), "drawable", context.getPackageName());
 
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);
         holder.imageView.setImageDrawable(drawable);
         holder.nameTextView.setText(pieceType.toUpperCase());
 
+        /*Optionally display rank and ID
+        holder.rankTextView.setText(piece.getRank().toString());*/
+
         // Set long click listener to start drag from the ImageView only
         holder.imageView.setOnLongClickListener(v -> {
             ClipData data = ClipData.newPlainText("pieceType", pieceType);
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-            v.startDragAndDrop(data, shadowBuilder, null, 0);
+            v.startDragAndDrop(data, shadowBuilder, piece, 0);
             if (dragListener != null) {
                 dragListener.onStartDrag(holder, position);
             }
@@ -79,7 +81,7 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
         pieces.clear(); // Clear the list of pieces
     }
 
-    public void setPieces(List<String> pieces) {
+    public void setPieces(List<Piece> pieces) {
         this.pieces = new ArrayList<>(pieces);
     }
 
@@ -92,6 +94,7 @@ public class PiecesAdapter extends RecyclerView.Adapter<PiecesAdapter.PieceViewH
             super(itemView);
             imageView = itemView.findViewById(R.id.pieceImageView);
             nameTextView = itemView.findViewById(R.id.pieceNameTextView);
+            //rankTextView = itemView.findViewById(R.id.pieceRankTextView); // Ensure these IDs are in your XML
         }
     }
 

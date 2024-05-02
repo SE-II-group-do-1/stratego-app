@@ -13,8 +13,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-
-import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.pieces.Board;
@@ -32,7 +30,6 @@ public class GameBoardView extends View implements ObserverModelService {
     private boolean isConfigMode = false;
     private boolean displayLowerHalfOnly = false;
     private Map<Rank, Drawable> drawableCache = new HashMap<>();
-    private Board board = new Board();
 
 
     private int cellWidth;
@@ -264,12 +261,8 @@ public class GameBoardView extends View implements ObserverModelService {
         String pieceType = item.getText().toString();
         Piece droppedPiece = createPieceFromType(pieceType);
 
-        boolean success = board.isValidLocation(row, col);
-
-        if (success) {
-            success = modelService.placePieceAtGameSetUp(col, row, droppedPiece);
-            invalidate(); // Redraw the board
-        }
+       boolean success = modelService.placePieceAtGameSetUp(col, row, droppedPiece);
+       invalidate(); // Redraw the board
 
         if (dropListener != null && draggedPosition != -1) {
             dropListener.onDrop(success, draggedPosition);
@@ -281,9 +274,8 @@ public class GameBoardView extends View implements ObserverModelService {
 
 
     private Piece createPieceFromType(String type) {
-        // Example conversion logic
         Rank rank = Rank.valueOf(type.toUpperCase());
-        return new Piece(rank, null, 0); // Assuming a constructor exists
+        return new Piece(rank, null, 0);
     }
 
     @Override
