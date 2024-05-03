@@ -60,6 +60,13 @@ public class Board {
         }
     }
 
+    /**
+     * checks if placed pieces is in a valid location without a set piece on it
+     * @param y y-coordinates
+     * @param x x-coordinates
+     * @return true it the field is empty
+     */
+
     public boolean isValidLocation(int y, int x) {
         if (y < 0 || y >= 10 || x < 0 || x >= 10) {
             return false;
