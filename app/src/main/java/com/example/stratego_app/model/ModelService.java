@@ -31,6 +31,7 @@ public class ModelService implements ModelServiceI{
     private Board gameBoard;
     private Board setupBoard;
     private boolean gameSetupMode = true;
+    private Player currentPlayer;
     private List<ObserverModelService> observers = new ArrayList<>();
 
     public ModelService() {
@@ -73,6 +74,33 @@ START observer methods to notify e.g. gameboardview when changes arise
 
     /*
     END gameState transitions
+     */
+
+    /*
+    START Player management
+     */
+
+    /**
+     * Creates a new player or updates the existing player with the provided username and ID.
+     * This method ensures that only one Player instance exists within the application.
+     * If player exists, username and ID will be updated. If no player exists, new player will be
+     * instantiated with the given username and the ID assigned by the server.
+     *
+     * @param username the username of the player.
+     * @param id the unique ID assigned by the server to the player.
+     */
+    public void createOrUpdatePlayer(String username, int id) {
+        if (currentPlayer == null) {
+            currentPlayer = new Player(username);
+        }
+        currentPlayer.setId(id);  //id is provided by server
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+    /*
+    END
      */
 
     @Override

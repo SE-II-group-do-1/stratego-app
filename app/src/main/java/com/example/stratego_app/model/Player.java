@@ -8,8 +8,7 @@ public class Player {
         // Default constructor
     }
 
-    public Player(int id, String username) {
-        this.id = id;
+    public Player(String username) { //id is set by server --> Update MainFragment to receive correct player id!
         this.username = username;
     }
 
