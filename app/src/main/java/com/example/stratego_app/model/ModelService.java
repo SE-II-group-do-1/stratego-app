@@ -1,10 +1,15 @@
 package com.example.stratego_app.model;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.stratego_app.model.pieces.*;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,10 +82,13 @@ START observer methods to notify e.g. gameboardview when changes arise
     private boolean validateMove(int startX, int startY, int endX, int endY) {
         return startX > startY && endX > endY;
     }
-
     @Override
-    public void updateBoard(Piece[][] newBoard) {
-        //update the board from the server
+    public void updateBoard(Board newBoard) {
+        if (newBoard == null) {
+            return;
+        }
+        board.setBoard(newBoard); //set entire board state
+        notifyObservers(); //notify observers of board update
     }
 
     @Override
@@ -93,7 +101,7 @@ START observer methods to notify e.g. gameboardview when changes arise
     }
 
     /**
-     * Place a piece on the board during the game setup.
+     * place a piece on the board during the game setup.
      *
      * @param x     The x-coordinate (column) of the board.
      * @param y     The y-coordinate (row) of the board.
@@ -110,12 +118,9 @@ START observer methods to notify e.g. gameboardview when changes arise
             notifyObservers();
         }
         return placed;
-
     }
 
-    /*
-    START managing lifecycle of game setup
-     */
+
     public void startGame() {
         if (gameSetupMode) {
             // additional setups and checks if needed
@@ -125,17 +130,54 @@ START observer methods to notify e.g. gameboardview when changes arise
             Log.d("ModelService", "Attempted to start game without being in setup mode.");
         }
     }
-    public void saveGameSetup() {
-        //Method implementieren
-            }
 
+    /**
+     * serialize the board setup and save it to the storage at server
+     * @param context
+     */
+    public boolean saveGameSetup(Context context) {
+        FileOutputStream fos = null;
+        JsonWriter writer = null;
+        try {
+            fos = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
+            writer = new JsonWriter(new OutputStreamWriter(fos, "UTF-8"));
+            writer.setIndent("  ");
+            writer.beginObject();
+            for (int y = 0; y < board.getBoard().length; y++) {
+                for (int x = 0; x < board.getBoard()[y].length; x++) {
+                    Piece piece = board.getField(y, x);
+                    if (piece != null) {
+                        writer.name(x + "," + y).value(piece.getRank().toString());
+                    }
+                }
+            }
+            writer.endObject();
+            return true; // saved
+        } catch (Exception e) {
+            Log.e("ModelService", "Error saving game setup", e);
+            return false;
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                Log.e("ModelService", "Error closing streams", e);
+                return false;
+            }
+        }
+    }
+
+    /**
+     *
+     * @return current state of the board
+     */
     public Board getCurrentGameBoard() {
         return board;
     }
-
-        /*
-    END
-     */
 
 
 
@@ -155,12 +197,9 @@ START observer methods to notify e.g. gameboardview when changes arise
     }
 
 
-    // ---------------- methods to fill Board randomly in settings Fragment  ----------------------------------------
-
-    //----- method to set Board ----
-
-
-
+    /**
+     * method to fill the board with pieces randomly
+     */
     public void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
         board.fillBoardRandomly(pieces);
@@ -168,6 +207,10 @@ START observer methods to notify e.g. gameboardview when changes arise
     }
 
 
+    /**
+     * generates a list of pieces including number of occurrence, rank, color and id)
+     * @return piece
+     */
     private List<Piece> generatePieces() {
         List<Piece> pieces = new ArrayList<>();
         pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, null, 1)));

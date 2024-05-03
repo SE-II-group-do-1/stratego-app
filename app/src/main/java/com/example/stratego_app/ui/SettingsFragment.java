@@ -78,16 +78,19 @@ public class SettingsFragment extends Fragment {
 
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
-            modelService.saveGameSetup();
-
+            modelService.saveGameSetup(getContext());
+            modelService.clearBoardExceptLakes();
+            clearPiecesInRecyclerView();
+            resetPiecesInRecycleView();
         });
     }
+
 
     //Helper methods
 
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());
-        piecesAdapter.notifyDataSetChanged(); //maybe use mor specific change event here!
+        piecesAdapter.notifyDataSetChanged(); //maybe use more specific change event here!
     }
     private void clearPiecesInRecyclerView() {
         piecesAdapter.clearPieces();

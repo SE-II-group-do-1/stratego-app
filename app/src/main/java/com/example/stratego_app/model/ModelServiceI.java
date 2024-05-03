@@ -26,7 +26,7 @@ public interface ModelServiceI {
      *
      * @param newBoard a 2D array of Piece objects representing the new board state
      */
-    void updateBoard(Piece[][] newBoard);
+    void updateBoard(Board newBoard);
 
     /**
      * Retrieves the piece at a given board location.
