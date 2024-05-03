@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.clients.LobbyClient;
 import com.example.stratego_app.connection.clients.LobbyClientListener;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Player;
 
 import java.util.List;
 

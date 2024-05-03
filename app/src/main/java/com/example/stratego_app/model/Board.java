@@ -1,4 +1,4 @@
-package com.example.stratego_app.model.pieces;
+package com.example.stratego_app.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +39,8 @@ public class Board {
             }
         }
     }
+
+
 
     /**
      * fills board with all pieces randomly placed on the gameboard

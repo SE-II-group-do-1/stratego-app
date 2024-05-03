@@ -1,6 +1,6 @@
 package com.example.stratego_app.connection.clients;
 
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Player;
 
 import java.util.List;
 

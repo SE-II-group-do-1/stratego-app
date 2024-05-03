@@ -1,4 +1,4 @@
-package com.example.stratego_app.models;
+package com.example.stratego_app.model;
 
 public class Player {
     private String username;

@@ -3,11 +3,12 @@ package com.example.stratego_app.pieces;
 //import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.model.Color;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 /**
  * Instrumented test, which will execute on an Android device.

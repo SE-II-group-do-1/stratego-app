@@ -10,8 +10,8 @@ import static org.mockito.Mockito.*;
 
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 @ExtendWith(MockitoExtension.class)
 class MockitoObserverClass {

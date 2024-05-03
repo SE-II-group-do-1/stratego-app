@@ -7,11 +7,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.pieces.Board;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
+import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

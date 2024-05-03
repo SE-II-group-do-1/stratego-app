@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 class ModelServiceTest {
 

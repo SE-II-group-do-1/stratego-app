@@ -15,8 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 import java.util.HashMap;
 import java.util.Map;

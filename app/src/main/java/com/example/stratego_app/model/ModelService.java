@@ -4,7 +4,6 @@ package com.example.stratego_app.model;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.stratego_app.model.pieces.*;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.FileOutputStream;
@@ -26,6 +25,8 @@ public class ModelService implements ModelServiceI{
         }
         return instance;
     }
+
+    private GameState currentGameState = GameState.WAITING;  // default state
 
     private Board gameBoard;
     private Board setupBoard;
@@ -58,6 +59,22 @@ START observer methods to notify e.g. gameboardview when changes arise
     END observer methods
      */
 
+    /*
+    START gameState transitions
+     */
+    public void setGameState(GameState newState) {
+        this.currentGameState = newState;
+        notifyObservers();  // Notify UI components of the state change
+    }
+
+    public GameState getGameState() {
+        return this.currentGameState;
+    }
+
+    /*
+    END gameState transitions
+     */
+
     @Override
     public void initializeGame() {
         if (gameSetupMode) {
@@ -72,6 +89,7 @@ START observer methods to notify e.g. gameboardview when changes arise
         if (gameSetupMode) {
             // transferSetupToGameBoard(); method? or how do we transfer the set-up to the final board?
             gameSetupMode = false;
+            setGameState(GameState.INGAME);
             notifyObservers();
         } else {
             Log.d(tag, "Attempted to start game without being in setup mode.");

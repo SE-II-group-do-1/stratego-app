@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.model.pieces.Piece;
+import com.example.stratego_app.model.Piece;
 
 import java.util.ArrayList;
 import java.util.List;

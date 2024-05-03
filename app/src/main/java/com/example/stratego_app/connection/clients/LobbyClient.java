@@ -2,7 +2,7 @@ package com.example.stratego_app.connection.clients;
 
 import android.util.Log;
 
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

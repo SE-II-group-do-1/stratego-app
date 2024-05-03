@@ -16,8 +16,8 @@ import android.widget.Button;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 import java.util.ArrayList;
 import java.util.Collections;

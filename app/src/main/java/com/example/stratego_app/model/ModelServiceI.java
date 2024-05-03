@@ -1,5 +1,4 @@
 package com.example.stratego_app.model;
-import com.example.stratego_app.model.pieces.*;
 
 public interface ModelServiceI {
     /**
