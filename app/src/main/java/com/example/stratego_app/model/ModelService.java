@@ -18,6 +18,7 @@ public class ModelService implements ModelServiceI{
 
     //implement singleton pattern
     private static ModelService instance;
+    String tag = "ModelService";
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
@@ -26,12 +27,14 @@ public class ModelService implements ModelServiceI{
         return instance;
     }
 
-    private final Board board;
+    private Board gameBoard;
+    private Board setupBoard;
     private boolean gameSetupMode = true;
     private List<ObserverModelService> observers = new ArrayList<>();
 
     public ModelService() {
-        this.board = new Board();
+        this.gameBoard = new Board();
+        this.setupBoard = new Board();
     }
 
 /*
@@ -57,21 +60,34 @@ START observer methods to notify e.g. gameboardview when changes arise
 
     @Override
     public void initializeGame() {
-        this.gameSetupMode = true;
-        // Assuming this is where the player starts placing their pieces
-        // GUI integration
+        if (gameSetupMode) {
+            this.setupBoard = new Board();
+        } else {
+            this.gameBoard = new Board();
+        }
+    }
+
+
+    public void startGame() {
+        if (gameSetupMode) {
+            // transferSetupToGameBoard(); method? or how do we transfer the set-up to the final board?
+            gameSetupMode = false;
+            notifyObservers();
+        } else {
+            Log.d(tag, "Attempted to start game without being in setup mode.");
+        }
     }
 
 
     @Override
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        Piece movingPiece = board.getField(startY, startX);
+        Piece movingPiece = gameBoard.getField(startY, startX);
 
 
         if (validateMove(startX, startY, endX, endY)) {
             // Perform the move
-            board.setField(endY, endX, movingPiece); // Move the piece to the new position
-            board.setField(startY, startX, null); // Clear the original position
+            gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
+            gameBoard.setField(startY, startX, null); // Clear the original position
 
             return true; // Move was successful
         }
@@ -87,18 +103,19 @@ START observer methods to notify e.g. gameboardview when changes arise
         if (newBoard == null) {
             return;
         }
-        board.setBoard(newBoard); //set entire board state
+        gameBoard.setBoard(newBoard); //set entire board state
         notifyObservers(); //notify observers of board update
     }
 
     @Override
     public Piece getPieceAtPosition(int x, int y) {
-        return board.getField(y, x);
+        return gameBoard.getField(y, x);
     }
 
-    public Board getBoard() {
-        return board;
+    public Board getGameBoard() {
+        return gameBoard;
     }
+
 
     /**
      * place a piece on the board during the game setup.
@@ -111,7 +128,7 @@ START observer methods to notify e.g. gameboardview when changes arise
     public boolean placePieceAtGameSetUp(int x, int y, Piece piece) {
         boolean placed = false;
         if (gameSetupMode && y >= 6 && y <= 9) {
-            board.setField(y, x, piece);
+            setupBoard.setField(y, x, piece);
             placed = true;
         }
         if (placed) {
@@ -121,31 +138,22 @@ START observer methods to notify e.g. gameboardview when changes arise
     }
 
 
-    public void startGame() {
-        if (gameSetupMode) {
-            // additional setups and checks if needed
-            gameSetupMode = false;
-            notifyObservers();
-        } else {
-            Log.d("ModelService", "Attempted to start game without being in setup mode.");
-        }
-    }
 
     /**
      * serialize the board setup and save it to the storage at server
      * @param context
      */
     public boolean saveGameSetup(Context context) {
-        FileOutputStream fos = null;
+        FileOutputStream fileOutStream = null;
         JsonWriter writer = null;
         try {
-            fos = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
-            writer = new JsonWriter(new OutputStreamWriter(fos, "UTF-8"));
+            fileOutStream = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
+            writer = new JsonWriter(new OutputStreamWriter(fileOutStream, "UTF-8"));
             writer.setIndent("  ");
             writer.beginObject();
-            for (int y = 0; y < board.getBoard().length; y++) {
-                for (int x = 0; x < board.getBoard()[y].length; x++) {
-                    Piece piece = board.getField(y, x);
+            for (int y = 0; y < gameBoard.getBoard().length; y++) {
+                for (int x = 0; x < gameBoard.getBoard()[y].length; x++) {
+                    Piece piece = gameBoard.getField(y, x);
                     if (piece != null) {
                         writer.name(x + "," + y).value(piece.getRank().toString());
                     }
@@ -154,30 +162,22 @@ START observer methods to notify e.g. gameboardview when changes arise
             writer.endObject();
             return true; // saved
         } catch (Exception e) {
-            Log.e("ModelService", "Error saving game setup", e);
+            Log.e(tag, "Error saving game setup", e);
             return false;
         } finally {
             try {
                 if (writer != null) {
                     writer.close();
                 }
-                if (fos != null) {
-                    fos.close();
+                if (fileOutStream != null) {
+                    fileOutStream.close();
                 }
             } catch (IOException e) {
-                Log.e("ModelService", "Error closing streams", e);
-                return false;
+                Log.e(tag, "Error closing streams", e);
             }
         }
     }
 
-    /**
-     *
-     * @return current state of the board
-     */
-    public Board getCurrentGameBoard() {
-        return board;
-    }
 
 
 
@@ -185,11 +185,11 @@ START observer methods to notify e.g. gameboardview when changes arise
      * clear gameboard in settings editor
      */
     public void clearBoardExceptLakes() {
-        for (int y = 0; y < board.getBoard().length; y++) {
-            for (int x = 0; x < board.getBoard()[y].length; x++) {
-                Piece piece = board.getField(y, x);
+        for (int y = 0; y < gameBoard.getBoard().length; y++) {
+            for (int x = 0; x < gameBoard.getBoard()[y].length; x++) {
+                Piece piece = gameBoard.getField(y, x);
                 if (piece != null && piece.getRank() != Rank.LAKE) {
-                    board.setField(y, x, null);
+                    gameBoard.setField(y, x, null);
                 }
             }
         }
@@ -202,7 +202,7 @@ START observer methods to notify e.g. gameboardview when changes arise
      */
     public void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
-        board.fillBoardRandomly(pieces);
+        gameBoard.fillBoardRandomly(pieces);
         notifyObservers();
     }
 

@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
-import com.example.stratego_app.model.pieces.Board;
 import com.example.stratego_app.model.pieces.Piece;
 import com.example.stratego_app.model.pieces.Rank;
 
@@ -199,7 +198,7 @@ public class GameBoardView extends View implements ObserverModelService {
      */
 
     private void drawPieces(Canvas canvas) {
-        Piece[][] boardArray = modelService.getBoard().getBoard();
+        Piece[][] boardArray = modelService.getGameBoard().getBoard();
 
         for (int row = 0; row < boardArray.length; row++) {
             for (int col = 0; col < boardArray[row].length; col++) {
