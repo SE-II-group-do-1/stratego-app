@@ -49,19 +49,6 @@ public class LobbyClient implements Disposable {
     }
 
 
-    /**
-     * TODO:
-     * - determine payload -> HashMap
-     * - /topic/lobby -> /topic/reply
-     * - impl updateLobby
-     * - impl setBoard
-     * - connect to UI
-     * - adapt LobbyClientListener Interface
-     * - sequence diagram
-     * - test
-     * - docs
-     */
-
     public void connect() {
         client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
         client.withClientHeartbeat(1000).withServerHeartbeat(1000);
@@ -116,7 +103,7 @@ public class LobbyClient implements Disposable {
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
-        //TODO: assign player selfInfo and color
+        //assign player selfInfo and color
         //subscribe to assigned lobby and setup
         currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
                 .subscribeOn(Schedulers.io())
@@ -141,7 +128,7 @@ public class LobbyClient implements Disposable {
     }
 
     public void setupBoardResponse(StompMessage message){
-        //TODO: use finished Model service
+        Log.i(TAG, message.getPayload());
     }
 
     private void updateLobby(StompMessage message){
@@ -156,7 +143,7 @@ public class LobbyClient implements Disposable {
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
-        //TODO: connect to Model
+        //connect to Model
 
     }
 
