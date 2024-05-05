@@ -63,14 +63,8 @@ public class ModelService implements ModelServiceI{
         //Check if other Piece is an opponent
         Piece otherPiece = board.getField(endY,endX);
         if (otherPiece.getColor() != movingPiece.getColor()){
-            //Starting a Fight
-            if(!fight(movingPiece,otherPiece)){
                 return false;
-            }
-        } else {
-            return false;
         }
-
         return true;
         }
 
@@ -127,36 +121,6 @@ public class ModelService implements ModelServiceI{
     private boolean areCoordinatesWithinBoardBounds(int startX, int startY, int endX, int endY) {
         return startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
-    }
-    public boolean fight(Piece attacker, Piece defender){
-        // Get the ranks of the attacking and defending pieces
-        Rank attackerRank = attacker.getRank();
-        Rank defenderRank = defender.getRank();
-
-        // Compare the ranks to determine the outcome of the fight
-        if (defenderRank == Rank.FLAG){
-            //TODO Game Won
-            return true;
-        }else if (attackerRank == Rank.MINER && defenderRank == Rank.BOMB) {
-            // Miner defuses bomb
-            return true; // Attacker wins
-        } else if (defenderRank == Rank.BOMB && attackerRank != Rank.MINER) {
-            // Defender wins if it's a bomb and attacker is not a miner
-            return false; // Defender wins
-        } else if (attackerRank == Rank.SPY && defenderRank == Rank.MARSHAL) {
-            // Spy defeats Marshal
-            return true; // Attacker wins
-        } else if (attackerRank.getValue() > defenderRank.getValue()) {
-            // Attacker wins if its rank value is higher than defender's
-            return true; // Attacker wins
-        } else if (attackerRank.getValue() < defenderRank.getValue()) {
-            // Defender wins if its rank value is higher than attacker's
-            return false; // Defender wins
-        } else {
-            // If ranks are equal, it's a tie
-            //TODO Remove both
-            return false; // Defender wins (for simplicity)
-        }
     }
 
     @Override
