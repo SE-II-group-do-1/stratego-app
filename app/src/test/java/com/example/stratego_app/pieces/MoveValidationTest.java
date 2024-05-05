@@ -1,5 +1,6 @@
 package com.example.stratego_app.pieces;
 
+import org.junit.AfterClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.Before;
@@ -13,28 +14,92 @@ import com.example.stratego_app.model.pieces.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class MoveValidationTest {
+ class MoveValidationTest {
     private ModelService modelService = new ModelService();
-
-
-    @Before
-    public void setUp() {
-        modelService = new ModelService();
-    }
     @Test
-    public void testMoveOutOfBoundary(){
+     void testMoveOutOfBoundary(){
         //TODO
+        assertEquals(false, modelService.movePiece(0,10,0,1));
     }
     @Test
-    public void testMovePiece_NotValidMove() {
-        // Arrange: Assuming you have a valid setup
-        int startX = 1, startY = 1, endX = 1, endY = 1;
-        modelService.getBoard().setField(startY, startX, new Piece(Rank.MINER));
-        boolean expected = false;
-
-        boolean result = modelService.movePiece(startX, startY, endX, endY);
-
-        // Assert: Validate that the move was successful
-        assertEquals("Valid move should be successful", expected, result);
+     void isMovable(){
+        Piece bomb = new Piece(Rank.BOMB, Color.RED, 3);
+        modelService.getBoard().setField(0,0,bomb);
+        assertEquals(false, modelService.movePiece(0,0,0,1));
     }
+    @Test
+     void checkForAPiece(){
+        assertEquals(false, modelService.movePiece(0,0,0,1));
+    }
+    @Test
+     void moveIntoLake(){
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        modelService.getBoard().setField(4,1,marshal);
+        assertEquals(false, modelService.movePiece(4,1,4,2));
+    }
+
+    @Test
+     void isMoveDiagonal(){
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        modelService.getBoard().setField(1,1,marshal);
+        assertEquals(false, modelService.movePiece(1,1,2,2));
+    }
+
+    @Test
+     void checkStepSize(){
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        modelService.getBoard().setField(0,0,marshal);
+        assertEquals(false, modelService.movePiece(0,0,0,2));
+    }
+
+    @Test
+     void isDestinationEmpty(){
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        modelService.getBoard().setField(0,0,marshal);
+        assertEquals(true, modelService.movePiece(0,0,0,1));
+    }
+
+    @Test
+     void DestinationNotEmpty(){
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece jeff = new Piece(Rank.BOMB, Color.RED, 2);
+        modelService.getBoard().setField(0,0,marshal);
+        modelService.getBoard().setField(1,0,jeff);
+        assertEquals(false, modelService.movePiece(0,0,1,0));
+    }
+    @Test
+     void testFight(){
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece jeff = new Piece(Rank.MARSHAL, Color.BLUE, 4);
+        modelService.getBoard().setField(0,0,marshal);
+        modelService.getBoard().setField(0,1,jeff);
+        assertEquals(true, modelService.movePiece(0,0,0,1));
+    }
+
+    @Test
+     void checkStepSizeScoutSomeoneInTheWayVertical(){
+        Piece scout = new Piece(Rank.SCOUT, Color.RED, 3);
+        Piece jeff = new Piece(Rank.MARSHAL, Color.RED, 3);
+        modelService.getBoard().setField(0,0,scout);
+        modelService.getBoard().setField(0,2,jeff);
+        assertEquals(false, modelService.movePiece(0,0,0,5));
+    }
+
+    @Test
+     void checkStepSizeScoutSomeoneInTheWayHorizontal(){
+        Piece scout = new Piece(Rank.SCOUT, Color.RED, 3);
+        Piece jeff = new Piece(Rank.MARSHAL, Color.RED, 3);
+        modelService.getBoard().setField(0,0,scout);
+        modelService.getBoard().setField(2,0,jeff);
+        assertEquals(false, modelService.movePiece(0,0,5,0));
+    }
+
+    @Test
+     void checkStepSizeScout(){
+        Piece scout = new Piece(Rank.SCOUT, Color.RED, 3);
+        modelService.getBoard().setField(0,0,scout);
+        assertEquals(true, modelService.movePiece(0,0,5,0));
+    }
+
+
 }

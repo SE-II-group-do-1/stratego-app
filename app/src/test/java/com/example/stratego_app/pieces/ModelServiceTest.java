@@ -20,13 +20,14 @@ class ModelServiceTest {
 
     private ModelService modelService = new ModelService();
 
+
     @Test
-    public void getPieceTest() {
+     void getPieceTest() {
         assertNull(modelService.getPieceAtPosition(1,1));
     }
 
     @Test
-    public void getBoard() {
+     void getBoard() {
         assertNotNull(modelService.getBoard());
     }
 

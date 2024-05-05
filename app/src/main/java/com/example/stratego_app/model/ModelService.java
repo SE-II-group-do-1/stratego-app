@@ -16,13 +16,14 @@ public class ModelService implements ModelServiceI{
 
     @Override
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        Piece movingPiece = board.getField(startY, startX);
+
 
 
         if (validateMove(startX, startY, endX, endY)) {
+            Piece movingPiece = board.getField(startX, startY);
             // Perform the move
-            board.setField(endY, endX, movingPiece); // Move the piece to the new position
-            board.setField(startY, startX, null); // Clear the original position
+            board.setField(endX, endY, movingPiece); // Move the piece to the new position
+            board.setField(startX, startY, null); // Clear the original position
             return true; // Move was successful
         }
 
@@ -34,8 +35,12 @@ public class ModelService implements ModelServiceI{
         if (!areCoordinatesWithinBoardBounds(startX, startY, endX, endY)) {
             return false;
         }
+        //Check if there is a piece
+        if (board.getField(startX,startY) == null){
+            return false;
+        }
         //Initialize a moving Piece
-        Piece movingPiece = board.getField(startY, startX);
+        Piece movingPiece = board.getField(startX, startY);
         //TODO Check if it is your piece
 
         //Check if the Piece is allowed to move
@@ -43,8 +48,11 @@ public class ModelService implements ModelServiceI{
             return false;
         }
 
-        //Check for a Lake
-        if (board.getField(endY, endX).getRank() == Rank.LAKE){ return false;}
+        // Check for a lake at the destination (null safe)
+        Piece destinationPiece = board.getField(endX, endY);
+        if (destinationPiece != null && destinationPiece.getRank() == Rank.LAKE) {
+            return false;
+        }
 
         //Check for diagonal move
         if (isMoveDiagonal(startX, startY, endX, endY)){
@@ -57,15 +65,14 @@ public class ModelService implements ModelServiceI{
         }
 
         //Check if the field is empty
-        if(board.getField(endY,endX) == null) {
+        if(destinationPiece == null) {
             return true;
         }
-        //Check if other Piece is an opponent
-        Piece otherPiece = board.getField(endY,endX);
-        if (otherPiece.getColor() != movingPiece.getColor()){
+        /* Check if other Piece is an opponent */
+        if (destinationPiece.getColor() == movingPiece.getColor()){
                 return false;
         }
-        return true;
+            return true;
         }
 
     private boolean checkStepSize(Piece movingPiece, int startX, int endX, int startY, int endY) {
@@ -107,7 +114,7 @@ public class ModelService implements ModelServiceI{
                 currentX += step;
             }
             // Check if the intermediate space is empty
-            if (board.getField(currentY, currentX) != null) {
+            if (board.getField(currentX, currentY) != null) {
                 return false; // There is a piece in the way, invalid move for Scout
             }
         }
@@ -127,10 +134,9 @@ public class ModelService implements ModelServiceI{
     public void updateBoard(Piece[][] newBoard) {
         //update the board from the server
     }
-
     @Override
     public Piece getPieceAtPosition(int x, int y) {
-        return null;
+        return board.getField(x,y);
     }
 
     public Board getBoard() {

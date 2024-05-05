@@ -17,10 +17,10 @@ public class Board {
         fields[5][7] = new Piece(Rank.LAKE);
     }
 
-    public void setField(int y, int x, Piece piece){
-        fields[y][x] = piece;
+    public void setField(int x, int y, Piece piece){
+        fields[x][y] = piece;
     }
-    public Piece getField(int y, int x){ return fields[y][x];
+    public Piece getField(int x, int y){ return fields[x][y];
     }
     public Piece[][] getBoard(){
         return fields;
@@ -28,9 +28,9 @@ public class Board {
 
     public void setBoard(Board newBoard){
         Piece[][] newFields = newBoard.getBoard();
-        for(int y=0; y<10;y++){
-            for(int x=0; x<10; x++){
-                if(newFields[y][x] != null) this.fields[y][x] = newFields[y][x];
+        for(int x=0; x<10;x++){
+            for(int y=0; y<10; y++){
+                if(newFields[x][y] != null) this.fields[x][y] = newFields[x][y];
             }
         }
     }
