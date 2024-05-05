@@ -1,5 +1,8 @@
 package com.example.stratego_app.connection.clients;
 
+import static com.example.stratego_app.connection.clients.ToMap.leaveToObject;
+import static com.example.stratego_app.connection.clients.ToMap.setupToObject;
+import static com.example.stratego_app.connection.clients.ToMap.updateToObject;
 import static java.util.Map.entry;
 
 import android.util.Log;
@@ -132,16 +135,21 @@ public class LobbyClient implements Disposable {
     }
 
     private void updateLobby(StompMessage message){
-        Map<String,Object> payload = gson.<Map<String,Object>>fromJson(message.getPayload(),
-                new TypeToken<Map<String, Object>>() {}.getType());
-        try{
-            Integer y = (Integer) payload.get("y");
-            Integer x = (Integer) payload.get("x");
-            Piece piece = (Piece) payload.get("piece");
-            Log.i(TAG, payload.toString());
+        if(message.getPayload().equals("close")){
+            Log.i(TAG, "Opponent left lobby");
         }
-        catch (Exception e){
-            Log.e(TAG, e.toString());
+        else {
+            try {
+                Map<String, Object> payload = gson.<Map<String, Object>>fromJson(message.getPayload(),
+                        new TypeToken<Map<String, Object>>() {
+                        }.getType());
+                Integer y = (Integer) payload.get("y");
+                Integer x = (Integer) payload.get("x");
+                Piece piece = (Piece) payload.get("piece");
+                Log.i(TAG, payload.toString());
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
         //connect to Model
 
@@ -174,29 +182,6 @@ public class LobbyClient implements Disposable {
     @Override
     public boolean isDisposed() {
         return disposable.isDisposed();
-    }
-
-    private Map<String, Object> updateToObject(int y, int x, Piece piece, Player initiator){
-        Map<String, Object> toReturn = new HashMap<>();
-        toReturn.put("y", y);
-        toReturn.put("x", x);
-        toReturn.put("piece", piece);
-        toReturn.put("initiator", initiator);
-        return toReturn;
-    }
-
-    private Map<String, Object> leaveToObject(Player player){
-        Map<String, Object> toReturn = new HashMap<>();
-        toReturn.put("id", currentLobbyID);
-        toReturn.put("player", player);
-        return toReturn;
-    }
-
-    private Map<String, Object> setupToObject(Player player, Board board){
-        Map<String, Object> toReturn = new HashMap<>();
-        toReturn.put("board", board);
-        toReturn.put("player", player);
-        return toReturn;
     }
 
 }
