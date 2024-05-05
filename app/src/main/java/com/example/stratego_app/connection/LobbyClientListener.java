@@ -1,4 +1,4 @@
-package com.example.stratego_app.connection.clients;
+package com.example.stratego_app.connection;
 
 import com.example.stratego_app.models.Player;
 

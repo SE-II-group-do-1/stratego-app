@@ -13,8 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.connection.LobbyClient;
 
 
 public class MainFragment extends Fragment {

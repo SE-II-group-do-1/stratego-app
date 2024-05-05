@@ -1,9 +1,8 @@
-package com.example.stratego_app.connection.clients;
+package com.example.stratego_app.connection;
 
-import static com.example.stratego_app.connection.clients.ToMap.leaveToObject;
-import static com.example.stratego_app.connection.clients.ToMap.setupToObject;
-import static com.example.stratego_app.connection.clients.ToMap.updateToObject;
-import static java.util.Map.entry;
+import static com.example.stratego_app.connection.ToMap.leaveToObject;
+import static com.example.stratego_app.connection.ToMap.setupToObject;
+import static com.example.stratego_app.connection.ToMap.updateToObject;
 
 import android.util.Log;
 
@@ -14,7 +13,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

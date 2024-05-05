@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
-import com.example.stratego_app.connection.clients.LobbyClientListener;
+import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.connection.LobbyClientListener;
 import com.example.stratego_app.models.Player;
 
 import java.util.List;
