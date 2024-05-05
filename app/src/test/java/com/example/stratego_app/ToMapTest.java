@@ -28,7 +28,7 @@ public class ToMapTest {
         testMap.put("y", y);
         testMap.put("x", x);
         testMap.put("piece", piece);
-        testMap.put("player", player);
+        testMap.put("initiator", player);
 
         assertEquals(testMap, ToMap.updateToObject(y,x,piece,player));
 
