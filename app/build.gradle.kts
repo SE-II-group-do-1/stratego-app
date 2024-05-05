@@ -106,5 +106,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.3.1")
     implementation("io.reactivex.rxjava2:rxjava:2.2.5")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.8.0")
 
 }
