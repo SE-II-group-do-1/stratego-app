@@ -19,7 +19,7 @@ public class ToMap {
 
     public static Map<String, Object> leaveToObject(Player player){
         Map<String, Object> toReturn = new HashMap<>();
-        toReturn.put("id", currentLobbyID);
+        toReturn.put("id", LobbyClient.getInstance().getCurrentLobby());
         toReturn.put("player", player);
         return toReturn;
     }

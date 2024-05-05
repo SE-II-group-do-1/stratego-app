@@ -28,6 +28,8 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
 
+    private static LobbyClient instance;
+
     private static final String TAG = "LobbyClient";
 
     private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
@@ -40,6 +42,17 @@ public class LobbyClient implements Disposable {
     Disposable setup;
     Disposable errors;
     Disposable currentLobby;
+
+
+
+    public static LobbyClient getInstance(){
+        if(instance == null){
+            return new LobbyClient();
+        }
+        else{
+            return instance;
+        }
+    }
 
     private final List<LobbyClientListener> listeners = new ArrayList<>();
 
