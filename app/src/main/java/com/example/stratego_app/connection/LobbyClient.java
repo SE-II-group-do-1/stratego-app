@@ -63,6 +63,10 @@ public class LobbyClient implements Disposable {
     }
 
 
+    /**
+     * Establishes connection with server and listens to topics concerning errors and
+     * initial server response (only after sending join lobby request)
+     */
     public void connect() {
         client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
         client.withClientHeartbeat(1000).withServerHeartbeat(1000);
@@ -104,6 +108,13 @@ public class LobbyClient implements Disposable {
 
         client.connect();
     }
+
+    /**
+     * Called after connecting to server and receiving response. Assigns player its info
+     * and starts listening to specific lobby topic with given ID. Also listens to specific
+     * setup topic with given ID, for initial Board setup.
+     * @param message - Map containing player info, color for game, and lobby ID
+     */
     private void onLobbyResponse(StompMessage message) {
         Log.d("stomp", message.getPayload());
         Map<String,Object> payload = gson.<Map<String,Object>>fromJson(message.getPayload(),
@@ -131,20 +142,39 @@ public class LobbyClient implements Disposable {
                 .subscribe(this::setupBoardResponse, throwable -> Log.e(TAG, "error subscribing to setup", throwable));
     }
 
+    /**
+     * Called when pressing a button to request joining a lobby to start playing.
+     * @param username - sent to server to create player and get asigned to a lobby.
+     *                 response is handled in onLobbyResponse()
+     */
     public void joinLobby(String username) {
         String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
     }
 
+    /**
+     * Called when a button is pressed. Sends current player chosen Board layout to server,
+     * after which the game can start.
+     * @param board - the player defined arrangement of pieces.
+     * @param player - self, the player making the request
+     */
     public void sendBoard(Board board, Player player){
         String data = gson.toJson(setupToObject(player, board));
         client.send("/setup", data);
     }
 
+    /**
+     * Handles response from server after sending player-defined board (sendBoard()).
+     * @param message - currently just Logs.
+     */
     public void setupBoardResponse(StompMessage message){
         Log.i(TAG, message.getPayload());
     }
 
+    /**
+     * Handles all in game server responses (mostly updating Board).
+     * @param message - can be "close" if other participant left, or updated position of Piece
+     */
     private void updateLobby(StompMessage message){
         if(message.getPayload().equals("close")){
             Log.i(TAG, "Opponent left lobby");
@@ -166,15 +196,30 @@ public class LobbyClient implements Disposable {
 
     }
 
+    /**
+     * Called after a button is pressed. Sends player move to server.
+     * @param y - new Y position of Piece
+     * @param x - new X position of Piece
+     * @param piece - Piece that was moved
+     * @param initiator - player that made the move
+     */
     public void sendUpdate(int y, int x, Piece piece, Player initiator){
         String data = gson.toJson(updateToObject(y,x,piece, initiator));
         client.send("/topic/lobby-"+currentLobbyID, data);
     }
 
+    /**
+     * Handles exceptions sent by server. Simply logs them.
+     * @param message - exception from server.
+     */
     private void handleException(StompMessage message){
         Log.e(TAG, message.getPayload());
     }
 
+    /**
+     * Called when player leaves the lobby.
+     * @param player - self, for server to identify.
+     */
     public void leaveLobby(Player player) {
         String data = gson.toJson(leaveToObject(player));
         client.send("/app/leave", data);
