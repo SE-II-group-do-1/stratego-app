@@ -1,9 +1,9 @@
 package com.example.stratego_app.connection;
 
 import com.example.stratego_app.connection.LobbyClient;
-import com.example.stratego_app.model.pieces.Board;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Player;
 
 import java.util.HashMap;
 import java.util.Map;
