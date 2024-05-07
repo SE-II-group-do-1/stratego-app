@@ -29,18 +29,25 @@ public class ModelService implements ModelServiceI{
     private GameState currentGameState = GameState.WAITING;  // default state
 
     private Board gameBoard;
-    private Board setupBoard;
-    private boolean gameSetupMode = true;
+
+    private boolean gameSetupMode;
     private Player currentPlayer;
     private List<ObserverModelService> observers = new ArrayList<>();
 
     public ModelService() {
         this.gameBoard = new Board();
-        this.setupBoard = new Board();
+    }
+
+    /**
+     * Sets the game setup mode.
+     * @param gameSetupMode true if the game is in setup mode, false if in play mode.
+     */
+    public void setGameSetupMode(boolean gameSetupMode) {
+        this.gameSetupMode = gameSetupMode;
     }
 
 
-/*
+    /*
 START observer methods to notify e.g. gameboardview when changes arise
  */
     public void addObserver(ObserverModelService observer) {
@@ -109,7 +116,7 @@ START observer methods to notify e.g. gameboardview when changes arise
     @Override
     public void initializeGame() {
         if (gameSetupMode) {
-            this.setupBoard = new Board();
+            this.gameBoard = new Board();
         } else {
             this.gameBoard = new Board();
             gameSetupMode = false;
@@ -270,7 +277,7 @@ START observer methods to notify e.g. gameboardview when changes arise
     public boolean placePieceAtGameSetUp(int x, int y, Piece piece) {
         boolean placed = false;
         if (gameSetupMode && y >= 6 && y <= 9) {
-            setupBoard.setField(y, x, piece);
+            gameBoard.setField(y, x, piece);
             placed = true;
         }
         if (placed) {

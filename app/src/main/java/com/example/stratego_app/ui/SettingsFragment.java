@@ -39,6 +39,7 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        modelService.setGameSetupMode(true);
         modelService.initializeGame();
 
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
