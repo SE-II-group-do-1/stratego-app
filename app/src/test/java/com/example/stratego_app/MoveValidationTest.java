@@ -18,8 +18,8 @@ import com.example.stratego_app.model.*;
     private ModelService modelService = new ModelService();
     @Test
      void testMoveOutOfBoundary(){
-        //TODO
-        assertEquals(false, modelService.movePiece(0,10,0,1));
+       boolean result = modelService.movePiece(0, 0, 10, 0); // End x is out of bounds
+       assertFalse(result);
     }
     @Test
      void isMovable(){
