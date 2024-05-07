@@ -1,54 +1,55 @@
 package com.example.stratego_app.model;
 
+import android.util.Log;
+
 public class Piece {
+    private static int nextID = 0;
     private Rank rank;
     private boolean isVisible;
-    private Color color; // Adding color to distinguish between players pieces
-    private int id; // Optional: useful for tracking specific pieces in complex logic
+    private boolean isMovable;
 
-    //normal Constructor
-    public Piece(Rank rank, Color color, int id) {
-        this.rank = rank;
+    private Color color;
+    private int id;
+
+    public Piece(Rank rank, Color color){
+        this.id = nextID;
         this.color = color;
-        this.id = id;
-        this.isVisible = false;
-    }
-    //Constructor for lakes
-    public Piece(Rank rank) {
         this.rank = rank;
-        this.isVisible = true; // Lakes are always visible
+        this.isVisible = false;
+        this.isMovable = rank != Rank.LAKE && rank != Rank.FLAG && rank != Rank.BOMB;
+        nextID++;
+    }
 
+    /**
+     * Construcor specific for Lakes. ID is always -1 (do not affect next ID), have no color.
+     * @param rank should be Lake, otherwise use other constructor
+     */
+    public Piece(Rank rank){
+        if(rank != Rank.LAKE) Log.e("Piece", "Wrong Constructor!!!!!");
+        this.rank = rank;
+        this.isVisible = true;
+        this.isMovable = false;
+        this.id = -1;
+        this.color = null;
     }
 
     public Rank getRank() {
         return rank;
     }
-    public int getId() {
-        return id;
-    }
-    public Color getColor(){
-        return color;
-    }
 
     public boolean isVisible() {
         return isVisible;
     }
-    public void setVisible(boolean visible){
-        this.isVisible = visible;
-    }
 
     public boolean isMovable() {
+        return isMovable;
+    }
 
-        switch (this.rank) {
-            case FLAG:
-            case BOMB:
-            case LAKE:
-                return false;
-            default:
-                return true;
-        }
+    public Color getColor() {
+        return color;
+    }
 
-
-
+    public int getId() {
+        return id;
     }
 }
