@@ -65,7 +65,7 @@ public class MainFragment extends Fragment {
             if (!username.isEmpty()) {
 
                 Player player = new Player(username);//has to be updated as id is received by server!
-                LobbyClient lc = new LobbyClient();
+                LobbyClient lc = LobbyClient.getInstance();
                 lc.connect();
                 lc.joinLobby(username);
 
