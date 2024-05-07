@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.model.*;
 
 /**
  * Instrumented test, which will execute on an Android device.

@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.connection.ToMap;
-import com.example.stratego_app.model.pieces.Board;
-import com.example.stratego_app.model.pieces.Color;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Color;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
+import com.example.stratego_app.model.Player;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ public class ToMapTest {
         int y = 1;
         int x = 2;
         Piece piece = new Piece(Rank.MAJOR, Color.BLUE, 1);
-        Player player = new Player(1, "TEST");
+        Player player = new Player("TEST");
 
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("y", y);
