@@ -88,10 +88,6 @@ START observer methods to notify e.g. gameboardview when changes arise
     END gameState transitions
      */
 
-    /*
-    START Player management
-     */
-
     /**
      * Creates a new player or updates the existing player with the provided username and ID.
      * This method ensures that only one Player instance exists within the application.
@@ -101,19 +97,18 @@ START observer methods to notify e.g. gameboardview when changes arise
      * @param username the username of the player.
      * @param id the unique ID assigned by the server to the player.
      */
-    public void createOrUpdatePlayer(String username, int id) {
+    public void Player(String username, int id) {
         if (currentPlayer == null) {
-            currentPlayer = new Player(username);
+            currentPlayer = new Player(username, id);
         }
-        currentPlayer.setId(id);  //id is provided by server
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
+    public String getPlayerUsername() {
+        return currentPlayer.getUsername();
     }
-    /*
-    END
-     */
+    public int getPlayerID(){
+        return currentPlayer.getId();
+    }
 
     @Override
     public void initializeGame() {

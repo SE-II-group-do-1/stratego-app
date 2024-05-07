@@ -4,12 +4,9 @@ public class Player {
     private String username;
     private int id;
 
-    public Player() {
-        // Default constructor
-    }
-
-    public Player(String username) { //id is set by server --> Update MainFragment to receive correct player id!
+    public Player(String username, int id) {
         this.username = username;
+        this.id = id;
     }
 
     public String getUsername() {
@@ -28,11 +25,4 @@ public class Player {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "username='" + username + '\'' +
-                ", id=" + id +
-                '}';
-    }
 }
