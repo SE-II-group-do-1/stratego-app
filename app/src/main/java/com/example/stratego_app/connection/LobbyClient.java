@@ -43,7 +43,7 @@ public class LobbyClient implements Disposable {
 
 
 
-    public static LobbyClient getInstance(){
+    public static synchronized LobbyClient getInstance(){
         if(instance == null){
             return new LobbyClient();
         }
