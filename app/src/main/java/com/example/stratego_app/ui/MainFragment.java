@@ -14,10 +14,15 @@ import android.widget.EditText;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Player;
+
 
 
 public class MainFragment extends Fragment {
 
+
+    ModelService modelService = ModelService.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +42,9 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
+        /**
+         * Button startGame starts e new game of Stratego with a two-player game set-up
+         */
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
 
@@ -45,6 +53,8 @@ public class MainFragment extends Fragment {
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+
+            modelService.startGame();
         });
 
         Button enter = view.findViewById(R.id.enterButton);
@@ -54,11 +64,9 @@ public class MainFragment extends Fragment {
 
             if (!username.isEmpty()) {
 
-                //Player player = new Player(2, username);
-                //use singleton
-                LobbyClient lc = LobbyClient.getInstance();
-                //already connected -> Main activity ???
-                //lc.connect();
+                Player player = new Player(username);//has to be updated as id is received by server!
+                LobbyClient lc = new LobbyClient();
+                lc.connect();
                 lc.joinLobby(username);
 
                 // Navigate to LobbyFragment

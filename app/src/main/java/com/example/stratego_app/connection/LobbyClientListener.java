@@ -1,12 +1,10 @@
 package com.example.stratego_app.connection;
 
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Player;
 
 import java.util.List;
 
-import ua.naiksoftware.stomp.dto.StompMessage;
-
 public interface LobbyClientListener {
 
-    void onLobbyResponse(StompMessage m);
+    void onLobbyUpdated(List<Player> players);
 }

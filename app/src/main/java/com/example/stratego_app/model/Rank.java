@@ -1,4 +1,4 @@
-package com.example.stratego_app.model.pieces;
+package com.example.stratego_app.model;
 
 public enum Rank {
     MARSHAL,
@@ -13,5 +13,5 @@ public enum Rank {
     SPY,
     FLAG,
     BOMB,
-    LAKE
+    LAKE;
 }
