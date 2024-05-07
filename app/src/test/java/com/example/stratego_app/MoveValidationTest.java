@@ -1,4 +1,4 @@
-package com.example.stratego_app.pieces;
+package com.example.stratego_app;
 
 import org.junit.AfterClass;
 import org.junit.jupiter.api.Test;

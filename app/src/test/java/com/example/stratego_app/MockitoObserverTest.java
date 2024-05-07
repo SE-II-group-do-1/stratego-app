@@ -14,7 +14,7 @@ import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
 
 @ExtendWith(MockitoExtension.class)
-class MockitoObserverClass {
+class MockitoObserverTest {
     @Mock
     private ObserverModelService observer;
     private ModelService modelService;

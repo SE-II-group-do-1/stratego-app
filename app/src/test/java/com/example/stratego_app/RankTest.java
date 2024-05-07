@@ -1,4 +1,4 @@
-package com.example.stratego_app.pieces;
+package com.example.stratego_app;
 
 //import androidx.test.ext.junit.runners.AndroidJUnit4;
 
