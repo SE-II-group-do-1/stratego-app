@@ -5,7 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
+
+import com.example.stratego_app.connection.LobbyClient;
 
 public class MainActivity extends AppCompatActivity {
     private LobbyClient lc;
@@ -22,11 +23,17 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        lc = new LobbyClient();
+        //use LobbyCLient seingleton
+        lc = LobbyClient.getInstance();
         lc.connect();
     }
 
+    //unnecessary
+    /*
     public LobbyClient getLobbyClient() {
         return lc;
     }
+     */
 }
+
+

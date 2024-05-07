@@ -13,8 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.connection.LobbyClient;
 
 
 public class MainFragment extends Fragment {
@@ -40,7 +39,6 @@ public class MainFragment extends Fragment {
 
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
-            MockSessionService.clearUsernames();
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -56,10 +54,12 @@ public class MainFragment extends Fragment {
 
             if (!username.isEmpty()) {
 
-                Player player = new Player(2, username);
-                LobbyClient lc = new LobbyClient();
-                lc.connect();
-                lc.joinLobby(player);
+                //Player player = new Player(2, username);
+                //use singleton
+                LobbyClient lc = LobbyClient.getInstance();
+                //already connected -> Main activity ???
+                //lc.connect();
+                lc.joinLobby(username);
 
                 // Navigate to LobbyFragment
                 LobbyFragment lobbyFragment = new LobbyFragment();
