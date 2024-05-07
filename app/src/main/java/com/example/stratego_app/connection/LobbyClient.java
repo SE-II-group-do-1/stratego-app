@@ -6,9 +6,9 @@ import static com.example.stratego_app.connection.ToMap.updateToObject;
 
 import android.util.Log;
 
-import com.example.stratego_app.model.pieces.Board;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -60,12 +60,6 @@ public class LobbyClient implements Disposable {
 
     public void unregisterListener(LobbyClientListener listener) {
         listeners.remove(listener);
-    }
-
-    private void notifyListeners(StompMessage message) {
-        for (LobbyClientListener listener : listeners) {
-            listener.onLobbyResponse(message);
-        }
     }
 
 

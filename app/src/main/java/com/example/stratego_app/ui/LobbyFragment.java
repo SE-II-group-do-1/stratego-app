@@ -4,8 +4,6 @@ package com.example.stratego_app.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
-import com.example.stratego_app.connection.clients.LobbyClientListener;
+import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.connection.LobbyClientListener;
 import com.example.stratego_app.model.Player;
 
 
 import java.util.List;
-
-import ua.naiksoftware.stomp.dto.StompMessage;
 
 
 public class LobbyFragment extends Fragment implements LobbyClientListener {
@@ -42,9 +38,8 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
         super.onViewCreated(view, savedInstanceState);
         playersContainer = view.findViewById(R.id.playersContainer);
 
-        //use LobbyClient Singleton instead
-        //LobbyClient lobbyClient = LobbyClient.getInstance();
-        LobbyClient.getInstance().registerListener(this);
+        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
+        lobbyClient.registerListener(this);
 
     }
 
@@ -52,16 +47,13 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
     public void onDestroyView() {
         super.onDestroyView();
 
-        //use LobbyClient Signelton
-        //LobbyClient lobbyClient = LobbyClient.getInstance();
-        LobbyClient.getInstance().unregisterListener(this);
+        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
+        lobbyClient.unregisterListener(this);
 
     }
 
     @Override
-    public void onLobbyResponse(StompMessage message) {
-        Log.i("LobbyFragment", message.getPayload());
-        /*
+    public void onLobbyUpdated(List<Player> players) {
         if (getActivity() == null) return;
 
         getActivity().runOnUiThread(() -> {
@@ -70,8 +62,6 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
                 addPlayerToView(player.getUsername());
             }
         });
-
-         */
     }
     private void addPlayerToView(String playerName) {
         TextView playerView = new TextView(getContext());

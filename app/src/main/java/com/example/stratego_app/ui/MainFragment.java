@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
+import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Player;
 
@@ -64,11 +64,10 @@ public class MainFragment extends Fragment {
 
             if (!username.isEmpty()) {
 
-                Player player = new Player(2, username);//has to be updated as id is received by server!
+                Player player = new Player(username);//has to be updated as id is received by server!
                 LobbyClient lc = new LobbyClient();
                 lc.connect();
-                lc.joinLobby(player);
-
+                lc.joinLobby(username);
 
                 // Navigate to LobbyFragment
                 LobbyFragment lobbyFragment = new LobbyFragment();
