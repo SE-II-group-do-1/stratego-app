@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface LobbyClientListener {
 
-    void onLobbyUpdated(List<Player> players);
+    void onLobbyUpdated(String message);
 }

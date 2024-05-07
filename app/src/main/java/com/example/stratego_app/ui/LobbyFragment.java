@@ -51,14 +51,12 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
     }
 
     @Override
-    public void onLobbyUpdated(List<Player> players) {
+    public void onLobbyUpdated(String message) {
         if (getActivity() == null) return;
 
         getActivity().runOnUiThread(() -> {
             playersContainer.removeAllViews();
-            for (Player player : players) {
-                addPlayerToView(player.getUsername());
-            }
+            addPlayerToView(message);
         });
     }
     private void addPlayerToView(String playerName) {

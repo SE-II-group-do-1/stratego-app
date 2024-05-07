@@ -103,6 +103,10 @@ START observer methods to notify e.g. gameboardview when changes arise
         }
     }
 
+    public void Player(Player player){
+        currentPlayer = player;
+    }
+
     public String getPlayerUsername() {
         return currentPlayer.getUsername();
     }
@@ -264,6 +268,10 @@ START observer methods to notify e.g. gameboardview when changes arise
 
     public Color getPlayerColor(){
         return playerColor;
+    }
+
+    public void setPlayerColor(Color color){
+        playerColor = color;
     }
 
 

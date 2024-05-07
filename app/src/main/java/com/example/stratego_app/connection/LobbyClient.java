@@ -7,6 +7,8 @@ import static com.example.stratego_app.connection.ToMap.updateToObject;
 import android.util.Log;
 
 import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Color;
+import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Player;
 import com.google.gson.Gson;
@@ -121,14 +123,18 @@ public class LobbyClient implements Disposable {
                 new TypeToken<Map<String, Object>>() {}.getType());
         try{
             currentLobbyID = (Integer) payload.get("id");
-            String color = (String) payload.get("color");
+            Color color = (Color) payload.get("color");
             Player selfInfo = (Player) payload.get("player");
             Log.i(TAG, payload.toString());
+
+            ModelService.getInstance().Player(selfInfo);
+            ModelService.getInstance().setPlayerColor(color);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
         //assign player selfInfo and color
+
         //subscribe to assigned lobby and setup
         currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
                 .subscribeOn(Schedulers.io())
