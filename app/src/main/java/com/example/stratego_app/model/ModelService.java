@@ -131,7 +131,7 @@ START observer methods to notify e.g. gameboardview when changes arise
 
 
         if (validateMove(startX, startY, endX, endY)) {
-            movingPiece = gameBoard.getField(startX, startY);
+            Piece movingPiece = gameBoard.getField(startX, startY);
             // Perform the move
             gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
             gameBoard.setField(startY, startX, null); // Clear the original position
