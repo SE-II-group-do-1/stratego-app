@@ -39,19 +39,17 @@ public class ModelServiceTest {
 
     private ModelService modelService = new ModelService();
     private Board board = new Board();
-
-    @Mock
-    private Context mockContext;
-    @Mock
-    private FileOutputStream mockFileOutputStream;
-    @Mock
-    private JsonWriter mockJsonWriter;
+    private ObserverModelService mockObserver;
 
 
     @BeforeEach
     public void setUp() throws Exception {
         modelService = ModelService.getInstance();
         board = modelService.getGameBoard();
+
+        mockObserver = mock(ObserverModelService.class);
+        modelService.addObserver(mockObserver);
+        modelService.initializeGame(); // Assuming this method or similar can set the game setup mode.
     }
 
     @Test
@@ -63,6 +61,18 @@ public class ModelServiceTest {
     void getBoard() {
         assertNotNull(modelService.getGameBoard());
     }
+
+
+    @Test
+    void testStartGameEffectivelyStartsTheGame() {
+        // Act
+        modelService.startGame();
+
+        // Assert
+        verify(mockObserver, times(1)).onBoardUpdated();
+        assertEquals(GameState.INGAME, modelService.getGameState());
+    }
+
 
     @Test
     public void testPlacePieceAtGameSetUp_FailureOutsideSetupRows() {

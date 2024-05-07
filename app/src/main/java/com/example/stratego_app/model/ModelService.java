@@ -39,6 +39,7 @@ public class ModelService implements ModelServiceI{
         this.setupBoard = new Board();
     }
 
+
 /*
 START observer methods to notify e.g. gameboardview when changes arise
  */
@@ -64,8 +65,10 @@ START observer methods to notify e.g. gameboardview when changes arise
     START gameState transitions
      */
     public void setGameState(GameState newState) {
-        this.currentGameState = newState;
-        notifyObservers();  // Notify UI components of the state change
+        if (this.currentGameState != newState) {
+            this.currentGameState = newState;
+            notifyObservers();  // Notify UI components only if the state actually changes
+        }
     }
 
     public GameState getGameState() {
@@ -109,6 +112,7 @@ START observer methods to notify e.g. gameboardview when changes arise
             this.setupBoard = new Board();
         } else {
             this.gameBoard = new Board();
+            gameSetupMode = false;
         }
     }
 
@@ -118,16 +122,13 @@ START observer methods to notify e.g. gameboardview when changes arise
             // transferSetupToGameBoard(); method? or how do we transfer the set-up to the final board?
             gameSetupMode = false;
             setGameState(GameState.INGAME);
-            notifyObservers();
-        } else {
-            Log.d(tag, "Attempted to start game without being in setup mode.");
         }
     }
 
 
     @Override
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        Piece movingPiece = gameBoard.getField(startY, startX);
+        Piece movingPiece;
 
 
         if (validateMove(startX, startY, endX, endY)) {
