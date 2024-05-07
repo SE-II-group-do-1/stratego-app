@@ -55,8 +55,10 @@ public class MainFragment extends Fragment {
             if (!username.isEmpty()) {
 
                 //Player player = new Player(2, username);
-                LobbyClient lc = new LobbyClient();
-                lc.connect();
+                //use singleton
+                LobbyClient lc = LobbyClient.getInstance();
+                //already connected -> Main activity ???
+                //lc.connect();
                 lc.joinLobby(username);
 
                 // Navigate to LobbyFragment

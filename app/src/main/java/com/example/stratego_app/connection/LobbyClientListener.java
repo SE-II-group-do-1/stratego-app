@@ -4,7 +4,9 @@ import com.example.stratego_app.models.Player;
 
 import java.util.List;
 
+import ua.naiksoftware.stomp.dto.StompMessage;
+
 public interface LobbyClientListener {
 
-    void onLobbyUpdated(List<Player> players);
+    void onLobbyResponse(StompMessage m);
 }

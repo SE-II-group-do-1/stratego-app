@@ -62,6 +62,12 @@ public class LobbyClient implements Disposable {
         listeners.remove(listener);
     }
 
+    private void notifyListeners(StompMessage message) {
+        for (LobbyClientListener listener : listeners) {
+            listener.onLobbyResponse(message);
+        }
+    }
+
 
     /**
      * Establishes connection with server and listens to topics concerning errors and

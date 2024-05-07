@@ -23,13 +23,17 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        lc = new LobbyClient();
+        //use LobbyCLient seingleton
+        lc = LobbyClient.getInstance();
         lc.connect();
     }
 
+    //unnecessary
+    /*
     public LobbyClient getLobbyClient() {
         return lc;
     }
+     */
 }
 
 
