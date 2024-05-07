@@ -109,18 +109,18 @@ public class SettingsFragment extends Fragment {
     // Helper method to get a list of all pieces
     private List<Piece> getPiecesList() {
         List<Piece> pieces = new ArrayList<>();
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, null, 1)));
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.MARSHAL, null, 2)));
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.GENERAL, null, 3)));
-        pieces.addAll(Collections.nCopies(2, new Piece(Rank.COLONEL, null, 4)));
-        pieces.addAll(Collections.nCopies(3, new Piece(Rank.MAJOR, null, 5)));
-        pieces.addAll(Collections.nCopies(4, new Piece(Rank.CAPTAIN, null, 6)));
-        pieces.addAll(Collections.nCopies(4, new Piece(Rank.LIEUTENANT, null, 7)));
-        pieces.addAll(Collections.nCopies(4, new Piece(Rank.SERGEANT, null, 8)));
-        pieces.addAll(Collections.nCopies(5, new Piece(Rank.MINER, null, 9)));
-        pieces.addAll(Collections.nCopies(8, new Piece(Rank.SCOUT, null, 10)));
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.SPY, null, 11)));
-        pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, null, 12)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.MARSHAL, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.GENERAL, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(2, new Piece(Rank.COLONEL, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(3, new Piece(Rank.MAJOR, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.CAPTAIN, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.LIEUTENANT, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.SERGEANT, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(5, new Piece(Rank.MINER, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(8, new Piece(Rank.SCOUT, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.SPY, ModelService.getInstance().getPlayerColor())));
+        pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, ModelService.getInstance().getPlayerColor())));
 
         return pieces;
     }

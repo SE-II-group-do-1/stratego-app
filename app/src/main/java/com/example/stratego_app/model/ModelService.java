@@ -32,6 +32,8 @@ public class ModelService implements ModelServiceI{
 
     private boolean gameSetupMode;
     private Player currentPlayer;
+
+    private Color playerColor;
     private List<ObserverModelService> observers = new ArrayList<>();
 
     public ModelService() {
@@ -265,6 +267,10 @@ START observer methods to notify e.g. gameboardview when changes arise
         return gameBoard;
     }
 
+    public Color getPlayerColor(){
+        return playerColor;
+    }
+
 
     /**
      * place a piece on the board during the game setup.
@@ -362,18 +368,18 @@ START observer methods to notify e.g. gameboardview when changes arise
      */
     private List<Piece> generatePieces() {
         List<Piece> pieces = new ArrayList<>();
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, null, 1)));
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.MARSHAL, null, 2)));
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.GENERAL, null, 3)));
-        pieces.addAll(Collections.nCopies(2, new Piece(Rank.COLONEL, null, 4)));
-        pieces.addAll(Collections.nCopies(3, new Piece(Rank.MAJOR, null, 5)));
-        pieces.addAll(Collections.nCopies(4, new Piece(Rank.CAPTAIN, null, 6)));
-        pieces.addAll(Collections.nCopies(4, new Piece(Rank.LIEUTENANT, null, 7)));
-        pieces.addAll(Collections.nCopies(4, new Piece(Rank.SERGEANT, null, 8)));
-        pieces.addAll(Collections.nCopies(5, new Piece(Rank.MINER, null, 9)));
-        pieces.addAll(Collections.nCopies(8, new Piece(Rank.SCOUT, null, 10)));
-        pieces.addAll(Collections.nCopies(1, new Piece(Rank.SPY, null, 11)));
-        pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, null, 12)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, playerColor)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.MARSHAL, playerColor)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.GENERAL, playerColor)));
+        pieces.addAll(Collections.nCopies(2, new Piece(Rank.COLONEL, playerColor)));
+        pieces.addAll(Collections.nCopies(3, new Piece(Rank.MAJOR, playerColor)));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.CAPTAIN, playerColor)));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.LIEUTENANT, playerColor)));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.SERGEANT, playerColor)));
+        pieces.addAll(Collections.nCopies(5, new Piece(Rank.MINER, playerColor)));
+        pieces.addAll(Collections.nCopies(8, new Piece(Rank.SCOUT, playerColor)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.SPY, playerColor)));
+        pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, playerColor)));
 
         return pieces;
     }

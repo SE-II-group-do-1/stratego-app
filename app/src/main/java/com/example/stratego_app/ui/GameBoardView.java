@@ -274,7 +274,7 @@ public class GameBoardView extends View implements ObserverModelService {
 
     private Piece createPieceFromType(String type) {
         Rank rank = Rank.valueOf(type.toUpperCase());
-        return new Piece(rank, null, 0);
+        return new Piece(rank, ModelService.getInstance().getPlayerColor());
     }
 
     @Override
