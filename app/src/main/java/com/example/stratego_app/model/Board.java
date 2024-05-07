@@ -1,4 +1,4 @@
-package com.example.stratego_app.model.pieces;
+package com.example.stratego_app.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +40,8 @@ public class Board {
         }
     }
 
+
+
     /**
      * fills board with all pieces randomly placed on the gameboard
      */
@@ -59,6 +61,13 @@ public class Board {
             setField(pos / 10, pos % 10, pieces.get(i));
         }
     }
+
+    /**
+     * checks if placed pieces is in a valid location without a set piece on it
+     * @param y y-coordinates
+     * @param x x-coordinates
+     * @return true it the field is empty
+     */
 
     public boolean isValidLocation(int y, int x) {
         if (y < 0 || y >= 10 || x < 0 || x >= 10) {

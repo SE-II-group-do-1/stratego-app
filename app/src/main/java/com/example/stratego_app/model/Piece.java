@@ -1,4 +1,4 @@
-package com.example.stratego_app.model.pieces;
+package com.example.stratego_app.model;
 
 public class Piece {
     private Rank rank;

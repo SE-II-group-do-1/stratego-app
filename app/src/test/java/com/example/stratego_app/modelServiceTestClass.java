@@ -7,11 +7,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.pieces.Board;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
+import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class modelServiceTestClass {
@@ -19,10 +19,10 @@ public class modelServiceTestClass {
     private ModelService modelService = new ModelService();
     private Board board = new Board();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         modelService = ModelService.getInstance();
-        board = modelService.getBoard();
+        board = modelService.getGameBoard();
     }
 
     @Test
@@ -48,8 +48,8 @@ public class modelServiceTestClass {
     @Test
     void testClearBoardExceptLakes() {
         // Arrange
-        modelService.getBoard().setField(0, 1, new Piece(Rank.FLAG));
-        modelService.getBoard().setField(1, 0, new Piece(Rank.MARSHAL));
+        modelService.getGameBoard().setField(0, 1, new Piece(Rank.FLAG));
+        modelService.getGameBoard().setField(1, 0, new Piece(Rank.MARSHAL));
 
         // Act
         modelService.clearBoardExceptLakes();

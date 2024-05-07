@@ -16,6 +16,8 @@ import android.widget.Button;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +39,8 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        modelService.initializeGame();
+
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
         gameBoardView.setConfigMode(false);
         gameBoardView.setDisplayLowerHalfOnly(true);
@@ -45,7 +49,7 @@ public class SettingsFragment extends Fragment {
         RecyclerView piecesRecyclerView = view.findViewById(R.id.piecesRecyclerView);
         piecesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6));
 
-        // Initialize the class field directly, removing the local declaration
+
         piecesAdapter = new PiecesAdapter(getPiecesList(), (viewHolder, position) -> {
             ClipData data = ClipData.newPlainText("", ""); // Include relevant piece data here
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(viewHolder.itemView);
@@ -54,10 +58,11 @@ public class SettingsFragment extends Fragment {
         });
 
         piecesRecyclerView.setAdapter(piecesAdapter);
-
         gameBoardView.setDropListener((success, position) -> {
             if (success) {
-                piecesAdapter.removeItem(position); // Remove the item only on successful drop
+                piecesAdapter.removeItem(position);
+                piecesAdapter.notifyItemRemoved(position);
+                piecesAdapter.notifyItemRangeChanged(position, piecesAdapter.getItemCount());
             }
         });
 
@@ -75,16 +80,24 @@ public class SettingsFragment extends Fragment {
 
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
-            modelService.saveGameSetup();
+            modelService.saveGameSetup(getContext());
+        });
 
+        Button leave = view.findViewById(R.id.btnLeaveSettings);
+        leave.setOnClickListener(v ->{
+            getParentFragmentManager().popBackStack();
+            clearPiecesInRecyclerView();
+            resetPiecesInRecycleView();
+            modelService.clearBoardExceptLakes();
         });
     }
+
 
     //Helper methods
 
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());
-        piecesAdapter.notifyDataSetChanged();
+        piecesAdapter.notifyDataSetChanged(); //maybe use more specific change event here!
     }
     private void clearPiecesInRecyclerView() {
         piecesAdapter.clearPieces();
@@ -93,21 +106,21 @@ public class SettingsFragment extends Fragment {
 
 
     // Helper method to get a list of all pieces
-    private List<String> getPiecesList() {
-        List<String> pieces = new ArrayList<>();
+    private List<Piece> getPiecesList() {
+        List<Piece> pieces = new ArrayList<>();
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.FLAG, null, 1)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.MARSHAL, null, 2)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.GENERAL, null, 3)));
+        pieces.addAll(Collections.nCopies(2, new Piece(Rank.COLONEL, null, 4)));
+        pieces.addAll(Collections.nCopies(3, new Piece(Rank.MAJOR, null, 5)));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.CAPTAIN, null, 6)));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.LIEUTENANT, null, 7)));
+        pieces.addAll(Collections.nCopies(4, new Piece(Rank.SERGEANT, null, 8)));
+        pieces.addAll(Collections.nCopies(5, new Piece(Rank.MINER, null, 9)));
+        pieces.addAll(Collections.nCopies(8, new Piece(Rank.SCOUT, null, 10)));
+        pieces.addAll(Collections.nCopies(1, new Piece(Rank.SPY, null, 11)));
+        pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, null, 12)));
 
-        pieces.addAll(Collections.nCopies(1, "flag"));
-        pieces.addAll(Collections.nCopies(1, "marshal"));
-        pieces.addAll(Collections.nCopies(1, "general"));
-        pieces.addAll(Collections.nCopies(2, "colonel"));
-        pieces.addAll(Collections.nCopies(3, "major"));
-        pieces.addAll(Collections.nCopies(4, "captain"));
-        pieces.addAll(Collections.nCopies(4, "lieutenant"));
-        pieces.addAll(Collections.nCopies(4, "sergeant"));
-        pieces.addAll(Collections.nCopies(5, "miner"));
-        pieces.addAll(Collections.nCopies(8, "scout"));
-        pieces.addAll(Collections.nCopies(1, "spy"));
-        pieces.addAll(Collections.nCopies(6, "bomb"));
         return pieces;
     }
 
