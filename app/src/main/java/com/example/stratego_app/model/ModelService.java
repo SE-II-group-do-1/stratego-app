@@ -14,6 +14,7 @@ public class ModelService implements ModelServiceI{
     private GameState currentGameState;
     private Board gameBoard;
     private Player currentPlayer;
+    private Player currentOpponent;
     private Color playerColor;
     private boolean currentTurn;
 
@@ -47,8 +48,8 @@ public class ModelService implements ModelServiceI{
     }
 
     //send update to Server
-    public void requestUpdate(){
-        LobbyClient.getInstance().sendUpdate();
+    public void requestUpdate(int y, int x, Piece piece){
+        LobbyClient.getInstance().sendUpdate(y,x,piece, currentPlayer);
     }
 
 
@@ -201,6 +202,10 @@ public class ModelService implements ModelServiceI{
     }
     public void Player(Player player){
         currentPlayer = player;
+    }
+
+    public void Opponent(Player opponent) {
+        currentOpponent = opponent;
     }
 
 
