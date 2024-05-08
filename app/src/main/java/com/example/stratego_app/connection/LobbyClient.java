@@ -5,6 +5,7 @@ import static com.example.stratego_app.connection.ToMap.setupToObject;
 import static com.example.stratego_app.connection.ToMap.updateToObject;
 
 import android.util.Log;
+import android.view.Display;
 
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
@@ -18,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -105,12 +107,13 @@ public class LobbyClient implements Disposable {
      *                 response is handled in onLobbyResponse()
      */
     public void joinLobby(String username) {
+        ModelService.getInstance().setUsername(username);
         String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
     }
 
     /**
-     * TODO: recieve response entire Lobby info, color???
+     * TODO: recieve response entire Lobby info
      * Called after connecting to server and receiving response. Assigns player its info
      * and starts listening to specific lobby topic with given ID. Also listens to specific
      * setup topic with given ID, for initial Board setup.
@@ -122,10 +125,24 @@ public class LobbyClient implements Disposable {
         try{
             //parse message
             currentLobbyID = (Integer) payload.get("id");
-            Color color = (Color) payload.get("color");
-            Player selfInfo = (Player) payload.get("player");
-            Player opponent = (Player) payload.get("opponent");
+            Player playerRed = (Player) payload.get("playerRed");
+            Player playerBlue = (Player) payload.get("playerBlue");
             Log.i(TAG, payload.toString());
+
+            //check who is self
+            Player selfInfo;
+            Player opponent;
+            Color color;
+            if(Objects.equals(playerRed.getUsername(), ModelService.getInstance().getUsername())){
+                selfInfo = playerRed;
+                opponent = playerBlue;
+                color = Color.RED;
+            }
+            else{
+                selfInfo = playerBlue;
+                opponent = playerRed;
+                color = Color.BLUE;
+            }
 
             //update info in ModelService
             ModelService.getInstance().Player(selfInfo);
