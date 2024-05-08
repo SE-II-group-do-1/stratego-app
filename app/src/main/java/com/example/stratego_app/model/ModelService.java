@@ -1,11 +1,12 @@
 package com.example.stratego_app.model;
 
+import com.example.stratego_app.connection.LobbyClient;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /*TODO:
- - updateBoard
  - code cleanup
  */
 public class ModelService implements ModelServiceI{
@@ -14,6 +15,7 @@ public class ModelService implements ModelServiceI{
     private Board gameBoard;
     private Player currentPlayer;
     private Color playerColor;
+    private boolean currentTurn;
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
@@ -25,37 +27,30 @@ public class ModelService implements ModelServiceI{
     public ModelService() {
         this.gameBoard = new Board();
         this.currentGameState = GameState.WAITING;
+        this.currentTurn = false;
     }
 
-    public void setGameState(GameState newState) {
-        if (this.currentGameState != newState) {
-            this.currentGameState = newState;
+    @Override
+    public void updateBoard(Board newBoard) {
+        if (newBoard == null) {
+            return;
         }
+        gameBoard.setBoard(newBoard); //set entire board state
+        //TODO: notify UI
     }
 
-    public GameState getGameState() {
-        return this.currentGameState;
+    //commit update from server
+    public void updateBoard(int y, int x, Piece piece){
+        if(currentGameState != GameState.INGAME) return;
+        gameBoard.setField(x,y,piece);
+        currentTurn = !currentTurn;
     }
 
-    /**
-     * Creates a new player or updates the existing player with the provided username and ID.
-     * This method ensures that only one Player instance exists within the application.
-     * If player exists, username and ID will be updated. If no player exists, new player will be
-     * instantiated with the given username and the ID assigned by the server.
-     *
-     * @param username the username of the player.
-     * @param id the unique ID assigned by the server to the player.
-     */
-    public void Player(String username, int id) {
-        if (currentPlayer == null) {
-            currentPlayer = new Player(username, id);
-        }
+    //send update to Server
+    public void requestUpdate(){
+        LobbyClient.getInstance().sendUpdate();
     }
-    public void Player(Player player){
-        if (currentPlayer == null){
-            currentPlayer = player;
-        }
-    }
+
 
 
     @Override
@@ -173,14 +168,7 @@ public class ModelService implements ModelServiceI{
         return startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
     }
-    @Override
-    public void updateBoard(Board newBoard) {
-        if (newBoard == null) {
-            return;
-        }
-        gameBoard.setBoard(newBoard); //set entire board state
-        //TODO: notify UI
-    }
+
     @Override
     public Piece getPieceAtPosition(int x, int y) {
         return gameBoard.getField(y, x);
@@ -196,6 +184,23 @@ public class ModelService implements ModelServiceI{
 
     public void setPlayerColor(Color color){
         playerColor = color;
+    }
+
+    public void setGameState(GameState newState) {
+        if (this.currentGameState != newState) {
+            this.currentGameState = newState;
+        }
+    }
+
+    public GameState getGameState() {
+        return this.currentGameState;
+    }
+
+    public void Player(String username, int id) {
+        currentPlayer = new Player(username, id);
+    }
+    public void Player(Player player){
+        currentPlayer = player;
     }
 
 
@@ -268,6 +273,3 @@ public class ModelService implements ModelServiceI{
     }
 
 }
-
-
-

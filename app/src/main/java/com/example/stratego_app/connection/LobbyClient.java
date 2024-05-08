@@ -43,8 +43,6 @@ public class LobbyClient implements Disposable {
     Disposable errors;
     Disposable currentLobby;
 
-
-
     public static synchronized LobbyClient getInstance(){
         if(instance == null){
             return new LobbyClient();
@@ -53,17 +51,6 @@ public class LobbyClient implements Disposable {
             return instance;
         }
     }
-
-    private final List<LobbyClientListener> listeners = new ArrayList<>();
-
-    public void registerListener(LobbyClientListener listener) {
-        listeners.add(listener);
-    }
-
-    public void unregisterListener(LobbyClientListener listener) {
-        listeners.remove(listener);
-    }
-
 
     /**
      * Establishes connection with server and listens to topics concerning errors and
@@ -112,6 +99,17 @@ public class LobbyClient implements Disposable {
     }
 
     /**
+     * Called when pressing a button to request joining a lobby to start playing.
+     * @param username - sent to server to create player and get asigned to a lobby.
+     *                 response is handled in onLobbyResponse()
+     */
+    public void joinLobby(String username) {
+        String data = gson.toJson(username);
+        client.send("/app/join", data).subscribe();
+    }
+
+    /**
+     * TODO: recieve response entire Lobby info -> ready for setup, unsub from reply
      * Called after connecting to server and receiving response. Assigns player its info
      * and starts listening to specific lobby topic with given ID. Also listens to specific
      * setup topic with given ID, for initial Board setup.
@@ -133,29 +131,11 @@ public class LobbyClient implements Disposable {
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
-        //assign player selfInfo and color
-
-        //subscribe to assigned lobby and setup
-        currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateLobby, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
-        disposable.add(currentLobby);
-
+        //subscribe to assigned setup
         setup = client.topic("/topic/setup-"+currentLobbyID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setupBoardResponse, throwable -> Log.e(TAG, "error subscribing to setup", throwable));
-    }
-
-    /**
-     * Called when pressing a button to request joining a lobby to start playing.
-     * @param username - sent to server to create player and get asigned to a lobby.
-     *                 response is handled in onLobbyResponse()
-     */
-    public void joinLobby(String username) {
-        String data = gson.toJson(username);
-        client.send("/app/join", data).subscribe();
     }
 
     /**
@@ -170,14 +150,36 @@ public class LobbyClient implements Disposable {
     }
 
     /**
+     * TODO: recieve setup from both parties -> ready for game start, unsub from setup
      * Handles response from server after sending player-defined board (sendBoard()).
      * @param message - currently just Logs.
      */
     public void setupBoardResponse(StompMessage message){
+        //sub to assigned lobby
+        currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateLobby, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
+        disposable.add(currentLobby);
+
         Log.i(TAG, message.getPayload());
+        ModelService.getInstance().updateBoard();
     }
 
     /**
+     * Called after a button is pressed. Sends player move to server.
+     * @param y - new Y position of Piece
+     * @param x - new X position of Piece
+     * @param piece - Piece that was moved
+     * @param initiator - player that made the move
+     */
+    public void sendUpdate(int y, int x, Piece piece, Player initiator){
+        String data = gson.toJson(updateToObject(y,x,piece, initiator));
+        client.send("/topic/lobby-"+currentLobbyID, data);
+    }
+
+    /**
+     * TODO: connect to Model -> commti changes
      * Handles all in game server responses (mostly updating Board).
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
@@ -200,18 +202,6 @@ public class LobbyClient implements Disposable {
         }
         //connect to Model
 
-    }
-
-    /**
-     * Called after a button is pressed. Sends player move to server.
-     * @param y - new Y position of Piece
-     * @param x - new X position of Piece
-     * @param piece - Piece that was moved
-     * @param initiator - player that made the move
-     */
-    public void sendUpdate(int y, int x, Piece piece, Player initiator){
-        String data = gson.toJson(updateToObject(y,x,piece, initiator));
-        client.send("/topic/lobby-"+currentLobbyID, data);
     }
 
     /**
