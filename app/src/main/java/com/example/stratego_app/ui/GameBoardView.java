@@ -57,15 +57,10 @@ public class GameBoardView extends View implements ObserverModelService {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         loadDrawableCache();
         setupDragListener();
-
-        modelService.addObserver(this);
     }
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (modelService != null) {
-            modelService.removeObserver(this); // Unregister to prevent memory leaks
-        }
     }
 
     @Override
