@@ -21,8 +21,8 @@ public class ToMapTest {
     void testUpdateToObject(){
         int y = 1;
         int x = 2;
-        Piece piece = new Piece(Rank.MAJOR, Color.BLUE, 1);
-        Player player = new Player("TEST");
+        Piece piece = new Piece(Rank.MAJOR, Color.BLUE);
+        Player player = new Player("TEST", 1);
 
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("y", y);
@@ -36,7 +36,7 @@ public class ToMapTest {
 
     @Test
     void testLeaveToObject(){
-        Player player = new Player();
+        Player player = new Player("TEST", 1);
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("id", LobbyClient.getInstance().getCurrentLobby());
         testMap.put("player", player);
@@ -46,7 +46,7 @@ public class ToMapTest {
 
     @Test
     void testSetupToObject(){
-        Player player = new Player();
+        Player player = new Player("TEST", 1);
         Board board = new Board();
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("board", board);
