@@ -23,7 +23,7 @@ import com.example.stratego_app.model.*;
     }
     @Test
      void isMovable(){
-        Piece bomb = new Piece(Rank.BOMB, Color.RED, 3);
+        Piece bomb = new Piece(Rank.BOMB, Color.RED);
         modelService.getGameBoard().setField(0,0,bomb);
         assertEquals(false, modelService.movePiece(0,0,0,1));
     }
@@ -33,44 +33,44 @@ import com.example.stratego_app.model.*;
     }
     @Test
      void moveIntoLake(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(4,1,marshal);
         assertEquals(false, modelService.movePiece(4,1,4,2));
     }
 
     @Test
      void isMoveDiagonal(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(1,1,marshal);
         assertEquals(false, modelService.movePiece(1,1,2,2));
     }
 
     @Test
      void checkStepSize(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(0,0,marshal);
         assertEquals(false, modelService.movePiece(0,0,0,2));
     }
 
     @Test
      void isDestinationEmpty(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(0,0,marshal);
         assertEquals(true, modelService.movePiece(0,0,0,1));
     }
 
     @Test
      void DestinationNotEmpty(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
-        Piece jeff = new Piece(Rank.BOMB, Color.RED, 2);
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
+        Piece jeff = new Piece(Rank.BOMB, Color.RED);
         modelService.getGameBoard().setField(0,0,marshal);
         modelService.getGameBoard().setField(1,0,jeff);
         assertEquals(false, modelService.movePiece(0,0,1,0));
     }
     @Test
      void testFight(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED, 3);
-        Piece jeff = new Piece(Rank.MARSHAL, Color.BLUE, 4);
+        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
+        Piece jeff = new Piece(Rank.MARSHAL, Color.BLUE);
         modelService.getGameBoard().setField(0,0,marshal);
         modelService.getGameBoard().setField(0,1,jeff);
         assertEquals(true, modelService.movePiece(0,0,0,1));
@@ -78,8 +78,8 @@ import com.example.stratego_app.model.*;
 
     @Test
      void checkStepSizeScoutSomeoneInTheWayVertical(){
-        Piece scout = new Piece(Rank.SCOUT, Color.RED, 3);
-        Piece jeff = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece scout = new Piece(Rank.SCOUT, Color.RED);
+        Piece jeff = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(0,0,scout);
         modelService.getGameBoard().setField(0,2,jeff);
         assertEquals(false, modelService.movePiece(0,0,0,5));
@@ -87,8 +87,8 @@ import com.example.stratego_app.model.*;
 
     @Test
      void checkStepSizeScoutSomeoneInTheWayHorizontal(){
-        Piece scout = new Piece(Rank.SCOUT, Color.RED, 3);
-        Piece jeff = new Piece(Rank.MARSHAL, Color.RED, 3);
+        Piece scout = new Piece(Rank.SCOUT, Color.RED);
+        Piece jeff = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(0,0,scout);
         modelService.getGameBoard().setField(2,0,jeff);
         assertEquals(false, modelService.movePiece(0,0,5,0));
@@ -96,7 +96,7 @@ import com.example.stratego_app.model.*;
 
     @Test
      void checkStepSizeScout(){
-        Piece scout = new Piece(Rank.SCOUT, Color.RED, 3);
+        Piece scout = new Piece(Rank.SCOUT, Color.RED);
         modelService.getGameBoard().setField(0,0,scout);
         assertEquals(true, modelService.movePiece(0,0,5,0));
     }

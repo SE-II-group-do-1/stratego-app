@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
 import org.junit.Assert;
@@ -27,12 +28,10 @@ public class ModelServiceTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        modelService = ModelService.getInstance();
         board = modelService.getGameBoard();
 
         mockObserver = mock(ObserverModelService.class);
-        modelService.addObserver(mockObserver);
-        modelService.initializeGame(); // Assuming this method or similar can set the game setup mode.
+        ModelService.subscribe(mockObserver);
     }
 
     @Test
@@ -49,17 +48,17 @@ public class ModelServiceTest {
     @Test
     void testStartGameEffectivelyStartsTheGame() {
         // Act
-        modelService.startGame();
+        //modelService.startGame();
 
         // Assert
-        verify(mockObserver, times(1)).onBoardUpdated();
+        verify(mockObserver, times(1)).update();
         assertEquals(GameState.INGAME, modelService.getGameState());
     }
 
 
     @Test
     public void testPlacePieceAtGameSetUp_FailureOutsideSetupRows() {
-        Piece piece = new Piece(Rank.MINER, null, 9);
+        Piece piece = new Piece(Rank.MINER, null);
         boolean result = modelService.placePieceAtGameSetUp(5, 5, piece); // Row 5 is not allowed
 
         assertFalse(result);
@@ -68,7 +67,7 @@ public class ModelServiceTest {
 
     @Test
     public void testPlacePieceAtGameSetUp_SuccessfulPlacement() {
-        Piece piece = new Piece(Rank.MINER, null, 9);
+        Piece piece = new Piece(Rank.MINER, null);
         boolean result = modelService.placePieceAtGameSetUp(5, 6, piece);
         Assert.assertNotNull(board.getField(5,6));
     }
@@ -106,11 +105,10 @@ public class ModelServiceTest {
     @Test
     public void testRemoveObserver() {
         ObserverModelService observer = mock(ObserverModelService.class);
-        ModelService modelService = ModelService.getInstance();
-        modelService.addObserver(observer);
-        modelService.removeObserver(observer);
+        ModelService.subscribe(observer);
+        ModelService.unsubscribe(observer);
         modelService.setGameState(GameState.INGAME); // Change to trigger notification
-        verify(observer, times(0)).onBoardUpdated(); // Observer should not be called
+        verify(observer, times(0)).update(); // Observer should not be called
     }
 
     @Test
@@ -126,13 +124,13 @@ public class ModelServiceTest {
     @Test
     public void testCreateOrUpdatePlayer() {
         ModelService modelService = ModelService.getInstance();
-        modelService.createOrUpdatePlayer("player1", 1);
-        assertNotNull(modelService.getCurrentPlayer());
+        modelService.Player("player1", 1);
+        assertNotNull(modelService.getPlayer());
         assertEquals("player1", modelService.getCurrentPlayer().getUsername());
         assertEquals(1, modelService.getCurrentPlayer().getId());
 
         // Update the same player
-        modelService.createOrUpdatePlayer("playerUpdated", 2);
+        modelService.Player("playerUpdated", 2);
         assertEquals(2, modelService.getCurrentPlayer().getId());
     }
 
@@ -140,7 +138,6 @@ public class ModelServiceTest {
     @Test
     public void testInitializeGame() {
         ModelService modelService = ModelService.getInstance();
-        modelService.initializeGame();
         assertNotNull(modelService.getGameBoard());
         // Further assertions can be made based on the initial state of the Board
     }
