@@ -1,10 +1,6 @@
 package com.example.stratego_app.model;
 
 public interface ModelServiceI {
-    /**
-     * Initializes the game board and sets up initial game state.
-     */
-    void initializeGame();
 
     /**
      * Attempts to move a piece from one location to another.

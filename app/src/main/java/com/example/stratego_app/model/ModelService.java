@@ -5,17 +5,15 @@ import java.util.Collections;
 import java.util.List;
 
 /*TODO:
- - observer?
- - get rid of save setup
- - game setup mode and state machine -> GameState
  - updateBoard
  - code cleanup
  */
 public class ModelService implements ModelServiceI{
-
-    //implement singleton pattern
     private static ModelService instance;
-    String tag = "ModelService";
+    private GameState currentGameState;
+    private Board gameBoard;
+    private Player currentPlayer;
+    private Color playerColor;
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
@@ -24,58 +22,20 @@ public class ModelService implements ModelServiceI{
         return instance;
     }
 
-    private GameState currentGameState = GameState.WAITING;  // default state
-
-    private Board gameBoard;
-
-    private Player currentPlayer;
-
-    private Color playerColor;
-    private List<ObserverModelService> observers = new ArrayList<>();
-
     public ModelService() {
         this.gameBoard = new Board();
+        this.currentGameState = GameState.WAITING;
     }
 
-
-    /*
-START observer methods to notify e.g. gameboardview when changes arise
- */
-    public void addObserver(ObserverModelService observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(ObserverModelService observer) {
-        observers.remove(observer);
-    }
-
-    protected void notifyObservers() {
-        for (ObserverModelService observer : observers) {
-            observer.onBoardUpdated();
-        }
-    }
-
-    /*
-    END observer methods
-     */
-
-    /*
-    START gameState transitions
-     */
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
             this.currentGameState = newState;
-            notifyObservers();  // Notify UI components only if the state actually changes
         }
     }
 
     public GameState getGameState() {
         return this.currentGameState;
     }
-
-    /*
-    END gameState transitions
-     */
 
     /**
      * Creates a new player or updates the existing player with the provided username and ID.
@@ -91,21 +51,10 @@ START observer methods to notify e.g. gameboardview when changes arise
             currentPlayer = new Player(username, id);
         }
     }
-
     public void Player(Player player){
-        currentPlayer = player;
-    }
-
-    public String getPlayerUsername() {
-        return currentPlayer.getUsername();
-    }
-    public int getPlayerID(){
-        return currentPlayer.getId();
-    }
-
-
-    public void startGame() {
-        setGameState(GameState.INGAME);
+        if (currentPlayer == null){
+            currentPlayer = player;
+        }
     }
 
 
@@ -230,7 +179,7 @@ START observer methods to notify e.g. gameboardview when changes arise
             return;
         }
         gameBoard.setBoard(newBoard); //set entire board state
-        notifyObservers(); //notify observers of board update
+        //TODO: notify UI
     }
     @Override
     public Piece getPieceAtPosition(int x, int y) {
@@ -265,14 +214,10 @@ START observer methods to notify e.g. gameboardview when changes arise
             placed = true;
         }
         if (placed) {
-            notifyObservers();
+            //TODO: notify UI
         }
         return placed;
     }
-
-
-
-
 
     /**
      * clear gameboard in settings editor
@@ -286,7 +231,7 @@ START observer methods to notify e.g. gameboardview when changes arise
                 }
             }
         }
-        notifyObservers();
+        //TODO: notify UI
     }
 
 
@@ -296,7 +241,7 @@ START observer methods to notify e.g. gameboardview when changes arise
     public void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
         gameBoard.fillBoardRandomly(pieces);
-        notifyObservers();
+        //TODO: notify UI
     }
 
 
