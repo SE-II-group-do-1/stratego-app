@@ -39,6 +39,8 @@ public class LobbyClient implements Disposable {
     private final CompositeDisposable disposable = new CompositeDisposable();
     private final Gson gson = new Gson();
     private int currentLobbyID;
+
+    private String username;
     private StompClient client;
 
     Disposable reply;
@@ -107,7 +109,7 @@ public class LobbyClient implements Disposable {
      *                 response is handled in onLobbyResponse()
      */
     public void joinLobby(String username) {
-        ModelService.getInstance().setUsername(username);
+        this.username = username;
         String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
     }
@@ -133,7 +135,7 @@ public class LobbyClient implements Disposable {
             Player selfInfo;
             Player opponent;
             Color color;
-            if(Objects.equals(playerRed.getUsername(), ModelService.getInstance().getUsername())){
+            if(Objects.equals(playerRed.getUsername(), this.username)){
                 selfInfo = playerRed;
                 opponent = playerBlue;
                 color = Color.RED;

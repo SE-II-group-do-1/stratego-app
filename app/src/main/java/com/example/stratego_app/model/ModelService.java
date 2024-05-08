@@ -17,7 +17,6 @@ public class ModelService implements ModelServiceI{
     private Player currentOpponent;
     private Color playerColor;
     private boolean currentTurn;
-    private String username;
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
@@ -209,12 +208,6 @@ public class ModelService implements ModelServiceI{
         currentOpponent = opponent;
     }
 
-    public void setUsername(String u){
-        username = u;
-    }
-    public String getUsername(){
-        return username;
-    }
 
 
     /**
