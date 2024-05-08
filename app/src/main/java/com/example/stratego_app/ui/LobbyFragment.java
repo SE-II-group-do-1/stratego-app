@@ -36,6 +36,7 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
         super.onViewCreated(view, savedInstanceState);
         playersContainer = view.findViewById(R.id.playersContainer);
 
+        //TODO: register to ModelService!
         LobbyClient lobbyClient = LobbyClient.getInstance();
         lobbyClient.registerListener(this);
 
@@ -45,6 +46,7 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
     public void onDestroyView() {
         super.onDestroyView();
 
+        //TODO: Register to ModelService!
         LobbyClient lobbyClient = LobbyClient.getInstance();
         lobbyClient.unregisterListener(this);
 

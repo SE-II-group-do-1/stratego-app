@@ -9,7 +9,6 @@ import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 
 public class MainActivity extends AppCompatActivity {
-    private LobbyClient lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        lc = LobbyClient.getInstance();
+        LobbyClient lc = LobbyClient.getInstance();
         lc.connect();
     }
 

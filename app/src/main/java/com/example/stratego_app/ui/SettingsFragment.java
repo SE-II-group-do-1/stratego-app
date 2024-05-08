@@ -18,6 +18,7 @@ import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
+import com.example.stratego_app.model.SaveSetup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,9 +39,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        modelService.setGameSetupMode(true);
-        modelService.initializeGame();
 
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
         gameBoardView.setConfigMode(false);
@@ -81,7 +79,7 @@ public class SettingsFragment extends Fragment {
 
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
-            modelService.saveGameSetup(getContext());
+            SaveSetup.saveGameSetup(getContext());
         });
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);

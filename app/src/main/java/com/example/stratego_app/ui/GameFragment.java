@@ -52,8 +52,6 @@
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
-            modelService.initializeGame();
-
             // look up GameBoardView by ID - GameBoardView not implemented yet
             GameBoardView gameBoardView = view.findViewById(R.id.gameBoardView);
             gameBoardView.setConfigMode(true);

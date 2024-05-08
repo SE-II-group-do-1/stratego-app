@@ -52,8 +52,6 @@ public class MainFragment extends Fragment {
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-
-            modelService.startGame();
         });
 
         Button enter = view.findViewById(R.id.enterButton);
