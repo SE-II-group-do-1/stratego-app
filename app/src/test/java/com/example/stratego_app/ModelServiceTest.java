@@ -125,7 +125,7 @@ public class ModelServiceTest {
     public void testCreateOrUpdatePlayer() {
         ModelService modelService = ModelService.getInstance();
         modelService.Player("player1", 1);
-        assertNotNull(modelService.getPlayer());
+        assertNotNull(modelService.getCurrentPlayer());
         assertEquals("player1", modelService.getCurrentPlayer().getUsername());
         assertEquals(1, modelService.getCurrentPlayer().getId());
 

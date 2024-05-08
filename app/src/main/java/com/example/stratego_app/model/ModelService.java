@@ -195,6 +195,10 @@ public class ModelService implements ModelServiceI{
         currentPlayer = player;
     }
 
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     public String getPlayerName(){
         return currentPlayer.getUsername();
     }
@@ -276,5 +280,4 @@ public class ModelService implements ModelServiceI{
 
         return pieces;
     }
-
 }
