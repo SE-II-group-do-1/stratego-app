@@ -86,49 +86,34 @@ public class ModelService implements ModelServiceI{
         return false;
     }
     private boolean validateMove(int startX, int startY, int endX, int endY) {
-        //Check if all Coordinates are on the board
-        if (!areCoordinatesWithinBoardBounds(startX, startY, endX, endY)) {
-            return false;
-        }
-        //Check if there is a piece
-        if (gameBoard.getField(startX,startY) == null){
-            return false;
-        }
-        //Initialize a moving Piece
+
         Piece movingPiece = gameBoard.getField(startX, startY);
-        //TODO Check if it is your piece
+        boolean notMyPiece = movingPiece.getColor() != playerColor;
+        boolean isPieceMovable= movingPiece.isMovable();
+        boolean isMoveDiagonal = startX != endX && startY != endY;;
+        boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
+                endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
 
-        //Check if the Piece is allowed to move
-        if (!movingPiece.isMovable()){
+        /*
+        - is it my piece?
+        - is it movable?
+        - coords within bounds?
+        - move diagonal?
+        - destination valid -> not lake, own piece
+        - check stepsize
+         */
+        if (!areCoordinatesWithinBounds || isMoveDiagonal || !isPieceMovable || notMyPiece || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
             return false;
         }
 
-        // Check for a lake at the destination (null safe)
+        // Check destination: is it friendly (own) lake?
         Piece destinationPiece = gameBoard.getField(endX, endY);
-        if (destinationPiece != null && destinationPiece.getRank() == Rank.LAKE) {
-            return false;
-        }
+        boolean isDestLake = destinationPiece.getRank() == Rank.LAKE;
+        boolean isDestFriend = destinationPiece.getColor() == playerColor;
 
-        //Check for diagonal move
-        if (isMoveDiagonal(startX, startY, endX, endY)){
-            return false;
-        }
+        return !isDestLake && !isDestFriend;
 
-        //Check Step-Size
-        if (!checkStepSize(movingPiece, startX,endX,startY,endY)){
-            return false;
-        }
-
-        //Check if the field is empty
-        if(destinationPiece == null) {
-            return true;
-        }
-        /* Check if other Piece is an opponent */
-        if (destinationPiece.getColor() == movingPiece.getColor()){
-                return false;
-        }
-            return true;
-        }
+    }
 
     private boolean checkStepSize(Piece movingPiece, int startX, int endX, int startY, int endY) {
         // Check if the piece is a Scout
@@ -174,15 +159,6 @@ public class ModelService implements ModelServiceI{
             }
         }
         return true;
-    }
-
-    private boolean isMoveDiagonal(int startX, int startY, int endX, int endY) {
-        return startX != endX && startY != endY;
-    }
-
-    private boolean areCoordinatesWithinBoardBounds(int startX, int startY, int endX, int endY) {
-        return startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
-                endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
     }
 
     @Override
