@@ -52,4 +52,8 @@ public class Piece {
     public int getId() {
         return id;
     }
+
+    public void setVisible(boolean b){
+        this.isVisible = b;
+    }
 }
