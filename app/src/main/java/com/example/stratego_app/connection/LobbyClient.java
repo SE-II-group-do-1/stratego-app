@@ -115,7 +115,6 @@ public class LobbyClient implements Disposable {
     }
 
     /**
-     * TODO: recieve response entire Lobby info
      * Called after connecting to server and receiving response. Assigns player its info
      * and starts listening to specific lobby topic with given ID. Also listens to specific
      * setup topic with given ID, for initial Board setup.
@@ -179,7 +178,6 @@ public class LobbyClient implements Disposable {
     }
 
     /**
-     * TODO: recieve setup from both parties
      * Handles response from server after sending player-defined board (sendBoard()).
      * @param message - currently just Logs.
      */
