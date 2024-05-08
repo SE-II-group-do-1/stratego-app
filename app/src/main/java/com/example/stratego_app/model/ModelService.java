@@ -1,18 +1,16 @@
 package com.example.stratego_app.model;
 
-
-import android.content.Context;
-import android.util.Log;
-
-import com.google.gson.stream.JsonWriter;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*TODO:
+ - observer?
+ - get rid of save setup
+ - game setup mode and state machine -> GameState
+ - updateBoard
+ - code cleanup
+ */
 public class ModelService implements ModelServiceI{
 
     //implement singleton pattern
@@ -30,7 +28,6 @@ public class ModelService implements ModelServiceI{
 
     private Board gameBoard;
 
-    private boolean gameSetupMode;
     private Player currentPlayer;
 
     private Color playerColor;
@@ -38,14 +35,6 @@ public class ModelService implements ModelServiceI{
 
     public ModelService() {
         this.gameBoard = new Board();
-    }
-
-    /**
-     * Sets the game setup mode.
-     * @param gameSetupMode true if the game is in setup mode, false if in play mode.
-     */
-    public void setGameSetupMode(boolean gameSetupMode) {
-        this.gameSetupMode = gameSetupMode;
     }
 
 
@@ -114,23 +103,9 @@ START observer methods to notify e.g. gameboardview when changes arise
         return currentPlayer.getId();
     }
 
-    @Override
-    public void initializeGame() {
-        if (gameSetupMode) {
-            this.gameBoard = new Board();
-        } else {
-            this.gameBoard = new Board();
-            gameSetupMode = false;
-        }
-    }
-
 
     public void startGame() {
-        if (gameSetupMode) {
-            // transferSetupToGameBoard(); method? or how do we transfer the set-up to the final board?
-            gameSetupMode = false;
-            setGameState(GameState.INGAME);
-        }
+        setGameState(GameState.INGAME);
     }
 
 
@@ -285,7 +260,7 @@ START observer methods to notify e.g. gameboardview when changes arise
      */
     public boolean placePieceAtGameSetUp(int x, int y, Piece piece) {
         boolean placed = false;
-        if (gameSetupMode && y >= 6 && y <= 9) {
+        if (currentGameState==GameState.SETUP && y >= 6 && y <= 9) {
             gameBoard.setField(y, x, piece);
             placed = true;
         }
@@ -301,6 +276,7 @@ START observer methods to notify e.g. gameboardview when changes arise
      * serialize the board setup and save it to the storage at server
      * @param context
      */
+    /*
     public boolean saveGameSetup(Context context) {
         FileOutputStream fileOutStream = null;
         JsonWriter writer = null;
@@ -335,9 +311,7 @@ START observer methods to notify e.g. gameboardview when changes arise
             }
         }
     }
-
-
-
+    */
 
     /**
      * clear gameboard in settings editor
