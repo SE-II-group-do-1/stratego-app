@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Board;
-import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
 import org.junit.Assert;

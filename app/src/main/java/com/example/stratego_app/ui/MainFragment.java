@@ -61,7 +61,7 @@ public class MainFragment extends Fragment {
 
             if (!username.isEmpty()) {
 
-                ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
+                //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient lc = LobbyClient.getInstance();
                 lc.connect();
                 lc.joinLobby(username);

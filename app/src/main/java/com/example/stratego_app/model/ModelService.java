@@ -18,6 +18,8 @@ public class ModelService implements ModelServiceI{
     private Color playerColor;
     private boolean currentTurn;
 
+    private static List<ObserverModelService> listeners;
+
     public static synchronized ModelService getInstance() {
         if (instance == null) {
             instance = new ModelService();
@@ -45,11 +47,24 @@ public class ModelService implements ModelServiceI{
         if(currentGameState != GameState.INGAME) return;
         gameBoard.setField(x,y,piece);
         currentTurn = !currentTurn;
+        notifyUI();
     }
 
     //send update to Server
     public void requestUpdate(int y, int x, Piece piece){
         LobbyClient.getInstance().sendUpdate(y,x,piece, currentPlayer);
+    }
+
+    public static void subscribe(ObserverModelService o){
+        listeners.add(o);
+    }
+
+    public static void unsubscribe(ObserverModelService o){
+        listeners.remove(o);
+    }
+
+    public static void notifyUI(){
+        listeners.forEach(ObserverModelService::update);
     }
 
 
@@ -204,8 +219,16 @@ public class ModelService implements ModelServiceI{
         currentPlayer = player;
     }
 
+    public String getPlayerName(){
+        return currentPlayer.getUsername();
+    }
+
     public void Opponent(Player opponent) {
         currentOpponent = opponent;
+    }
+
+    public String getOpponentName(){
+        return currentOpponent.getUsername();
     }
 
 

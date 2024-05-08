@@ -11,13 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.LobbyClient;
-import com.example.stratego_app.connection.LobbyClientListener;
-
-import java.util.List;
+import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.ObserverModelService;
 
 
-public class LobbyFragment extends Fragment implements LobbyClientListener {
+public class LobbyFragment extends Fragment implements ObserverModelService {
 
     private LinearLayout playersContainer;
     public LobbyFragment() {
@@ -35,20 +33,26 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         playersContainer = view.findViewById(R.id.playersContainer);
+
+        ModelService.subscribe(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ModelService.unsubscribe(this);
     }
 
     @Override
-    public void onLobbyUpdated(String message) {
+    public void update() {
         if (getActivity() == null) return;
+        String ownName = ModelService.getInstance().getPlayerName();
+        String oppName = ModelService.getInstance().getOpponentName();
 
         getActivity().runOnUiThread(() -> {
             playersContainer.removeAllViews();
-            addPlayerToView(message);
+            addPlayerToView(ownName);
+            addPlayerToView(oppName);
         });
     }
     private void addPlayerToView(String playerName) {

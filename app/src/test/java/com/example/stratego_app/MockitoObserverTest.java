@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
 
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
 
