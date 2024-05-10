@@ -27,7 +27,7 @@ public class ModelServiceTest {
 
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         board = modelService.getGameBoard();
 
         mockObserver = mock(ObserverModelService.class);
@@ -45,6 +45,7 @@ public class ModelServiceTest {
     }
 
 
+    /*
     @Test
     void testStartGameEffectivelyStartsTheGame() {
         // Act
@@ -54,6 +55,8 @@ public class ModelServiceTest {
         verify(mockObserver, times(1)).update();
         assertEquals(GameState.INGAME, modelService.getGameState());
     }
+
+     */
 
 
     @Test

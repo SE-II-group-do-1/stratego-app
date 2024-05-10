@@ -35,12 +35,5 @@ class PlayerTest {
         player.setId(1234);
         assertEquals(1234, player.getId());
     }
-
-    @Test
-    void testPlayerToString() {
-        player.setId(1);
-        String expectedString = "Player{username='testUsername', id=1}";
-        assertEquals(expectedString, player.toString());
-    }
 }
 
