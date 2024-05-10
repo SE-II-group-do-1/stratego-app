@@ -18,7 +18,7 @@ public class ModelService implements ModelServiceI{
     private Color playerColor;
     private boolean currentTurn;
 
-    private static List<ObserverModelService> listeners;
+    private static List<ObserverModelService> listeners = new ArrayList<>();
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
