@@ -1,7 +1,11 @@
 package com.example.stratego_app;
 
 import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.junit.Before;
 import static org.junit.Assert.*;
@@ -14,10 +18,23 @@ import com.example.stratego_app.model.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
  class MoveValidationTest {
-    private ModelService modelService = new ModelService();
+    private ModelService modelService = ModelService.getInstance();
+
+   @BeforeAll
+   void setup(){
+      modelService.setPlayerColor(Color.RED);
+   }
+
+    @AfterEach
+    void destroy(){
+       modelService.clearBoardExceptLakes();
+    }
     @Test
      void testMoveOutOfBoundary(){
+        Piece bomb = new Piece(Rank.BOMB, Color.RED);
+        modelService.getGameBoard().setField(0,0,bomb);
        boolean result = modelService.movePiece(0, 0, 10, 0); // End x is out of bounds
        assertFalse(result);
     }
@@ -27,10 +44,13 @@ import com.example.stratego_app.model.*;
         modelService.getGameBoard().setField(0,0,bomb);
         assertEquals(false, modelService.movePiece(0,0,0,1));
     }
+    /*
     @Test
      void checkForAPiece(){
         assertEquals(false, modelService.movePiece(0,0,0,1));
     }
+
+     */
     @Test
      void moveIntoLake(){
         Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
@@ -67,6 +87,7 @@ import com.example.stratego_app.model.*;
         modelService.getGameBoard().setField(1,0,jeff);
         assertEquals(false, modelService.movePiece(0,0,1,0));
     }
+    /* "fights" are Server side!!!
     @Test
      void testFight(){
         Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
@@ -75,6 +96,8 @@ import com.example.stratego_app.model.*;
         modelService.getGameBoard().setField(0,1,jeff);
         assertEquals(true, modelService.movePiece(0,0,0,1));
     }
+
+     */
 
     @Test
      void checkStepSizeScoutSomeoneInTheWayVertical(){

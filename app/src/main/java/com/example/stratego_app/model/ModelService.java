@@ -108,10 +108,12 @@ public class ModelService implements ModelServiceI{
 
         // Check destination: is it friendly (own) lake?
         Piece destinationPiece = gameBoard.getField(endX, endY);
+        if(destinationPiece == null) return true;
+
         boolean isDestLake = destinationPiece.getRank() == Rank.LAKE;
         boolean isDestFriend = destinationPiece.getColor() == playerColor;
 
-        return !isDestLake && !isDestFriend;
+        return !isDestFriend && !isDestLake;
 
     }
 
