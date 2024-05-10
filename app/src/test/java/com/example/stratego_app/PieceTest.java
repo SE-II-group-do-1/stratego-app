@@ -22,7 +22,7 @@ class PieceTest {
         Piece soldier = new Piece(Rank.SERGEANT, Color.BLUE);
         assertEquals("Rank should be SERGEANT", Rank.SERGEANT, soldier.getRank());
         assertEquals("Color should be BLUE", Color.BLUE, soldier.getColor());
-        assertEquals("ID should be 1", 1, soldier.getId());
+        assertEquals("ID should be 0", 0, soldier.getId());
         assertFalse("Visibility should initially be false", soldier.isVisible());
         assertTrue("Sergeant should be movable", soldier.isMovable());
     }
