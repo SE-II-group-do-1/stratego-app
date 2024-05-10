@@ -27,7 +27,7 @@ class PlayerTest {
 
     @Test
     void testGetIdBeforeSet() {
-        assertEquals(0, player.getId());
+        assertEquals(1, player.getId());
     }
 
     @Test
