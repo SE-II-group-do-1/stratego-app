@@ -253,7 +253,8 @@ public class GameBoardView extends View implements ObserverModelService {
     }
 
    private boolean handleDrop(float x, float y, DragEvent event) {
-        int col = (int) (x / cellWidth);
+       Log.i("handleDrop", "handle");
+       int col = (int) (x / cellWidth);
         int row = (int) (y / cellHeight);
 
         ClipData.Item item = event.getClipData().getItemAt(0);

@@ -223,7 +223,8 @@ public class ModelService implements ModelServiceI{
      */
     public boolean placePieceAtGameSetUp(int x, int y, Piece piece) {
         boolean placed = false;
-        if (currentGameState==GameState.SETUP && y >= 6 && y <= 9) {
+        // currentGameState==GameState.SETUP && <- condition extraced from if below
+        if ( y >= 6 && y <= 9) {
             gameBoard.setField(y, x, piece);
             placed = true;
         }
