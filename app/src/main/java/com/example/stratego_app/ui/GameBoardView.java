@@ -196,15 +196,18 @@ public class GameBoardView extends View implements ObserverModelService {
 
     private void drawPieces(Canvas canvas) {
         Piece[][] boardArray = modelService.getGameBoard().getBoard();
+        Log.i("drawPiece", "in method");
 
         for (int row = 0; row < boardArray.length; row++) {
             for (int col = 0; col < boardArray[row].length; col++) {
                 Piece piece = boardArray[row][col];
                 if (piece == null) {
+                    Log.i("drawPiece", "Piece is null!");
                     continue;  // Skip drawing if no piece is present
                 }
                 Drawable drawable = drawableCache.get(piece.getRank());
                 if (drawable != null) {
+                    Log.i("drawPiece", "drawable found");
                     drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
                     drawable.draw(canvas);  // Draw the piece
                 }

@@ -87,7 +87,7 @@ public class SettingsFragment extends Fragment {
             getParentFragmentManager().popBackStack();
             clearPiecesInRecyclerView();
             resetPiecesInRecycleView();
-            modelService.clearBoardExceptLakes();
+            //modelService.clearBoardExceptLakes();
         });
     }
 
