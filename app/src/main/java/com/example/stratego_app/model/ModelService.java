@@ -229,6 +229,7 @@ public class ModelService implements ModelServiceI{
         }
         if (placed) {
             //TODO: notify UI
+            notifyUI();
         }
         return placed;
     }
@@ -246,6 +247,7 @@ public class ModelService implements ModelServiceI{
             }
         }
         //TODO: notify UI
+        notifyUI();
     }
 
 
@@ -256,6 +258,7 @@ public class ModelService implements ModelServiceI{
         List<Piece> pieces = generatePieces();
         gameBoard.fillBoardRandomly(pieces);
         //TODO: notify UI
+        notifyUI();
     }
 
 
