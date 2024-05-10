@@ -17,6 +17,7 @@ import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
+import com.example.stratego_app.model.SaveSetup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -195,7 +196,13 @@ public class GameBoardView extends View implements ObserverModelService {
      */
 
     private void drawPieces(Canvas canvas) {
-        Piece[][] boardArray = modelService.getGameBoard().getBoard();
+        //attempt reading from storage first
+        Piece[][] boardArray = SaveSetup.readGameSetup(getContext());
+        if(boardArray == null){
+            //read from Board directly???
+            //boardArray = modelService.getGameBoard().getBoard();
+            ModelService.getInstance().fillBoardRandomly(); //if no setup, random
+        }
         Log.i("drawPiece", "in method");
 
         for (int row = 0; row < boardArray.length; row++) {

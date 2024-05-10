@@ -4,9 +4,18 @@ import android.content.Context;
 import android.util.JsonWriter;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public class SaveSetup {
 
@@ -14,7 +23,7 @@ public class SaveSetup {
     private static Board gameBoard = ModelService.getInstance().getGameBoard();
 
     /**
-     * serialize the board setup and save it to the storage at server
+     * serialize the board setup and save it to the storage
      * @param context
      */
 
@@ -50,6 +59,33 @@ public class SaveSetup {
             } catch (IOException e) {
                 Log.e(tag, "Error closing streams", e);
             }
+        }
+    }
+
+    public static Piece[][] readGameSetup(Context context){
+        try {
+            Piece[][] savedSetup = new Piece[10][10];
+
+            InputStream is = context.openFileInput("game_setup.json");
+            String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+            JSONTokener tokener = new JSONTokener(jsonString);
+            JSONObject jsonObject = new JSONObject(tokener);
+
+            Iterator<?> keys = jsonObject.keys();
+            while (keys.hasNext()) {
+                String key = keys.next().toString();
+                String[] coordinates = key.split(",");
+                int x = Integer.parseInt(coordinates[0]);
+                int y = Integer.parseInt(coordinates[1]);
+                Rank pieceRank = (Rank) Rank.valueOf(jsonObject.get(key).toString());
+
+                savedSetup[y][x] = new Piece(pieceRank, null);
+
+            }
+            return savedSetup;
+        } catch (Exception e) {
+            Log.e(tag, "Error reading game setup", e);
+            return null;
         }
     }
 }
