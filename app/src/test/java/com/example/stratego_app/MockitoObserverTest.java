@@ -17,7 +17,7 @@ import com.example.stratego_app.model.Rank;
 class MockitoObserverTest {
     @Mock
     private ObserverModelService observer;
-    private ModelService modelService;
+    private ModelService modelService = ModelService.getInstance();
 
 
     @BeforeEach

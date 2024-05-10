@@ -25,7 +25,7 @@ public class Piece {
      * @param rank should be Lake, otherwise use other constructor
      */
     public Piece(Rank rank){
-        if(rank != Rank.LAKE) Log.e("Piece", "Wrong Constructor!!!!!");
+        if(rank != Rank.LAKE) new Piece(rank, ModelService.getInstance().getPlayerColor());
         this.rank = rank;
         this.isVisible = true;
         this.isMovable = false;
