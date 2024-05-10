@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*TODO:
- - code cleanup
- */
 public class ModelService implements ModelServiceI{
     private static ModelService instance;
     private GameState currentGameState;
@@ -39,7 +36,7 @@ public class ModelService implements ModelServiceI{
             return;
         }
         gameBoard.setBoard(newBoard); //set entire board state
-        //TODO: notify UI
+        notifyUI();
     }
 
     //commit update from server
@@ -231,7 +228,6 @@ public class ModelService implements ModelServiceI{
             placed = true;
         }
         if (placed) {
-            //TODO: notify UI
             notifyUI();
         }
         return placed;
@@ -249,7 +245,6 @@ public class ModelService implements ModelServiceI{
                 }
             }
         }
-        //TODO: notify UI
         notifyUI();
     }
 
@@ -260,7 +255,6 @@ public class ModelService implements ModelServiceI{
     public void fillBoardRandomly() {
         List<Piece> pieces = generatePieces();
         gameBoard.fillBoardRandomly(pieces);
-        //TODO: notify UI
         notifyUI();
     }
 

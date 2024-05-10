@@ -54,7 +54,7 @@
 
             // look up GameBoardView by ID - GameBoardView not implemented yet
             GameBoardView gameBoardView = view.findViewById(R.id.gameBoardView);
-            gameBoardView.setConfigMode(true);
+            //gameBoardView.setConfigMode(true);
 
             timeCounter = view.findViewById(R.id.timeCounter);
             startTimer();

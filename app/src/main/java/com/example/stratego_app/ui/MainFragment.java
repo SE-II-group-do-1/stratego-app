@@ -53,6 +53,8 @@ public class MainFragment extends Fragment {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
+        startGame.setEnabled(false);
+
 
         Button enter = view.findViewById(R.id.enterButton);
         enter.setOnClickListener(view1 -> {
@@ -60,6 +62,7 @@ public class MainFragment extends Fragment {
             String username = usernameEntry.getText().toString().trim();
 
             if (!username.isEmpty()) {
+                startGame.setEnabled(true);
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient lc = LobbyClient.getInstance();
