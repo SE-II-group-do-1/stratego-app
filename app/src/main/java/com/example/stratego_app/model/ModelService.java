@@ -1,5 +1,7 @@
 package com.example.stratego_app.model;
 
+import android.util.Log;
+
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
@@ -76,11 +78,13 @@ public class ModelService implements ModelServiceI{
             // Perform the move
             gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
             gameBoard.setField(startY, startX, null); // Clear the original position
+            Log.i("gbv", "movePiece valid");
             LobbyClient.getInstance().sendUpdate(endY,endX,movingPiece, currentPlayer);
             notifyUI();
 
             return true; // Move was successful
         }
+        Log.i("gbv", "movePiece invalid");
         return false;
     }
     private boolean validateMove(int startX, int startY, int endX, int endY) {
@@ -92,7 +96,7 @@ public class ModelService implements ModelServiceI{
         boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
 
-        if (!areCoordinatesWithinBounds || isMoveDiagonal || !isPieceMovable || notMyPiece || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
+        if (!areCoordinatesWithinBounds || isMoveDiagonal || !isPieceMovable || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
             return false;
         }
 

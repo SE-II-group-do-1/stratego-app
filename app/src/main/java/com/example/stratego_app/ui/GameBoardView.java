@@ -233,16 +233,22 @@ public class GameBoardView extends View implements ObserverModelService {
         this.setOnClickListener((v) -> {
 
             Log.i(TAG, "onclick");
-            int col = (int) v.getX()/cellWidth;
-            int row = (int) v.getY()/cellHeight;
+            int col = (int) (v.getX()/cellWidth);
+            int row = (int) (v.getY()/cellHeight);
+
+            Log.i(TAG, String.valueOf(col));
+            Log.i(TAG, String.valueOf(row));
 
             if(selected == null){
+                Log.i(TAG, "selected is null");
                 selected = ModelService.getInstance().getPieceAtPosition(row, col);
                 selectedX = col;
                 selectedY = row;
                 return;
             }
+            Log.i(TAG, selected.toString());
             modelService.movePiece(selectedX, selectedY, col, row);
+            selected = null;
         });
     }
 
