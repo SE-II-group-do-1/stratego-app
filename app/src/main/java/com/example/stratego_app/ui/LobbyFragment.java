@@ -4,6 +4,8 @@ package com.example.stratego_app.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +41,15 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         ModelService.unsubscribe(this);
+        super.onDestroyView();
+
     }
 
     @Override
     public void update() {
         if (getActivity() == null) return;
+        Log.i("lobbyUpdate", "in method");
         String ownName = ModelService.getInstance().getPlayerName();
         String oppName = ModelService.getInstance().getOpponentName();
 

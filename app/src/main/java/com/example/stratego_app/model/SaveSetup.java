@@ -77,10 +77,17 @@ public class SaveSetup {
                 String[] coordinates = key.split(",");
                 int x = Integer.parseInt(coordinates[0]);
                 int y = Integer.parseInt(coordinates[1]);
-                Rank pieceRank = (Rank) Rank.valueOf(jsonObject.get(key).toString());
+                Rank pieceRank = Rank.valueOf(jsonObject.get(key).toString());
 
                 savedSetup[y][x] = new Piece(pieceRank, null);
 
+            }
+            Log.i("saveSetup", savedSetup[0][0].toString());
+            //check none of the pieces are null
+            for(int y=0; y<10; y++){
+                for(int x=0; x<10; x++){
+                    if(savedSetup[y][x] == null) return null;
+                }
             }
             return savedSetup;
         } catch (Exception e) {

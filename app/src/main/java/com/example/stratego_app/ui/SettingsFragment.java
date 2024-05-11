@@ -57,6 +57,9 @@ public class SettingsFragment extends Fragment {
         });
 
         piecesRecyclerView.setAdapter(piecesAdapter);
+        //if setup is saved. load onto field. no drag n drop
+        if(SaveSetup.readGameSetup(getContext()) != null) clearPiecesInRecyclerView();
+
         gameBoardView.setDropListener((success, position) -> {
             if (success) {
                 piecesAdapter.removeItem(position);
@@ -87,7 +90,7 @@ public class SettingsFragment extends Fragment {
             getParentFragmentManager().popBackStack();
             clearPiecesInRecyclerView();
             resetPiecesInRecycleView();
-            //modelService.clearBoardExceptLakes();
+            modelService.clearBoardExceptLakes();
         });
     }
 
