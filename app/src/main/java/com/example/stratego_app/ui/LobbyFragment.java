@@ -50,8 +50,8 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
     public void update() {
         if (getActivity() == null) return;
         Log.i("lobbyUpdate", "in method");
-        String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getPlayerName();
-        String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getOpponentName();
+        String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
+        String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
 
         getActivity().runOnUiThread(() -> {
             playersContainer.removeAllViews();

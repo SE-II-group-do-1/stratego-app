@@ -47,11 +47,6 @@ public class ModelService implements ModelServiceI{
         notifyUI();
     }
 
-    //send update to Server
-    public void requestUpdate(int y, int x, Piece piece){
-        LobbyClient.getInstance().sendUpdate(y,x,piece, currentPlayer);
-    }
-
     public static void subscribe(ObserverModelService o){
         listeners.add(o);
     }
@@ -65,17 +60,24 @@ public class ModelService implements ModelServiceI{
     }
 
 
-
+    /**
+     * validates move, if valid -> updates Board -> sends request via LobbyClient, notifies UI
+     * @param startX the starting X-coordinate of the piece
+     * @param startY the starting Y-coordinate of the piece
+     * @param endX the ending X-coordinate after the move
+     * @param endY the ending Y-coordinate after the move
+     * @return
+     */
     @Override
     public boolean movePiece(int startX, int startY, int endX, int endY) {
         Piece movingPiece;
-
-
         if (validateMove(startX, startY, endX, endY)) {
             movingPiece = gameBoard.getField(startX, startY);
             // Perform the move
             gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
             gameBoard.setField(startY, startX, null); // Clear the original position
+            LobbyClient.getInstance().sendUpdate(endY,endX,movingPiece, currentPlayer);
+            notifyUI();
 
             return true; // Move was successful
         }
@@ -90,26 +92,17 @@ public class ModelService implements ModelServiceI{
         boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
 
-        /*
-        - is it my piece?
-        - is it movable?
-        - coords within bounds?
-        - move diagonal?
-        - destination valid -> not lake, own piece
-        - check stepsize
-         */
         if (!areCoordinatesWithinBounds || isMoveDiagonal || !isPieceMovable || notMyPiece || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
             return false;
         }
 
-        // Check destination: is it friendly (own) lake?
         Piece destinationPiece = gameBoard.getField(endX, endY);
         if(destinationPiece == null) return true;
 
         boolean isDestLake = destinationPiece.getRank() == Rank.LAKE;
         boolean isDestFriend = destinationPiece.getColor() == playerColor;
 
-        return !isDestFriend && !isDestLake;
+        return !isDestLake && !isDestFriend;
 
     }
 
@@ -189,30 +182,22 @@ public class ModelService implements ModelServiceI{
     public void Player(String username, int id) {
         currentPlayer = new Player(username, id);
     }
+
     public void Player(Player player){
         currentPlayer = player;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-    public Player getCurrentOpponent() {
-        return currentOpponent;
-    }
-
-    public String getPlayerName(){
-        return currentPlayer.getUsername();
     }
 
     public void Opponent(Player opponent) {
         currentOpponent = opponent;
     }
 
-    public String getOpponentName(){
-        return currentOpponent.getUsername();
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-
+    public Player getCurrentOpponent() {
+        return currentOpponent;
+    }
 
     /**
      * place a piece on the board during the game setup.

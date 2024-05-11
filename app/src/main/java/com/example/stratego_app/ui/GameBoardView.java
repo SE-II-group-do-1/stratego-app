@@ -242,8 +242,7 @@ public class GameBoardView extends View implements ObserverModelService {
                 selectedY = row;
                 return;
             }
-            boolean valid = modelService.movePiece(selectedX, selectedY, col, row);
-            if(valid) invalidate();
+            modelService.movePiece(selectedX, selectedY, col, row);
         });
     }
 
