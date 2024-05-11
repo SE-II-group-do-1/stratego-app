@@ -32,6 +32,10 @@ public class GameBoardView extends View implements ObserverModelService {
     private boolean displayLowerHalfOnly = false;
     private Map<Rank, Drawable> drawableCache = new HashMap<>();
 
+    private Piece selected;
+    private int selectedX;
+    private int selectedY;
+
 
     private int cellWidth;
     private int cellHeight;
@@ -59,6 +63,7 @@ public class GameBoardView extends View implements ObserverModelService {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         loadDrawableCache();
         setupDragListener();
+        setupClickListener();
         ModelService.subscribe(this);
     }
     @Override
@@ -219,6 +224,27 @@ public class GameBoardView extends View implements ObserverModelService {
                 }
             }
         }
+    }
+
+    /**
+     * Move pieces on Board when selecting (clicking) them and then other field
+     */
+    public void setupClickListener(){
+        this.setOnClickListener((v) -> {
+
+            Log.i(TAG, "onclick");
+            int col = (int) v.getX()/cellWidth;
+            int row = (int) v.getY()/cellHeight;
+
+            if(selected == null){
+                selected = ModelService.getInstance().getPieceAtPosition(row, col);
+                selectedX = col;
+                selectedY = row;
+                return;
+            }
+            boolean valid = modelService.movePiece(selectedX, selectedY, col, row);
+            if(valid) invalidate();
+        });
     }
 
     /*

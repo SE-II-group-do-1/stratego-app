@@ -79,7 +79,6 @@ public class ModelService implements ModelServiceI{
 
             return true; // Move was successful
         }
-
         return false;
     }
     private boolean validateMove(int startX, int startY, int endX, int endY) {
@@ -196,6 +195,9 @@ public class ModelService implements ModelServiceI{
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+    public Player getCurrentOpponent() {
+        return currentOpponent;
     }
 
     public String getPlayerName(){
