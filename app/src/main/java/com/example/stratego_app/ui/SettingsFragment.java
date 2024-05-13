@@ -68,11 +68,20 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        modelService.clearBoardExceptLakes(); //clears the board for new setup
+
+        /*
+          fills board with randomly set pieces
+         */
         Button fillBoard = view.findViewById(R.id.fillButton);
         fillBoard.setOnClickListener(v -> {
             modelService.fillBoardRandomly();
             clearPiecesInRecyclerView();
         });
+
+        /*
+          clears the board of all pieces
+         */
 
         Button clearBoard = view.findViewById(R.id.clearButton);
         clearBoard.setOnClickListener(v -> {
@@ -80,17 +89,24 @@ public class SettingsFragment extends Fragment {
             resetPiecesInRecycleView();
         });
 
+        /*
+          saves individual set pieces on board
+         */
+
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
             SaveSetup.saveGameSetup(getContext());
         });
+
+        /*
+          ends settings editor and clears alle pieces from board
+         */
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
         leave.setOnClickListener(v ->{
             getParentFragmentManager().popBackStack();
             clearPiecesInRecyclerView();
             resetPiecesInRecycleView();
-            //modelService.clearBoardExceptLakes();
         });
     }
 

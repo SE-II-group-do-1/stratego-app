@@ -59,8 +59,14 @@
             timeCounter = view.findViewById(R.id.timeCounter);
             startTimer();
 
+            /*
+              ends the game
+             */
             Button btnLeaveGame = view.findViewById(R.id.leaveGameButton);
-            btnLeaveGame.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+            btnLeaveGame.setOnClickListener(v -> {
+                modelService.clearBoardExceptLakes(); //clears board when leaving
+                getParentFragmentManager().popBackStack(); //go back to previous fragment
+            });
         }
 
         public void startTimer() {

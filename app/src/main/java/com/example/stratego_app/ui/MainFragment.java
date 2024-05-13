@@ -33,6 +33,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        /*
+          Button SETTINGS opens up the settings editor to set the individual gameboard
+         */
         Button settingsButton = view.findViewById(R.id.settings);
         settingsButton.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -42,8 +46,8 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-        /**
-         * Button startGame starts e new game of Stratego with a two-player game set-up
+        /*
+          Button STARTGAME starts e new game of Stratego with a two-player game set-up
          */
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
@@ -63,6 +67,9 @@ public class MainFragment extends Fragment {
         });
         //startGame.setEnabled(false); (deactivate startGameButton when everything else works)
 
+        /*
+          Button ENTER sends the Username to the Server and starts a new game session
+         */
 
         Button enter = view.findViewById(R.id.enterButton);
         enter.setOnClickListener(view1 -> {
