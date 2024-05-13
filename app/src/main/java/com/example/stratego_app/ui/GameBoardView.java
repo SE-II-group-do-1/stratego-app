@@ -1,5 +1,7 @@
 package com.example.stratego_app.ui;
 
+import static android.view.MotionEvent.ACTION_DOWN;
+
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -230,26 +233,38 @@ public class GameBoardView extends View implements ObserverModelService {
      * Move pieces on Board when selecting (clicking) them and then other field
      */
     public void setupClickListener(){
-        this.setOnClickListener((v) -> {
-
-            Log.i(TAG, "onclick");
-            int col = (int) (v.getX()/cellWidth);
-            int row = (int) (v.getY()/cellHeight);
-
-            Log.i(TAG, String.valueOf(col));
-            Log.i(TAG, String.valueOf(row));
-
-            if(selected == null){
-                Log.i(TAG, "selected is null");
-                selected = ModelService.getInstance().getPieceAtPosition(row, col);
-                selectedX = col;
-                selectedY = row;
-                return;
+        this.setOnTouchListener((View v, MotionEvent e) -> {
+            int action = e.getAction();
+            switch (action) {
+                case ACTION_DOWN:
+                    onTouch(e);
+                    return true;
+                default:
+                    return false;
             }
-            Log.i(TAG, selected.toString());
-            modelService.movePiece(selectedX, selectedY, col, row);
-            selected = null;
         });
+    }
+
+    private boolean onTouch(MotionEvent e) {
+
+        Log.i(TAG, "onclick");
+        int col = (int) (e.getX() / cellWidth);
+        int row = (int) (e.getY() / cellHeight);
+
+        Log.i(TAG, String.valueOf(col));
+        Log.i(TAG, String.valueOf(row));
+
+        if (selected == null) {
+            selected = ModelService.getInstance().getPieceAtPosition(row, col);
+            //Log.i(TAG, selected.toString());
+            selectedX = col;
+            selectedY = row;
+            return false;
+        }
+        Log.i(TAG, "null?");
+        modelService.movePiece(selectedX, selectedY, col, row);
+        selected = null;
+        return true;
     }
 
     /*
