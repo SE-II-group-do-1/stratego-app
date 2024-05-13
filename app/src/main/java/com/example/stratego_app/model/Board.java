@@ -40,6 +40,27 @@ public class Board {
         }
     }
 
+    /**
+     * transfers board set up from settings editor to game
+     * @param newBoard
+     */
+
+    public void setBoard(Piece[][] newBoard) {
+        if (newBoard == null || newBoard.length != 10 || newBoard[0].length != 10) {
+            throw new IllegalArgumentException("Invalid board setup");
+        }
+
+        // Iterate over the board to update each cell
+        for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+                // Preserve lake positions by not updating them
+                if (!(fields[x][y] != null && fields[x][y].getRank() == Rank.LAKE)) {
+                    fields[x][y] = newBoard[x][y];
+                }
+            }
+        }
+    }
+
 
 
     /**
