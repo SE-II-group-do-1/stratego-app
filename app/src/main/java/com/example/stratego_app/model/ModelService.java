@@ -49,6 +49,17 @@ public class ModelService implements ModelServiceI{
         notifyUI();
     }
 
+    /**
+     * sets saved pieces from settings editor on gameboard
+     * @param newBoard
+     */
+    public void setGameBoard(Piece[][] newBoard) {
+        if (newBoard != null) {
+            gameBoard.setBoard(newBoard);
+            notifyUI(); // Notify all listeners that the board has been updated
+        }
+    }
+
     public static void subscribe(ObserverModelService o){
         listeners.add(o);
     }
