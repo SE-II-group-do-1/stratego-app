@@ -15,7 +15,8 @@ import android.widget.EditText;
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
-
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.SaveSetup;
 
 
 public class MainFragment extends Fragment {
@@ -47,13 +48,20 @@ public class MainFragment extends Fragment {
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
 
+            // Try to read the saved game setup
+            Piece[][] setup = SaveSetup.readGameSetup(getContext());
+            if (setup != null) {
+                // Assuming ModelService can apply a board setup
+                modelService.getGameBoard().setBoard(setup);
+            }
+
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
-        startGame.setEnabled(false);
+        //startGame.setEnabled(false); (deactivate startGameButton when everything else works)
 
 
         Button enter = view.findViewById(R.id.enterButton);
@@ -62,7 +70,7 @@ public class MainFragment extends Fragment {
             String username = usernameEntry.getText().toString().trim();
 
             if (!username.isEmpty()) {
-                startGame.setEnabled(true);
+                //startGame.setEnabled(true); (activate startGameButton when everything else works)
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient lc = LobbyClient.getInstance();
