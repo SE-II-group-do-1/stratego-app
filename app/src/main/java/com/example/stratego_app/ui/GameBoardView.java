@@ -247,7 +247,6 @@ public class GameBoardView extends View implements ObserverModelService {
 
     private boolean onTouch(MotionEvent e) {
 
-        Log.i(TAG, "onclick");
         int col = (int) (e.getX() / cellWidth);
         int row = (int) (e.getY() / cellHeight);
 
@@ -255,13 +254,15 @@ public class GameBoardView extends View implements ObserverModelService {
         Log.i(TAG, String.valueOf(row));
 
         if (selected == null) {
-            selected = ModelService.getInstance().getPieceAtPosition(row, col);
-            //Log.i(TAG, selected.toString());
+            selected = ModelService.getInstance().getGameBoard().getField(row, col);
+            Log.i(TAG, "click1" + selected);
             selectedX = col;
             selectedY = row;
             return false;
         }
-        Log.i(TAG, "null?");
+        Log.i(TAG, "click2" + selected);
+        Log.i(TAG, String.valueOf(selectedX));
+        Log.i(TAG, String.valueOf(selectedY));
         modelService.movePiece(selectedX, selectedY, col, row);
         selected = null;
         return true;

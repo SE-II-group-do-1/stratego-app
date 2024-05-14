@@ -86,13 +86,13 @@ public class LobbyClient implements Disposable {
         disposable.add(lifecycle);
 
 
-        reply = client.topic("/topic/reply")
+        reply = client.topic("/user/topic/reply")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, "error", throwable));
 
 
-        errors = client.topic("/topic/errors")
+        errors = client.topic("/user/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleException, throwable -> Log.e(TAG, "error", throwable));
@@ -110,6 +110,7 @@ public class LobbyClient implements Disposable {
      */
     public void joinLobby(String username) {
         this.username = username;
+        Log.i(TAG, username);
         String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
     }
@@ -125,7 +126,8 @@ public class LobbyClient implements Disposable {
         Map<String, Object> payload = ToMap.parseMessage(message);
         try{
             //parse message
-            currentLobbyID = (Integer) payload.get("id");
+            Double id = (Double) payload.get("id");
+            currentLobbyID = id.intValue();
             Player playerRed = (Player) payload.get("playerRed");
             Player playerBlue = (Player) payload.get("playerBlue");
             Log.i(TAG, payload.toString());
