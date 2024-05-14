@@ -78,13 +78,11 @@ public class ModelService implements ModelServiceI{
             // Perform the move
             gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
             gameBoard.setField(startY, startX, null); // Clear the original position
-            Log.i("gbv", "movePiece valid");
             LobbyClient.getInstance().sendUpdate(endY,endX,movingPiece, currentPlayer);
             notifyUI();
 
             return true; // Move was successful
         }
-        Log.i("gbv", "movePiece invalid");
         return false;
     }
     private boolean validateMove(int startX, int startY, int endX, int endY) {
