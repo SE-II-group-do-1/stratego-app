@@ -15,7 +15,9 @@ import android.widget.EditText;
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Player;
+import com.example.stratego_app.model.SaveSetup;
 
 
 public class MainFragment extends Fragment {
@@ -46,8 +48,6 @@ public class MainFragment extends Fragment {
          */
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
-            //TODO: remove when comms back up. only for testing movepiece
-            ModelService.getInstance().Player(new Player("TEST", 1));
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

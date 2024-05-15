@@ -180,6 +180,7 @@ public class LobbyClient implements Disposable {
         int id = ModelService.getInstance().getCurrentPlayer().getId();
         String data = gson.toJson(updateToObject(b,id));
         client.send("/topic/lobby-"+currentLobbyID, data).subscribe();
+        Log.i(TAG, "message sent");
     }
 
     /**
@@ -220,14 +221,10 @@ public class LobbyClient implements Disposable {
      */
     public void leaveLobby(int id) {
         String data = gson.toJson(id);
-        this.client.send("/app/leave", data);
-        disposable.remove(this.currentLobby);
-        currentLobby.dispose();
+        this.client.send("/app/leave", data).subscribe();
+        //disposable.remove(this.currentLobby);
+        //currentLobby.dispose();
         ModelService.getInstance().setGameState(GameState.DONE);
-    }
-
-    public int getCurrentLobby() {
-        return currentLobbyID;
     }
 
     @Override
