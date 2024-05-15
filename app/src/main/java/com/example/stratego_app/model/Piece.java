@@ -1,7 +1,5 @@
 package com.example.stratego_app.model;
 
-import android.util.Log;
-
 public class Piece {
     private static int nextID = 0;
     private Rank rank;
@@ -9,10 +7,8 @@ public class Piece {
     private boolean isMovable;
 
     private Color color;
-    private int id;
 
     public Piece(Rank rank, Color color){
-        this.id = nextID;
         this.color = color;
         this.rank = rank;
         this.isVisible = false;
@@ -29,7 +25,6 @@ public class Piece {
         this.rank = rank;
         this.isVisible = true;
         this.isMovable = false;
-        this.id = -1;
         this.color = null;
     }
 
@@ -47,10 +42,6 @@ public class Piece {
 
     public Color getColor() {
         return color;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void setVisible(boolean b){

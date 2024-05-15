@@ -1,6 +1,5 @@
 package com.example.stratego_app.model;
 
-import android.util.Log;
 
 import com.example.stratego_app.connection.LobbyClient;
 
@@ -15,7 +14,6 @@ public class ModelService implements ModelServiceI{
     private Player currentPlayer;
     private Player currentOpponent;
     private Color playerColor;
-    private boolean currentTurn;
 
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
@@ -29,23 +27,15 @@ public class ModelService implements ModelServiceI{
     public ModelService() {
         this.gameBoard = new Board();
         this.currentGameState = GameState.WAITING;
-        this.currentTurn = false;
     }
 
+    //only for committing data from server
     @Override
     public void updateBoard(Board newBoard) {
         if (newBoard == null) {
             return;
         }
         gameBoard.setBoard(newBoard); //set entire board state
-        notifyUI();
-    }
-
-    //commit update from server
-    public void updateBoard(int y, int x, Piece piece){
-        if(currentGameState != GameState.INGAME) return;
-        gameBoard.setField(x,y,piece);
-        currentTurn = !currentTurn;
         notifyUI();
     }
 
@@ -76,21 +66,20 @@ public class ModelService implements ModelServiceI{
         if (validateMove(startX, startY, endX, endY)) {
             movingPiece = gameBoard.getField(startX, startY);
             // Perform the move
-            gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
-            gameBoard.setField(startY, startX, null); // Clear the original position
-            Log.i("gbv", "movePiece valid");
-            LobbyClient.getInstance().sendUpdate(endY,endX,movingPiece, currentPlayer);
+            gameBoard.setField(endX, endY, movingPiece); // Move the piece to the new position
+            gameBoard.setField(startX, startY, null); // Clear the original position
+            //TODO: check why this gives error: client null
+            //LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
             notifyUI();
 
             return true; // Move was successful
         }
-        Log.i("gbv", "movePiece invalid");
         return false;
     }
     private boolean validateMove(int startX, int startY, int endX, int endY) {
 
         Piece movingPiece = gameBoard.getField(startX, startY);
-        boolean notMyPiece = movingPiece.getColor() != playerColor;
+        //boolean notMyPiece = movingPiece.getColor() != playerColor;
         boolean isPieceMovable= movingPiece.isMovable();
         boolean isMoveDiagonal = startX != endX && startY != endY;;
         boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
@@ -113,13 +102,10 @@ public class ModelService implements ModelServiceI{
     private boolean checkStepSize(Piece movingPiece, int startX, int endX, int startY, int endY) {
         // Check if the piece is a Scout
         if (movingPiece.getRank() == Rank.SCOUT) {
-
-
             // Iterate over all intermediate spaces between the start and end points
             if (!iterateOverAllIntermediateSpaces(startX,endX,startY,endY)){
                 return false;
             }
-
         } else {
             // For non-Scout pieces, check if the move exceeds the maximum step size
             int distanceX = Math.abs(endX - startX);
@@ -176,15 +162,12 @@ public class ModelService implements ModelServiceI{
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
             this.currentGameState = newState;
+            notifyUI();
         }
     }
 
     public GameState getGameState() {
         return this.currentGameState;
-    }
-
-    public void Player(String username, int id) {
-        currentPlayer = new Player(username, id);
     }
 
     public void Player(Player player){

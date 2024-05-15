@@ -82,9 +82,9 @@ public class SaveSetup {
                 savedSetup[y][x] = new Piece(pieceRank, null);
 
             }
-            Log.i("saveSetup", savedSetup[0][0].toString());
+            Log.i("saveSetup", "done going through list");
             //check none of the pieces are null
-            for(int y=0; y<10; y++){
+            for(int y=6; y<10; y++){
                 for(int x=0; x<10; x++){
                     if(savedSetup[y][x] == null) return null;
                 }
