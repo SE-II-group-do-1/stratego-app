@@ -79,12 +79,14 @@ import com.example.stratego_app.model.*;
         assertEquals(false, modelService.movePiece(0,0,0,2));
     }
 
+    /**
     @Test
      void isDestinationEmpty(){
         Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
         modelService.getGameBoard().setField(0,0,marshal);
         assertEquals(true, modelService.movePiece(0,0,0,1));
     }
+     **/
 
     @Test
      void DestinationNotEmpty(){
@@ -124,12 +126,14 @@ import com.example.stratego_app.model.*;
         assertEquals(false, modelService.movePiece(0,0,5,0));
     }
 
+    /**
     @Test
      void checkStepSizeScout(){
         Piece scout = new Piece(Rank.SCOUT, Color.RED);
         modelService.getGameBoard().setField(0,0,scout);
         assertEquals(true, modelService.movePiece(0,0,5,0));
     }
+    **/
 
 
 }

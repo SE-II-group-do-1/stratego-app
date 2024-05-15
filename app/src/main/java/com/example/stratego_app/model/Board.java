@@ -81,4 +81,26 @@ public class Board {
         return true;
     }
 
+
+    public void rotateBoard() {
+        int rows = this.fields.length;
+        int cols = this.fields[0].length;
+
+        // Reverse the rows
+        for (int i = 0; i < rows / 2; i++) {
+            Piece[] temp = fields[i];
+            fields[i] = fields[rows - 1 - i];
+            fields[rows - 1 - i] = temp;
+        }
+        // Reverse the columns
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols / 2; j++) {
+                Piece temp = fields[i][j];
+                fields[i][j] = fields[i][cols - 1 - j];
+                fields[i][cols - 1 - j] = temp;
+            }
+        }
+
+    }
+
 }

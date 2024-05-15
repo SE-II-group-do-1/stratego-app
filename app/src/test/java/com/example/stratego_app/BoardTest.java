@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 
 import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
 
@@ -94,7 +95,14 @@ class BoardTest {
         assertFalse(board.isValidLocation(5, 7));
     }
 
-    
+    @Test
+    void testBoardRotation() {
+        Piece flagPieceFromBlue = new Piece(Rank.FLAG, Color.BLUE);
+        board.setField(0,0,flagPieceFromBlue);
+
+        board.rotateBoard();
+        assertEquals(flagPieceFromBlue,board.getField(9,9));
+    }
 
 
 
