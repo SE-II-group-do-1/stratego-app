@@ -180,7 +180,7 @@ public class LobbyClient implements Disposable {
     public void sendUpdate(Board b){
         int id = ModelService.getInstance().getCurrentPlayer().getId();
         String data = gson.toJson(updateToObject(b,id));
-        client.send("/topic/lobby-"+currentLobbyID, data);
+        client.send("/topic/lobby-"+currentLobbyID, data).subscribe();
     }
 
     /**

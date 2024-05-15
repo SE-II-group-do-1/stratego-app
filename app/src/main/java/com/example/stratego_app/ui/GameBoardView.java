@@ -263,7 +263,7 @@ public class GameBoardView extends View implements ObserverModelService {
         Log.i(TAG, "click2" + selected);
         Log.i(TAG, String.valueOf(selectedX));
         Log.i(TAG, String.valueOf(selectedY));
-        modelService.movePiece(selectedX, selectedY, col, row);
+        modelService.movePiece(selectedY, selectedX, row, col);
         selected = null;
         return true;
     }

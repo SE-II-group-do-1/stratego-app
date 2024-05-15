@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.Before;
 import static org.junit.Assert.*;
 
+import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.*;
 
@@ -21,10 +22,16 @@ import com.example.stratego_app.model.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
  class MoveValidationTest {
     private ModelService modelService = ModelService.getInstance();
+    private Player player = new Player("TEST", 1);
+
+
+
 
    @BeforeAll
    void setup(){
+      LobbyClient lobbyClient = LobbyClient.getInstance();
       modelService.setPlayerColor(Color.RED);
+      modelService.Player(player);
    }
 
     @AfterEach
