@@ -68,8 +68,8 @@ public class ModelService implements ModelServiceI{
             // Perform the move
             gameBoard.setField(endX, endY, movingPiece); // Move the piece to the new position
             gameBoard.setField(startX, startY, null); // Clear the original position
-            //TODO: check why this gives error: client null
-            //LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
+            //TODO: check why this doesnt send shit
+            LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
             notifyUI();
 
             return true; // Move was successful
@@ -253,5 +253,11 @@ public class ModelService implements ModelServiceI{
         pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, playerColor)));
 
         return pieces;
+    }
+
+    public void leaveGame() {
+        if(currentGameState == GameState.INGAME){
+            LobbyClient.getInstance().leaveLobby(currentPlayer.getId());
+        }
     }
 }

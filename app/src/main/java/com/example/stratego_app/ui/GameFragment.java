@@ -60,7 +60,10 @@
             startTimer();
 
             Button btnLeaveGame = view.findViewById(R.id.leaveGameButton);
-            btnLeaveGame.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+            btnLeaveGame.setOnClickListener(v -> {
+                ModelService.getInstance().leaveGame();
+                getParentFragmentManager().popBackStack();
+            });
         }
 
         public void startTimer() {
