@@ -1,7 +1,5 @@
 package com.example.stratego_app.connection;
 
-import static com.example.stratego_app.connection.ToMap.leaveToObject;
-import static com.example.stratego_app.connection.ToMap.setupToObject;
 import static com.example.stratego_app.connection.ToMap.updateToObject;
 
 import android.util.Log;
@@ -150,12 +148,13 @@ public class LobbyClient implements Disposable {
             }
 
             //TODO: ModelService doesnt need a Player class. keep values in normal form!
+            //  leave for now. maybe in sprint 3!!!!!
 
             //update info in ModelService
             ModelService.getInstance().Player(selfInfo);
             ModelService.getInstance().setPlayerColor(color);
             ModelService.getInstance().Opponent(opponent);
-            ModelService.getInstance().setGameState(GameState.SETUP);
+            ModelService.getInstance().setGameState(GameState.INGAME);
 
             //unsub from reply
             disposable.remove(reply);
@@ -179,7 +178,8 @@ public class LobbyClient implements Disposable {
      * @param b - updated Board, id is sent implicitly
      */
     public void sendUpdate(Board b){
-        String data = gson.toJson(b, id); //TODO: ToMap function {initiator:id, board:b}
+        int id = ModelService.getInstance().getCurrentPlayer().getId();
+        String data = gson.toJson(updateToObject(b,id));
         client.send("/topic/lobby-"+currentLobbyID, data);
     }
 
@@ -189,13 +189,13 @@ public class LobbyClient implements Disposable {
      */
     private void handleUpdate(StompMessage message){
         if(message.getPayload().equals("close")){
-            ModelService.getInstance().setGameState(GameState.DONE);
+            ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up
             Log.i(TAG, "Opponent left lobby");
         }
         else {
             try {
                 //parse message
-                Board b = (Board) message.getPayload(); //TODO: ToMap function
+                Board b = (Board) ToMap.parseMessage(message);
 
                 //commit changes
                 ModelService.getInstance().updateBoard(b);

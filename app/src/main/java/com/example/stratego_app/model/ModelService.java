@@ -1,6 +1,5 @@
 package com.example.stratego_app.model;
 
-import android.util.Log;
 
 import com.example.stratego_app.connection.LobbyClient;
 
@@ -15,7 +14,6 @@ public class ModelService implements ModelServiceI{
     private Player currentPlayer;
     private Player currentOpponent;
     private Color playerColor;
-    private boolean currentTurn;
 
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
@@ -29,23 +27,15 @@ public class ModelService implements ModelServiceI{
     public ModelService() {
         this.gameBoard = new Board();
         this.currentGameState = GameState.WAITING;
-        this.currentTurn = false;
     }
 
+    //only for committing data from server
     @Override
     public void updateBoard(Board newBoard) {
         if (newBoard == null) {
             return;
         }
         gameBoard.setBoard(newBoard); //set entire board state
-        notifyUI();
-    }
-
-    //commit update from server
-    public void updateBoard(int y, int x, Piece piece){
-        if(currentGameState != GameState.INGAME) return;
-        gameBoard.setField(x,y,piece);
-        currentTurn = !currentTurn;
         notifyUI();
     }
 
@@ -78,7 +68,7 @@ public class ModelService implements ModelServiceI{
             // Perform the move
             gameBoard.setField(endY, endX, movingPiece); // Move the piece to the new position
             gameBoard.setField(startY, startX, null); // Clear the original position
-            LobbyClient.getInstance().sendUpdate(endY,endX,movingPiece, currentPlayer);
+            LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
             notifyUI();
 
             return true; // Move was successful
