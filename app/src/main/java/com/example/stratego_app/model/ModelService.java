@@ -162,6 +162,7 @@ public class ModelService implements ModelServiceI{
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
             this.currentGameState = newState;
+            notifyUI();
         }
     }
 
