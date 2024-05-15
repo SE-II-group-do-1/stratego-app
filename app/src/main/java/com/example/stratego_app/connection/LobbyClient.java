@@ -39,7 +39,7 @@ public class LobbyClient implements Disposable {
     private int currentLobbyID;
 
     private String username;
-    private StompClient client;
+    private StompClient client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
 
     Disposable reply;
     Disposable errors;
@@ -59,8 +59,7 @@ public class LobbyClient implements Disposable {
      * initial server response (only after sending join lobby request)
      */
     public void connect() {
-        client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
-        client.withClientHeartbeat(1000).withServerHeartbeat(1000);
+        this.client.withClientHeartbeat(1000).withServerHeartbeat(1000);
         Disposable lifecycle = client.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,13 +82,13 @@ public class LobbyClient implements Disposable {
         disposable.add(lifecycle);
 
 
-        reply = client.topic("/topic/reply")
+        reply = this.client.topic("/topic/reply")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, "error", throwable));
 
 
-        errors = client.topic("/topic/errors")
+        errors = this.client.topic("/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleException, throwable -> Log.e(TAG, "error", throwable));
@@ -97,7 +96,7 @@ public class LobbyClient implements Disposable {
         disposable.add(reply);
         disposable.add(errors);
 
-        client.connect();
+        this.client.connect();
     }
 
     /**
@@ -161,11 +160,11 @@ public class LobbyClient implements Disposable {
             reply.dispose();
 
             //sub to lobby
-            currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
+            this.currentLobby = this.client.topic("/topic/lobby-"+currentLobbyID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleUpdate, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
-            disposable.add(currentLobby);
+            disposable.add(this.currentLobby);
 
         }
         catch (Exception e){
@@ -221,8 +220,8 @@ public class LobbyClient implements Disposable {
      */
     public void leaveLobby(int id) {
         String data = gson.toJson(id);
-        client.send("/app/leave", data);
-        disposable.remove(currentLobby);
+        this.client.send("/app/leave", data);
+        disposable.remove(this.currentLobby);
         currentLobby.dispose();
         ModelService.getInstance().setGameState(GameState.DONE);
     }

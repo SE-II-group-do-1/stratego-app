@@ -254,4 +254,10 @@ public class ModelService implements ModelServiceI{
 
         return pieces;
     }
+
+    public void leaveGame() {
+        if(currentGameState == GameState.INGAME){
+            LobbyClient.getInstance().leaveLobby(currentPlayer.getId());
+        }
+    }
 }
