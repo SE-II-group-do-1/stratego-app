@@ -207,8 +207,7 @@ public class GameBoardView extends View implements ObserverModelService {
 
     private void drawPieces(Canvas canvas) {
 
-        Piece[][] boardArray = SaveSetup.readGameSetup(getContext());
-        if(boardArray == null) boardArray = ModelService.getInstance().getGameBoard().getBoard();
+        Piece[][] boardArray = ModelService.getInstance().getGameBoard().getBoard();
 
         Log.i("drawPiece", "in method");
 
