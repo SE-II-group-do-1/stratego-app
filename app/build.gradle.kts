@@ -76,7 +76,8 @@ sonar {
         // Exclude UI tests from SonarQube analysis
         property("sonar.coverage.exclusions", "src/main/java/com/example/stratego_app/ui/**," +
                  "src/main/java/com/example/stratego_app/connection/LobbyClient.java," +
-                "src/main/java/com/example/stratego_app/connection/ToMap.java")
+                "src/main/java/com/example/stratego_app/connection/ToMap.java" +
+                "src/main/java/com/example/stratego_app/model/SaveSetup.java")
     }
 }
 

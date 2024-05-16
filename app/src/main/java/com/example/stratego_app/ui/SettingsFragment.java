@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
@@ -88,6 +91,19 @@ public class SettingsFragment extends Fragment {
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
             SaveSetup.saveGameSetup(getContext());
+
+            // Inflate the custom toast layout.
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast_layout, null);
+
+            TextView text = layout.findViewById(R.id.toastText);
+            text.setText("Game setup successfully saved");
+
+            Toast toast = new Toast(getContext());
+            toast.setGravity(Gravity.CENTER, 0, 0); // Center the toast
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
         });
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
@@ -97,9 +113,6 @@ public class SettingsFragment extends Fragment {
             getParentFragmentManager().popBackStack();
         });
     }
-
-
-    //Helper methods
 
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());
