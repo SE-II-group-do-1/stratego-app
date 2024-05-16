@@ -68,7 +68,12 @@ public class ModelService implements ModelServiceI{
             // Perform the move
             gameBoard.setField(endX, endY, movingPiece); // Move the piece to the new position
             gameBoard.setField(startX, startY, null); // Clear the original position
+
             //TODO: check why this doesnt send shit
+            //speicere method calls in eigenen Variablen und schritt für schritt debuggen
+            //manchmal keine fehlermeldung bei Null objekten
+            //kommt nachricht beim Server an? kommt nur response nicht an?
+
             LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
             notifyUI();
 

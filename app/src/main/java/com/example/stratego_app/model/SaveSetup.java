@@ -46,7 +46,7 @@ public class SaveSetup {
             writer.endObject();
             return true; // saved
         } catch (Exception e) {
-            Log.e(tag, "Error saving game setup", e);
+            //Log.e(tag, "Error saving game setup", e);
             return false;
         } finally {
             try {
@@ -57,7 +57,7 @@ public class SaveSetup {
                     fileOutStream.close();
                 }
             } catch (IOException e) {
-                Log.e(tag, "Error closing streams", e);
+                //Log.e(tag, "Error closing streams", e);
             }
         }
     }
@@ -81,7 +81,7 @@ public class SaveSetup {
                 savedSetup[y][x] = new Piece(pieceRank, null);
 
             }
-            Log.i("saveSetup", "done going through list");
+            //Log.i("saveSetup", "done going through list");
             //check none of the pieces are null
             for(int y=6; y<10; y++){
                 for(int x=0; x<10; x++){
@@ -90,7 +90,7 @@ public class SaveSetup {
             }
             return savedSetup;
         } catch (Exception e) {
-            Log.e(tag, "Error reading game setup", e);
+            //Log.e(tag, "Error reading game setup", e);
             return null;
         }
     }
