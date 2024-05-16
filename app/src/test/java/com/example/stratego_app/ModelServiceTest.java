@@ -13,6 +13,7 @@ import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Player;
 import com.example.stratego_app.model.Rank;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -127,13 +128,13 @@ public class ModelServiceTest {
     @Test
     public void testCreateOrUpdatePlayer() {
         ModelService modelService = ModelService.getInstance();
-        modelService.Player("player1", 1);
+        modelService.Player(new Player("player1", 1));
         assertNotNull(modelService.getCurrentPlayer());
         assertEquals("player1", modelService.getCurrentPlayer().getUsername());
         assertEquals(1, modelService.getCurrentPlayer().getId());
 
         // Update the same player
-        modelService.Player("playerUpdated", 2);
+        modelService.Player(new Player("playerUpdated", 2));
         assertEquals(2, modelService.getCurrentPlayer().getId());
     }
 

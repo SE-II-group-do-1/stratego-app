@@ -63,10 +63,9 @@ public class SaveSetup {
     }
 
     public static Piece[][] readGameSetup(Context context){
-        try {
+        try (InputStream is = context.openFileInput("game_setup.json")) {
             Piece[][] savedSetup = new Piece[10][10];
 
-            InputStream is = context.openFileInput("game_setup.json");
             String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
             JSONTokener tokener = new JSONTokener(jsonString);
             JSONObject jsonObject = new JSONObject(tokener);
@@ -84,7 +83,7 @@ public class SaveSetup {
             }
             Log.i("saveSetup", "done going through list");
             //check none of the pieces are null
-            for(int y=0; y<10; y++){
+            for(int y=6; y<10; y++){
                 for(int x=0; x<10; x++){
                     if(savedSetup[y][x] == null) return null;
                 }
