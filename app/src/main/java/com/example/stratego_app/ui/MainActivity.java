@@ -5,9 +5,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
+
+import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.model.ModelService;
+
 public class MainActivity extends AppCompatActivity {
-    private LobbyClient lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +23,10 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        lc = new LobbyClient();
+        LobbyClient lc = LobbyClient.getInstance();
         lc.connect();
     }
 
-    public LobbyClient getLobbyClient() {
-        return lc;
-    }
 }
 
 

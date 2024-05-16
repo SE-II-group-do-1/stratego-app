@@ -1,4 +1,4 @@
-package com.example.stratego_app.model.pieces;
+package com.example.stratego_app.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,10 +22,10 @@ public class Board {
         fields[5][7] = new Piece(Rank.LAKE);
     }
 
-    public void setField(int y, int x, Piece piece){
-        fields[y][x] = piece;
+    public void setField(int x, int y, Piece piece){
+        fields[x][y] = piece;
     }
-    public Piece getField(int y, int x){ return fields[y][x];
+    public Piece getField(int x, int y){ return fields[x][y];
     }
     public Piece[][] getBoard(){
         return fields;
@@ -33,12 +33,14 @@ public class Board {
 
     public void setBoard(Board newBoard){
         Piece[][] newFields = newBoard.getBoard();
-        for(int y=0; y<10;y++){
-            for(int x=0; x<10; x++){
-                if(newFields[y][x] != null) this.fields[y][x] = newFields[y][x];
+        for(int x=0; x<10;x++){
+            for(int y=0; y<10; y++){
+                if(newFields[x][y] != null) this.fields[x][y] = newFields[x][y];
             }
         }
     }
+
+
 
     /**
      * fills board with all pieces randomly placed on the gameboard
@@ -60,6 +62,13 @@ public class Board {
         }
     }
 
+    /**
+     * checks if placed pieces is in a valid location without a set piece on it
+     * @param y y-coordinates
+     * @param x x-coordinates
+     * @return true it the field is empty
+     */
+
     public boolean isValidLocation(int y, int x) {
         if (y < 0 || y >= 10 || x < 0 || x >= 10) {
             return false;
@@ -70,6 +79,28 @@ public class Board {
         }
 
         return true;
+    }
+
+
+    public void rotateBoard() {
+        int rows = this.fields.length;
+        int cols = this.fields[0].length;
+
+        // Reverse the rows
+        for (int i = 0; i < rows / 2; i++) {
+            Piece[] temp = fields[i];
+            fields[i] = fields[rows - 1 - i];
+            fields[rows - 1 - i] = temp;
+        }
+        // Reverse the columns
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols / 2; j++) {
+                Piece temp = fields[i][j];
+                fields[i][j] = fields[i][cols - 1 - j];
+                fields[i][cols - 1 - j] = temp;
+            }
+        }
+
     }
 
 }

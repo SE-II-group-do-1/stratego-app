@@ -1,5 +1,7 @@
 package com.example.stratego_app.ui;
 
+import static android.view.MotionEvent.ACTION_DOWN;
+
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,19 +11,19 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-
-import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
-import com.example.stratego_app.model.pieces.Board;
-import com.example.stratego_app.model.pieces.Piece;
-import com.example.stratego_app.model.pieces.Rank;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
+import com.example.stratego_app.model.SaveSetup;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameBoardView extends View implements ObserverModelService {
@@ -32,7 +34,10 @@ public class GameBoardView extends View implements ObserverModelService {
     private boolean isConfigMode = false;
     private boolean displayLowerHalfOnly = false;
     private Map<Rank, Drawable> drawableCache = new HashMap<>();
-    private Board board = new Board();
+
+    private Piece selected;
+    private int selectedX;
+    private int selectedY;
 
 
     private int cellWidth;
@@ -61,19 +66,17 @@ public class GameBoardView extends View implements ObserverModelService {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         loadDrawableCache();
         setupDragListener();
-
-        modelService.addObserver(this);
+        setupClickListener();
+        ModelService.subscribe(this);
     }
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (modelService != null) {
-            modelService.removeObserver(this); // Unregister to prevent memory leaks
-        }
+        ModelService.unsubscribe(this);
     }
 
     @Override
-    public void onBoardUpdated() {
+    public void update() {
         invalidate();
     }
 
@@ -200,9 +203,12 @@ public class GameBoardView extends View implements ObserverModelService {
     /**
      * method drawPieces adds pieces to the board fetching them from a drawable cache, so a constant reload from res files is not necessary
      */
+    //use dependency injection, check saved setup beforehand
 
     private void drawPieces(Canvas canvas) {
-        Piece[][] boardArray = modelService.getBoard().getBoard();
+
+        Piece[][] boardArray = ModelService.getInstance().getGameBoard().getBoard();
+
 
         for (int row = 0; row < boardArray.length; row++) {
             for (int col = 0; col < boardArray[row].length; col++) {
@@ -217,6 +223,45 @@ public class GameBoardView extends View implements ObserverModelService {
                 }
             }
         }
+    }
+
+    /**
+     * Move pieces on Board when selecting (clicking) them and then other field
+     */
+    public void setupClickListener(){
+        this.setOnTouchListener((View v, MotionEvent e) -> {
+            int action = e.getAction();
+            switch (action) {
+                case ACTION_DOWN:
+                    onTouch(e);
+                    return true;
+                default:
+                    return false;
+            }
+        });
+    }
+
+    private boolean onTouch(MotionEvent e) {
+
+        int col = (int) (e.getX() / cellWidth);
+        int row = (int) (e.getY() / cellHeight);
+
+        Log.i(TAG, String.valueOf(col));
+        Log.i(TAG, String.valueOf(row));
+
+        if (selected == null) {
+            selected = ModelService.getInstance().getGameBoard().getField(row, col);
+            Log.i(TAG, "click1" + selected);
+            selectedX = col;
+            selectedY = row;
+            return false;
+        }
+        Log.i(TAG, "click2" + selected);
+        Log.i(TAG, String.valueOf(selectedX));
+        Log.i(TAG, String.valueOf(selectedY));
+        modelService.movePiece(selectedY, selectedX, row, col);
+        selected = null;
+        return true;
     }
 
     /*
@@ -257,19 +302,16 @@ public class GameBoardView extends View implements ObserverModelService {
     }
 
    private boolean handleDrop(float x, float y, DragEvent event) {
-        int col = (int) (x / cellWidth);
+       Log.i("handleDrop", "handle");
+       int col = (int) (x / cellWidth);
         int row = (int) (y / cellHeight);
 
         ClipData.Item item = event.getClipData().getItemAt(0);
         String pieceType = item.getText().toString();
         Piece droppedPiece = createPieceFromType(pieceType);
 
-        boolean success = board.isValidLocation(row, col);
-
-        if (success) {
-            success = modelService.placePieceAtGameSetUp(col, row, droppedPiece);
-            invalidate(); // Redraw the board
-        }
+       boolean success = modelService.placePieceAtGameSetUp(col, row, droppedPiece);
+       invalidate(); // Redraw the board
 
         if (dropListener != null && draggedPosition != -1) {
             dropListener.onDrop(success, draggedPosition);
@@ -281,9 +323,8 @@ public class GameBoardView extends View implements ObserverModelService {
 
 
     private Piece createPieceFromType(String type) {
-        // Example conversion logic
         Rank rank = Rank.valueOf(type.toUpperCase());
-        return new Piece(rank, null, 0); // Assuming a constructor exists
+        return new Piece(rank, ModelService.getInstance().getPlayerColor());
     }
 
     @Override

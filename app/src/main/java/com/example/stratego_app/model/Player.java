@@ -1,16 +1,12 @@
-package com.example.stratego_app.models;
+package com.example.stratego_app.model;
 
 public class Player {
     private String username;
     private int id;
 
-    public Player() {
-        // Default constructor
-    }
-
-    public Player(int id, String username) {
-        this.id = id;
+    public Player(String username, int id) {
         this.username = username;
+        this.id = id;
     }
 
     public String getUsername() {
@@ -29,11 +25,4 @@ public class Player {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "username='" + username + '\'' +
-                ", id=" + id +
-                '}';
-    }
 }

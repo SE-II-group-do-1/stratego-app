@@ -13,12 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
-import com.example.stratego_app.models.Player;
+import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Player;
+import com.example.stratego_app.model.SaveSetup;
 
 
 public class MainFragment extends Fragment {
 
+
+    ModelService modelService = ModelService.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +43,9 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
+        /**
+         * Button startGame starts e new game of Stratego with a two-player game set-up
+         */
         Button startGame = view.findViewById(R.id.startGame);
         startGame.setOnClickListener(v -> {
 
@@ -47,6 +55,8 @@ public class MainFragment extends Fragment {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
+        startGame.setEnabled(false);
+
 
         Button enter = view.findViewById(R.id.enterButton);
         enter.setOnClickListener(view1 -> {
@@ -54,11 +64,12 @@ public class MainFragment extends Fragment {
             String username = usernameEntry.getText().toString().trim();
 
             if (!username.isEmpty()) {
+                startGame.setEnabled(true);
 
-                Player player = new Player(2, username);
-                LobbyClient lc = new LobbyClient();
+                //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
+                LobbyClient lc = LobbyClient.getInstance();
                 lc.connect();
-                lc.joinLobby(player);
+                lc.joinLobby(username);
 
                 // Navigate to LobbyFragment
                 LobbyFragment lobbyFragment = new LobbyFragment();

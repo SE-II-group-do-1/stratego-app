@@ -1,14 +1,16 @@
-package com.example.stratego_app.pieces;
+package com.example.stratego_app;
 
 //import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-import com.example.stratego_app.model.pieces.*;
+import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Color;
+import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.Rank;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -93,7 +95,14 @@ class BoardTest {
         assertFalse(board.isValidLocation(5, 7));
     }
 
-    
+    @Test
+    void testBoardRotation() {
+        Piece flagPieceFromBlue = new Piece(Rank.FLAG, Color.BLUE);
+        board.setField(0,0,flagPieceFromBlue);
+
+        board.rotateBoard();
+        assertEquals(flagPieceFromBlue,board.getField(9,9));
+    }
 
 
 

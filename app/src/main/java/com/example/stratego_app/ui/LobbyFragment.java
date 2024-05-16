@@ -4,6 +4,8 @@ package com.example.stratego_app.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.stratego_app.R;
-import com.example.stratego_app.connection.clients.LobbyClient;
-import com.example.stratego_app.connection.clients.LobbyClientListener;
-import com.example.stratego_app.models.Player;
-
-import java.util.List;
+import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.ObserverModelService;
 
 
-public class LobbyFragment extends Fragment implements LobbyClientListener {
+public class LobbyFragment extends Fragment implements ObserverModelService {
 
     private LinearLayout playersContainer;
     public LobbyFragment() {
@@ -37,32 +36,31 @@ public class LobbyFragment extends Fragment implements LobbyClientListener {
         super.onViewCreated(view, savedInstanceState);
         playersContainer = view.findViewById(R.id.playersContainer);
 
-        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
-        lobbyClient.registerListener(this);
-
+        ModelService.subscribe(this);
     }
 
     @Override
     public void onDestroyView() {
+        ModelService.unsubscribe(this);
         super.onDestroyView();
-
-        LobbyClient lobbyClient = ((MainActivity) getActivity()).getLobbyClient();
-        lobbyClient.unregisterListener(this);
 
     }
 
     @Override
-    public void onLobbyUpdated(List<Player> players) {
+    public void update() {
         if (getActivity() == null) return;
+        Log.i("lobbyUpdate", "in method");
+        String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
+        String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
 
         getActivity().runOnUiThread(() -> {
             playersContainer.removeAllViews();
-            for (Player player : players) {
-                addPlayerToView(player.getUsername());
-            }
+            addPlayerToView(ownName);
+            addPlayerToView(oppName);
         });
     }
     private void addPlayerToView(String playerName) {
+        Log.i("lobbyUpdate", "in addplayer");
         TextView playerView = new TextView(getContext());
         playerView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,

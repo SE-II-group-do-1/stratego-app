@@ -1,11 +1,6 @@
 package com.example.stratego_app.model;
-import com.example.stratego_app.model.pieces.*;
 
 public interface ModelServiceI {
-    /**
-     * Initializes the game board and sets up initial game state.
-     */
-    void initializeGame();
 
     /**
      * Attempts to move a piece from one location to another.
@@ -26,7 +21,7 @@ public interface ModelServiceI {
      *
      * @param newBoard a 2D array of Piece objects representing the new board state
      */
-    void updateBoard(Piece[][] newBoard);
+    void updateBoard(Board newBoard);
 
     /**
      * Retrieves the piece at a given board location.
