@@ -3,19 +3,13 @@ package com.example.stratego_app.connection;
 import static com.example.stratego_app.connection.ToMap.updateToObject;
 
 import android.util.Log;
-import android.view.Display;
-
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Player;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
