@@ -52,10 +52,6 @@
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
-            // look up GameBoardView by ID - GameBoardView not implemented yet
-            GameBoardView gameBoardView = view.findViewById(R.id.gameBoardView);
-            //gameBoardView.setConfigMode(true);
-
             timeCounter = view.findViewById(R.id.timeCounter);
             startTimer();
 
