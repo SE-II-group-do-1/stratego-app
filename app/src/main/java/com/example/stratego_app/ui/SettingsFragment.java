@@ -57,8 +57,13 @@ public class SettingsFragment extends Fragment {
         });
 
         piecesRecyclerView.setAdapter(piecesAdapter);
+
+        modelService.clearBoardExceptLakes();
+        resetPiecesInRecycleView();
+
         //if setup is saved. load onto field. no drag n drop
-        if(SaveSetup.readGameSetup(getContext()) != null) clearPiecesInRecyclerView();
+        /*if(SaveSetup.readGameSetup(getContext()) != null)
+            clearPiecesInRecyclerView();*/
 
         gameBoardView.setDropListener((success, position) -> {
             if (success) {
@@ -87,9 +92,9 @@ public class SettingsFragment extends Fragment {
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
         leave.setOnClickListener(v ->{
-            getParentFragmentManager().popBackStack();
-            clearPiecesInRecyclerView();
+            modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
+            getParentFragmentManager().popBackStack();
         });
     }
 
