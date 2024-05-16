@@ -59,6 +59,8 @@ public class LobbyClient implements Disposable {
      * initial server response (only after sending join lobby request)
      */
     public void connect() {
+
+        String errorMsg = "error";
         this.client.withClientHeartbeat(1000).withServerHeartbeat(1000);
         Disposable lifecycle = client.lifecycle()
                 .subscribeOn(Schedulers.io())
@@ -66,7 +68,7 @@ public class LobbyClient implements Disposable {
                 .subscribe((lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case ERROR:
-                            Log.e(TAG, "error", lifecycleEvent.getException());
+                            Log.e(TAG, errorMsg, lifecycleEvent.getException());
                             break;
                         case OPENED:
                             Log.e(TAG, "opened");
@@ -85,13 +87,13 @@ public class LobbyClient implements Disposable {
         reply = this.client.topic("/topic/reply")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, "error", throwable));
+                .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, errorMsg, throwable));
 
 
         errors = this.client.topic("/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleException, throwable -> Log.e(TAG, "error", throwable));
+                    .subscribe(this::handleException, throwable -> Log.e(TAG, errorMsg, throwable));
 
         disposable.add(reply);
         disposable.add(errors);
