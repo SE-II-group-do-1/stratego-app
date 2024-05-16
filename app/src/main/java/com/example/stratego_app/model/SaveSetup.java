@@ -63,10 +63,9 @@ public class SaveSetup {
     }
 
     public static Piece[][] readGameSetup(Context context){
-        try {
+        try (InputStream is = context.openFileInput("game_setup.json")) {
             Piece[][] savedSetup = new Piece[10][10];
 
-            InputStream is = context.openFileInput("game_setup.json");
             String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
             JSONTokener tokener = new JSONTokener(jsonString);
             JSONObject jsonObject = new JSONObject(tokener);
