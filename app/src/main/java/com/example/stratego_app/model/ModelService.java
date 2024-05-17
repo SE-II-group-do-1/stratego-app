@@ -35,6 +35,10 @@ public class ModelService implements ModelServiceI{
         if (newBoard == null) {
             return;
         }
+        // blue version of board is always right side up (server version)
+        if(playerColor == Color.RED){
+            newBoard.rotateBoard();
+        }
         gameBoard.setBoard(newBoard); //set entire board state
         notifyUI();
     }
@@ -49,6 +53,17 @@ public class ModelService implements ModelServiceI{
 
     public static void notifyUI(){
         listeners.forEach(ObserverModelService::update);
+    }
+
+    public void notifyClient(){
+        //blue version of board is right way up. if red player -> turn board for server
+        if(playerColor == Color.BLUE) {
+            LobbyClient.getInstance().sendUpdate(this.gameBoard);
+        } else {
+            this.gameBoard.rotateBoard();
+            LobbyClient.getInstance().sendUpdate(this.gameBoard);
+            this.gameBoard.rotateBoard();
+        }
     }
 
 
