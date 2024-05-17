@@ -61,7 +61,8 @@ public class ModelService implements ModelServiceI{
             LobbyClient.getInstance().sendUpdate(getInstance().getGameBoard());
         } else {
             Board copyForRotation = getInstance().getGameBoard();
-            LobbyClient.getInstance().sendUpdate(copyForRotation.rotateBoard(););
+            copyForRotation.rotateBoard();
+            LobbyClient.getInstance().sendUpdate(copyForRotation);
         }
     }
 
