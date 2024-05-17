@@ -58,12 +58,11 @@ public class ModelService implements ModelServiceI{
     public static void notifyClient(){
         //blue version of board is right way up. if red player -> turn board for server
         if(getInstance().playerColor == Color.BLUE) {
-            LobbyClient.getInstance().sendUpdate(getInstance().getGameBoard());
+            LobbyClient.sendUpdate(getInstance().getGameBoard());
         } else {
             Board copyForRotation = getInstance().getGameBoard();
             copyForRotation.rotateBoard();
-            LobbyClient lc = LobbyClient.getInstance();
-            lc.sendUpdate(copyForRotation);
+            LobbyClient.sendUpdate(copyForRotation);
         }
     }
 
@@ -278,7 +277,7 @@ public class ModelService implements ModelServiceI{
 
     public void leaveGame() {
         if(currentGameState == GameState.INGAME){
-            LobbyClient.getInstance().leaveLobby(currentPlayer.getId());
+            LobbyClient.leaveLobby(currentPlayer.getId());
         }
     }
 }

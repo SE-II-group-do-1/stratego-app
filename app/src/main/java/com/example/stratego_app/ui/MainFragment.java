@@ -67,9 +67,8 @@ public class MainFragment extends Fragment {
                 startGame.setEnabled(true);
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
-                LobbyClient lc = LobbyClient.getInstance();
-                lc.connect();
-                lc.joinLobby(username);
+                LobbyClient.connect();
+                LobbyClient.joinLobby(username);
 
                 // Navigate to LobbyFragment
                 LobbyFragment lobbyFragment = new LobbyFragment();

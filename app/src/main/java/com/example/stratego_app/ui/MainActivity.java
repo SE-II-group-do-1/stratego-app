@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        LobbyClient lc = LobbyClient.getInstance();
-        lc.connect();
+        //LobbyClient lc = LobbyClient.getInstance();
+        //lc.connect();
     }
 
 }
