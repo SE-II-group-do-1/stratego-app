@@ -22,7 +22,6 @@ import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
-    //TODO: IDEA: turn to static class/methods
 
     private static LobbyClient instance;
 
@@ -176,6 +175,7 @@ public class LobbyClient implements Disposable {
      * Handles all in game server responses (mostly updating Board).
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
+    //TODO: Error parsing message. LinkTreeMap to Board
     private static void handleUpdate(StompMessage message){
         if(message.getPayload().equals("close")){
             ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up

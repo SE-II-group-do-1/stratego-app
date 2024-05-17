@@ -22,9 +22,6 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, new MainFragment())
                     .commit();
         }
-
-        //LobbyClient lc = LobbyClient.getInstance();
-        //lc.connect();
     }
 
 }
