@@ -55,14 +55,13 @@ public class ModelService implements ModelServiceI{
         listeners.forEach(ObserverModelService::update);
     }
 
-    public void notifyClient(){
+    public static void notifyClient(){
         //blue version of board is right way up. if red player -> turn board for server
-        if(playerColor == Color.BLUE) {
-            LobbyClient.getInstance().sendUpdate(this.gameBoard);
+        if(getInstance().playerColor == Color.BLUE) {
+            LobbyClient.getInstance().sendUpdate(getInstance().getGameBoard());
         } else {
-            this.gameBoard.rotateBoard();
-            LobbyClient.getInstance().sendUpdate(this.gameBoard);
-            this.gameBoard.rotateBoard();
+            Board copyForRotation = getInstance().getGameBoard();
+            LobbyClient.getInstance().sendUpdate(copyForRotation.rotateBoard(););
         }
     }
 
@@ -89,7 +88,7 @@ public class ModelService implements ModelServiceI{
             //manchmal keine fehlermeldung bei Null objekten
             //kommt nachricht beim Server an? kommt nur response nicht an?
 
-            LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
+            notifyClient();
             notifyUI();
 
             return true; // Move was successful
