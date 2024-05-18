@@ -74,11 +74,12 @@ public class MainFragment extends Fragment {
 
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
-            if (!username.isEmpty() && username != "") {
+            if (username != null && !username.isEmpty()) {
                 if (SaveSetup.doesGameSetupExist(getContext(), username)) {
+                    setButtonEnabled(enter);
                     setButtonEnabled(startGame);
                 } else {
-                    setButtonDisabled(startGame); // Ensure it's disabled if no setup exists
+                    setButtonDisabled(enter); // Ensure it's disabled if no setup exists
                 }
 
                 LobbyClient.connect();
@@ -104,6 +105,7 @@ public class MainFragment extends Fragment {
                 String username = s.toString().trim();
                 if (!username.isEmpty() && SaveSetup.doesGameSetupExist(getContext(), username)) {
                     setButtonEnabled(enter);
+
                 } else {
                     setButtonDisabled(enter);
                 }
