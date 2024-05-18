@@ -32,7 +32,7 @@ public class SaveSetup {
         FileOutputStream fileOutStream = null;
         JsonWriter writer = null;
         try {
-            fileOutStream = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
+            fileOutStream = context.openFileOutput(username + "_game_setup.json", Context.MODE_PRIVATE);
             writer = new JsonWriter(new OutputStreamWriter(fileOutStream, "UTF-8"));
             writer.setIndent("  ");
             writer.beginObject();
@@ -64,7 +64,7 @@ public class SaveSetup {
     }
 
     public static Piece[][] readGameSetup(Context context, String username){
-        try (InputStream is = context.openFileInput("game_setup.json")) {
+        try (InputStream is = context.openFileInput(username + "_game_setup.json")) {
             Piece[][] savedSetup = new Piece[10][10];
 
             String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
