@@ -4,6 +4,8 @@
     import android.os.Bundle;
     import androidx.annotation.NonNull;
     import androidx.annotation.Nullable;
+    import androidx.core.view.ViewCompat;
+    import androidx.core.view.WindowInsetsCompat;
     import androidx.fragment.app.Fragment;
 
     import android.os.Handler;
@@ -63,6 +65,7 @@
                 ModelService.getInstance().leaveGame();
                 getParentFragmentManager().popBackStack();
             });
+
         }
 
         public void startTimer() {

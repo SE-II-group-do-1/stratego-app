@@ -58,6 +58,12 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
             addPlayerToView(oppName);
         });
     }
+
+    public void update(String msg) {
+        // method for updating UI with inGame message
+
+    }
+
     private void addPlayerToView(String playerName) {
         TextView playerView = new TextView(getContext());
         playerView.setLayoutParams(new ViewGroup.LayoutParams(

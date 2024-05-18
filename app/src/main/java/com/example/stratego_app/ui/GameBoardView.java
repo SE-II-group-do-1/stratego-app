@@ -20,10 +20,7 @@ import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
-import com.example.stratego_app.model.SaveSetup;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameBoardView extends View implements ObserverModelService {
@@ -78,6 +75,11 @@ public class GameBoardView extends View implements ObserverModelService {
     @Override
     public void update() {
         invalidate();
+    }
+
+    @Override
+    public void update(String message) {
+    // method for updating UI with inGame message
     }
 
     /**
@@ -337,5 +339,7 @@ public class GameBoardView extends View implements ObserverModelService {
             loadDrawableCache();
         }
     }
+
+
 
 }

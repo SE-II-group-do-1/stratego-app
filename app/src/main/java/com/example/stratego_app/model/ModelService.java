@@ -54,6 +54,9 @@ public class ModelService implements ModelServiceI{
     public static void notifyUI(){
         listeners.forEach(ObserverModelService::update);
     }
+    public static void notifyUI(String message) {
+        listeners.forEach(listener -> listener.update(message));
+    }
 
     public static void notifyClient(){
         //blue version of board is right way up. if red player -> turn board for server
@@ -80,6 +83,7 @@ public class ModelService implements ModelServiceI{
         Piece movingPiece;
         if (validateMove(startX, startY, endX, endY)) {
             movingPiece = gameBoard.getField(startX, startY);
+            Piece destinationPiece = gameBoard.getField(endX, endY);
             // Perform the move
             gameBoard.setField(endX, endY, movingPiece); // Move the piece to the new position
             gameBoard.setField(startX, startY, null); // Clear the original position
@@ -88,6 +92,12 @@ public class ModelService implements ModelServiceI{
             //speicere method calls in eigenen Variablen und schritt für schritt debuggen
             //manchmal keine fehlermeldung bei Null objekten
             //kommt nachricht beim Server an? kommt nur response nicht an?
+
+            //to retrieve info for inGame messages - determine the action and generate the message
+            String action = (destinationPiece != null) ? "captured" : "moved to";
+            String destinationPieceName = (destinationPiece != null) ? destinationPiece.getRank().toString() : String.format("(%d, %d)", endX, endY);
+            String message = String.format("Player %s %s %s", currentPlayer.getUsername(), action, destinationPieceName);
+            notifyUI(message);
 
             notifyClient();
             notifyUI();
@@ -101,7 +111,7 @@ public class ModelService implements ModelServiceI{
         Piece movingPiece = gameBoard.getField(startX, startY);
         //boolean notMyPiece = movingPiece.getColor() != playerColor;
         boolean isPieceMovable= movingPiece.isMovable();
-        boolean isMoveDiagonal = startX != endX && startY != endY;;
+        boolean isMoveDiagonal = startX != endX && startY != endY;
         boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
 

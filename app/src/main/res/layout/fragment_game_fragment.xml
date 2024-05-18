@@ -53,7 +53,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/frame_game_events"
-        android:text="Player kat has capture marshall."
         android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="italic" />
