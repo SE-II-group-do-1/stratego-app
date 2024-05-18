@@ -16,13 +16,15 @@
 
     import com.example.stratego_app.R;
     import com.example.stratego_app.model.ModelService;
+    import com.example.stratego_app.model.ObserverModelService;
 
 
-    public class GameFragment extends Fragment {
+    public class GameFragment extends Fragment implements ObserverModelService {
 
         ModelService modelService = ModelService.getInstance();
 
         private TextView timeCounter;
+        private TextView gameEvents;
         private long startTime = 0L;
         private final Handler handler = new Handler();
         private long timeInMilliseconds = 0L;
@@ -53,6 +55,7 @@
             super.onViewCreated(view, savedInstanceState);
 
             timeCounter = view.findViewById(R.id.timeCounter);
+            gameEvents = view.findViewById(R.id.gameEvents);
             startTimer();
 
             Button btnLeaveGame = view.findViewById(R.id.leaveGameButton);
@@ -76,6 +79,18 @@
         public void onDestroyView() {
             super.onDestroyView();
             pauseTimer();
+        }
+
+        @Override
+        public void update() {
+            // Default update method
+        }
+
+        @Override
+        public void update(String message) {
+            if (gameEvents != null) {
+                gameEvents.setText(message);
+            }
         }
 
     }
