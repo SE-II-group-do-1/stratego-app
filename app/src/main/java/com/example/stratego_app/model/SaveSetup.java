@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,5 +94,10 @@ public class SaveSetup {
             //Log.e(tag, "Error reading game setup", e);
             return null;
         }
+    }
+
+    public static boolean doesGameSetupExist(Context context) {
+        File file = context.getFileStreamPath("game_setup.json");
+        return file.exists();
     }
 }
