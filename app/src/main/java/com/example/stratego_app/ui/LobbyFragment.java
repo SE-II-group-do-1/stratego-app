@@ -49,7 +49,6 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
     @Override
     public void update() {
         if (getActivity() == null) return;
-        Log.i("lobbyUpdate", "in method");
         String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
         String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
 
@@ -60,7 +59,6 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         });
     }
     private void addPlayerToView(String playerName) {
-        Log.i("lobbyUpdate", "in addplayer");
         TextView playerView = new TextView(getContext());
         playerView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,

@@ -108,6 +108,7 @@ public class SettingsFragment extends Fragment {
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
         leave.setOnClickListener(v ->{
+            //modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
             getParentFragmentManager().popBackStack();
         });

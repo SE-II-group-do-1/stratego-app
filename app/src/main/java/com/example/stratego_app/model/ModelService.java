@@ -35,6 +35,10 @@ public class ModelService implements ModelServiceI{
         if (newBoard == null) {
             return;
         }
+        // blue version of board is always right side up (server version)
+        if(playerColor == Color.RED){
+            newBoard.rotateBoard();
+        }
         gameBoard.setBoard(newBoard); //set entire board state
         notifyUI();
     }
@@ -49,6 +53,17 @@ public class ModelService implements ModelServiceI{
 
     public static void notifyUI(){
         listeners.forEach(ObserverModelService::update);
+    }
+
+    public static void notifyClient(){
+        //blue version of board is right way up. if red player -> turn board for server
+        if(getInstance().playerColor == Color.BLUE) {
+            LobbyClient.sendUpdate(getInstance().getGameBoard());
+        } else {
+            Board copyForRotation = getInstance().getGameBoard();
+            copyForRotation.rotateBoard();
+            LobbyClient.sendUpdate(copyForRotation);
+        }
     }
 
 
@@ -74,7 +89,7 @@ public class ModelService implements ModelServiceI{
             //manchmal keine fehlermeldung bei Null objekten
             //kommt nachricht beim Server an? kommt nur response nicht an?
 
-            LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
+            notifyClient();
             notifyUI();
 
             return true; // Move was successful
@@ -262,7 +277,7 @@ public class ModelService implements ModelServiceI{
 
     public void leaveGame() {
         if(currentGameState == GameState.INGAME){
-            LobbyClient.getInstance().leaveLobby(currentPlayer.getId());
+            LobbyClient.leaveLobby(currentPlayer.getId());
         }
     }
 }
