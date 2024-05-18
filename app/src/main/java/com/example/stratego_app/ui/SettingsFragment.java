@@ -90,7 +90,8 @@ public class SettingsFragment extends Fragment {
 
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
-            SaveSetup.saveGameSetup(getContext());
+            String username = getArguments().getString("username", "defaultUsername");
+            SaveSetup.saveGameSetup(getContext(), username);
 
             // Inflate the custom toast layout.
             LayoutInflater inflater = getLayoutInflater();

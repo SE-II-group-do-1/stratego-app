@@ -24,6 +24,7 @@ public class MainFragment extends Fragment {
 
 
     ModelService modelService = ModelService.getInstance();
+    private String username;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,46 +35,52 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         Button settingsButton = view.findViewById(R.id.settings);
-        settingsButton.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new SettingsFragment());
-            fragmentTransaction.addToBackStack(null);//makes transaction reversible "back" button in app
-            fragmentTransaction.commit();
-        });
-
-
         Button startGame = view.findViewById(R.id.startGame);
         Button enter = view.findViewById(R.id.enterButton);
         EditText usernameEntry = view.findViewById(R.id.enterUsername);
 
-        setButtonDisabled(startGame);
+
+        settingsButton.setOnClickListener(v -> {
+            username = usernameEntry.getText().toString().trim();
+            if (!username.isEmpty()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+
+                SettingsFragment settingsFragment = new SettingsFragment();
+                settingsFragment.setArguments(bundle);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, settingsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
         setButtonDisabled(enter);
+        setButtonDisabled(startGame);
 
 
         startGame.setOnClickListener(v -> {
-
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
-        //startGame.setEnabled(false);
 
 
         enter.setOnClickListener(view1 -> {
-            String username = usernameEntry.getText().toString().trim();
-
+            username = usernameEntry.getText().toString().trim();
             if (!username.isEmpty() && username != "") {
-                if (SaveSetup.doesGameSetupExist(getContext())) {
+                if (SaveSetup.doesGameSetupExist(getContext(), username)) {
                     setButtonEnabled(startGame);
                 } else {
                     setButtonDisabled(startGame); // Ensure it's disabled if no setup exists
                 }
 
-                //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient.connect();
                 LobbyClient.joinLobby(username);
 
@@ -95,7 +102,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String username = s.toString().trim();
-                if (!username.isEmpty()) {
+                if (!username.isEmpty() && SaveSetup.doesGameSetupExist(getContext(), username)) {
                     setButtonEnabled(enter);
                 } else {
                     setButtonDisabled(enter);
@@ -106,6 +113,8 @@ public class MainFragment extends Fragment {
             public void afterTextChanged(Editable s) { }
         });
     }
+
+
 
     private void setButtonDisabled(Button button) {
         button.setEnabled(false);

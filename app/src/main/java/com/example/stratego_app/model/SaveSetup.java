@@ -28,7 +28,7 @@ public class SaveSetup {
      * @param context
      */
 
-    public static boolean saveGameSetup(Context context) {
+    public static boolean saveGameSetup(Context context, String username) {
         FileOutputStream fileOutStream = null;
         JsonWriter writer = null;
         try {
@@ -63,13 +63,18 @@ public class SaveSetup {
         }
     }
 
-    public static Piece[][] readGameSetup(Context context){
+    public static Piece[][] readGameSetup(Context context, String username){
         try (InputStream is = context.openFileInput("game_setup.json")) {
             Piece[][] savedSetup = new Piece[10][10];
 
             String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
             JSONTokener tokener = new JSONTokener(jsonString);
             JSONObject jsonObject = new JSONObject(tokener);
+
+            String savedUsername = jsonObject.getString("username");
+            if (!savedUsername.equals(username)) {
+                return null;  // If the username doesn't match, return null
+            }
 
             Iterator<?> keys = jsonObject.keys();
             while (keys.hasNext()) {
@@ -96,8 +101,8 @@ public class SaveSetup {
         }
     }
 
-    public static boolean doesGameSetupExist(Context context) {
-        File file = context.getFileStreamPath("game_setup.json");
+    public static boolean doesGameSetupExist(Context context, String username) {
+        File file = context.getFileStreamPath(username + "_game_setup.json");
         return file.exists();
     }
 }
