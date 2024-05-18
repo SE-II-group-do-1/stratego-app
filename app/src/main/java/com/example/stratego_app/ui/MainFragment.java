@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,6 @@ import android.widget.EditText;
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.Piece;
-import com.example.stratego_app.model.Player;
 import com.example.stratego_app.model.SaveSetup;
 
 
@@ -43,10 +43,15 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-        /**
-         * Button startGame starts e new game of Stratego with a two-player game set-up
-         */
+
         Button startGame = view.findViewById(R.id.startGame);
+        Button enter = view.findViewById(R.id.enterButton);
+        EditText usernameEntry = view.findViewById(R.id.enterUsername);
+
+        setButtonDisabled(startGame);
+        setButtonDisabled(enter);
+
+
         startGame.setOnClickListener(v -> {
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -55,21 +60,18 @@ public class MainFragment extends Fragment {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
-        startGame.setEnabled(false);
+        //startGame.setEnabled(false);
 
-
-        Button enter = view.findViewById(R.id.enterButton);
-        setButtonDisabled(enter); // Initially disable the button
-        if(SaveSetup.doesGameSetupExist(getContext())) {
-            setButtonEnabled(enter);
-        }
 
         enter.setOnClickListener(view1 -> {
-            EditText usernameEntry = view.findViewById(R.id.enterUsername);
             String username = usernameEntry.getText().toString().trim();
 
-            if (!username.isEmpty()) {
-                startGame.setEnabled(true);
+            if (!username.isEmpty() && username != "") {
+                if (SaveSetup.doesGameSetupExist(getContext())) {
+                    setButtonEnabled(startGame);
+                } else {
+                    setButtonDisabled(startGame); // Ensure it's disabled if no setup exists
+                }
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient.connect();
@@ -86,6 +88,23 @@ public class MainFragment extends Fragment {
             usernameEntry.setText("");
         });
 
+        usernameEntry.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String username = s.toString().trim();
+                if (!username.isEmpty()) {
+                    setButtonEnabled(enter);
+                } else {
+                    setButtonDisabled(enter);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
     }
 
     private void setButtonDisabled(Button button) {
