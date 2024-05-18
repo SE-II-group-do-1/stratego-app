@@ -16,6 +16,7 @@ public class SaveSetupTest {
     private Context context;
     private ModelService modelService;
     private Board gameBoard;
+    private String username;
 
     @BeforeEach
     public void setUp() {
@@ -23,17 +24,18 @@ public class SaveSetupTest {
         modelService = ModelService.getInstance();
         gameBoard = Mockito.mock(Board.class);
         modelService.getGameBoard();
+        username = "claudia";
     }
     @Test
     public void testReadGameSetup_FileNotFound() {
-        Piece[][] board = SaveSetup.readGameSetup(context);
+        Piece[][] board = SaveSetup.readGameSetup(context, username);
         Assertions.assertNull(board);
     }
 
     @Test
     public void testSaveGameSetup_NullBoard() {
         ModelService.getInstance().getGameBoard();
-        boolean result = SaveSetup.saveGameSetup(context);
+        boolean result = SaveSetup.saveGameSetup(context, username);
         Assertions.assertFalse(result);
     }
 
