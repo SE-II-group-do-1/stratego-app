@@ -59,6 +59,11 @@ public class MainFragment extends Fragment {
 
 
         Button enter = view.findViewById(R.id.enterButton);
+        setButtonDisabled(enter); // Initially disable the button
+        if(SaveSetup.doesGameSetupExist(getContext())) {
+            setButtonEnabled(enter);
+        }
+
         enter.setOnClickListener(view1 -> {
             EditText usernameEntry = view.findViewById(R.id.enterUsername);
             String username = usernameEntry.getText().toString().trim();
@@ -81,5 +86,17 @@ public class MainFragment extends Fragment {
             usernameEntry.setText("");
         });
 
+    }
+
+    private void setButtonDisabled(Button button) {
+        button.setEnabled(false);
+        button.setAlpha(0.5f); // Set transparency to indicate disabled state
+        button.setTextColor(getResources().getColor(R.color.disabled_text_color));
+    }
+
+    private void setButtonEnabled(Button button) {
+        button.setEnabled(true);
+        button.setAlpha(1.0f); // Reset transparency to indicate enabled state
+        button.setTextColor(getResources().getColor(R.color.white));
     }
 }
