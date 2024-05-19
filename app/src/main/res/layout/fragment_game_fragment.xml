@@ -45,19 +45,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/gameEvents"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/gameBoardView"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/frame_game_events"
-        android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="italic" />
-
-    <TextView
         android:id="@+id/gameStats"
         android:layout_width="372dp"
         android:layout_height="158dp"

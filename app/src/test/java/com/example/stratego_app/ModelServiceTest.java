@@ -153,12 +153,6 @@ public class ModelServiceTest {
         ModelService.notifyUI();
         verify(mockObserver, times(1)).update();
     }
-    @Test
-    public void testNotifyUIWithMessage() {
-        String testMessage = "Test Message";
-        ModelService.notifyUI(testMessage);
-        verify(mockObserver, times(1)).update(testMessage);
-    }
 
     @Test
     public void testGetCurrentOpponent() {
