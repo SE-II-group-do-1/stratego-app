@@ -4,6 +4,4 @@ public interface ObserverModelService {
 
     void update();
 
-    void update(String msg);
-
 }

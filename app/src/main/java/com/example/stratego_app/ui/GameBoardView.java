@@ -77,11 +77,6 @@ public class GameBoardView extends View implements ObserverModelService {
         invalidate();
     }
 
-    @Override
-    public void update(String message) {
-    // method for updating UI with inGame message
-    }
-
     /**
      * loading and caching drawable pieces associated with different ranks
      */

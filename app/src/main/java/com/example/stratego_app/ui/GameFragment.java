@@ -10,18 +10,21 @@
 
     import android.os.Handler;
     import android.os.SystemClock;
+    import android.view.Gravity;
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.ViewGroup;
     import android.widget.Button;
+    import android.widget.FrameLayout;
     import android.widget.TextView;
 
     import com.example.stratego_app.R;
     import com.example.stratego_app.model.ModelService;
     import com.example.stratego_app.model.ObserverModelService;
+    import com.google.android.material.snackbar.Snackbar;
 
 
-    public class GameFragment extends Fragment implements ObserverModelService {
+    public class GameFragment extends Fragment {
 
         ModelService modelService = ModelService.getInstance();
 
@@ -31,6 +34,7 @@
         private final Handler handler = new Handler();
         private long timeInMilliseconds = 0L;
         private long timeBuff = 0L;
+        private Snackbar currentSnackbar;
 
         private final Runnable runnable = new Runnable() {
             @SuppressLint("DefaultLocale")
@@ -56,6 +60,8 @@
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
+            currentSnackbar = showSnackbar(view, "Game started!");
+
             timeCounter = view.findViewById(R.id.timeCounter);
             gameEvents = view.findViewById(R.id.gameEvents);
             startTimer();
@@ -65,6 +71,8 @@
                 ModelService.getInstance().leaveGame();
                 getParentFragmentManager().popBackStack();
             });
+
+
 
         }
 
@@ -84,16 +92,40 @@
             pauseTimer();
         }
 
-        @Override
-        public void update() {
-            // Default update method
+        @SuppressLint("RestrictedApi")
+        private Snackbar showSnackbar(View view, String message) {
+            Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG);
+
+            LayoutInflater inflater = LayoutInflater.from(view.getContext());
+            View customView = inflater.inflate(R.layout.custom_snack_layout, null);
+
+            TextView textView = customView.findViewById(R.id.snackbar_text);
+            textView.setText(message);
+
+            @SuppressLint("RestrictedApi") Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+            TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
+            snackbarText.setVisibility(View.INVISIBLE);
+
+            snackbarLayout.addView(customView, 0);
+
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarLayout.getLayoutParams();
+            params.gravity = Gravity.CENTER_HORIZONTAL;
+            params.topMargin = 1250;
+            snackbarLayout.setLayoutParams(params);
+
+            snackbar.show();
+
+            return snackbar;
         }
 
-        @Override
-        public void update(String message) {
-            if (gameEvents != null) {
-                gameEvents.setText(message);
-            }
+
+        @SuppressLint("RestrictedApi")
+        private void updateSnackbarText(Snackbar snackbar, String message) {
+            Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+            TextView textView = snackbarLayout.findViewById(R.id.snackbar_text);
+            textView.setText(message);
         }
+
 
     }
