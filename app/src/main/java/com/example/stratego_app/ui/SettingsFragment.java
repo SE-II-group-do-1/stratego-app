@@ -84,8 +84,7 @@ public class SettingsFragment extends Fragment {
             modelService.fillBoardRandomly();
             clearPiecesInRecyclerView();
 
-            showSnackbar(view, "Setup board fully filled!\n"+
-                    "To save your setup PRESS save button. ");
+            showSnackbar(view, "Battle Formation Set!\nTo save your setup, PRESS save button.");
         });
 
         Button clearBoard = view.findViewById(R.id.clearButton);
@@ -93,7 +92,7 @@ public class SettingsFragment extends Fragment {
             modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
 
-            showSnackbar(view, "Game setup cleared!");
+            showSnackbar(view, "Setup cleared");
         });
 
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
@@ -101,7 +100,7 @@ public class SettingsFragment extends Fragment {
             String username = getArguments().getString("username", "defaultUsername");
             SaveSetup.saveGameSetup(getContext(), username);
 
-            showSnackbar(view, "Game setup successfully saved");
+            showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
         });
 
 
@@ -144,15 +143,34 @@ public class SettingsFragment extends Fragment {
 
     @SuppressLint("RestrictedApi")
     private void showSnackbar(View view, String message) {
-        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG);
+
+        // Inflate custom layout
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        View customView = inflater.inflate(R.layout.custom_snack_layout, null);
+
+        // Set the message in the custom layout
+        TextView textView = customView.findViewById(R.id.snackbar_text);
+        textView.setText(message);
+
+        // Get the Snackbar's view
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
 
+        // Hide the default Snackbar text
+        TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
+        if (snackbarText != null) {
+            snackbarText.setVisibility(View.INVISIBLE);
+        }
+
+        // Add the custom layout to the Snackbar
+        snackbarLayout.addView(customView, 0);
+
+        // Adjust Snackbar position
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarLayout.getLayoutParams();
         params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-        params.topMargin = 500;
+        params.topMargin = 500; // Adjust this value as needed
         snackbarLayout.setLayoutParams(params);
 
-        // Show the Snackbar
         snackbar.show();
     }
 
