@@ -8,6 +8,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Board;
@@ -18,19 +21,20 @@ import com.example.stratego_app.model.Rank;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 
 public class ModelServiceTest {
 
-    private ModelService modelService = new ModelService();
+    private ModelService modelService;
     private Board board = new Board();
     private ObserverModelService mockObserver;
 
 
     @BeforeEach
     public void setUp() {
+        modelService = new ModelService();
         board = modelService.getGameBoard();
-
         mockObserver = mock(ObserverModelService.class);
         ModelService.subscribe(mockObserver);
     }
@@ -44,21 +48,6 @@ public class ModelServiceTest {
     void getBoard() {
         assertNotNull(modelService.getGameBoard());
     }
-
-
-    /*
-    @Test
-    void testStartGameEffectivelyStartsTheGame() {
-        // Act
-        //modelService.startGame();
-
-        // Assert
-        verify(mockObserver, times(1)).update();
-        assertEquals(GameState.INGAME, modelService.getGameState());
-    }
-
-     */
-
 
     @Test
     public void testPlacePieceAtGameSetUp_FailureOutsideSetupRows() {
@@ -145,6 +134,63 @@ public class ModelServiceTest {
         assertNotNull(modelService.getGameBoard());
         // Further assertions can be made based on the initial state of the Board
     }
+
+    @Test
+    public void testUpdateBoard() {
+        Board newBoard = mock(Board.class);
+        Mockito.when(newBoard.getBoard()).thenReturn(new Piece[10][10]);
+        modelService.setPlayerColor(Color.RED);
+
+        modelService.updateBoard(newBoard);
+
+        verify(newBoard, times(1)).rotateBoard();
+        assertNotNull(modelService.getGameBoard());
+        verify(mockObserver, times(1)).update();
+    }
+
+    @Test
+    public void testNotifyUI() {
+        ModelService.notifyUI();
+        verify(mockObserver, times(1)).update();
+    }
+    @Test
+    public void testNotifyUIWithMessage() {
+        String testMessage = "Test Message";
+        ModelService.notifyUI(testMessage);
+        verify(mockObserver, times(1)).update(testMessage);
+    }
+
+    @Test
+    public void testGetCurrentOpponent() {
+        Player opponent = new Player("opponent", 2);
+        modelService.Opponent(opponent);
+        assertEquals(opponent, modelService.getCurrentOpponent());
+    }
+
+    @Test
+    public void testOpponent() {
+        Player opponent = new Player("opponent", 2);
+        modelService.Opponent(opponent);
+        assertEquals(opponent, modelService.getCurrentOpponent());
+    }
+
+    @Test
+    public void testMovePiece_InvalidMove() {
+        // Arrange
+        Piece piece = new Piece(Rank.MARSHAL, Color.RED);
+        modelService.setPlayerColor(Color.RED);
+        board.setField(0, 0, piece);
+
+        // Invalid move (out of bounds)
+        boolean result = modelService.movePiece(0, 0, 8, 8);
+
+        // Assert
+        assertFalse(result);
+        assertEquals(piece, board.getField(0, 0));
+        assertNull(board.getField(8, 8));
+        verify(mockObserver, times(0)).update(); // No notification should happen
+    }
+
 
 
 }
