@@ -115,8 +115,15 @@
 
             @SuppressLint("RestrictedApi") Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
 
+            // Hide default Snackbar elements
             TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
-            snackbarText.setVisibility(View.INVISIBLE);
+            if (snackbarText != null) {
+                snackbarText.setVisibility(View.INVISIBLE);
+            }
+            View snackbarAction = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_action);
+            if (snackbarAction != null) {
+                snackbarAction.setVisibility(View.INVISIBLE);
+            }
 
             snackbarLayout.addView(customView, 0);
 
@@ -129,6 +136,7 @@
 
             return snackbar;
         }
+
 
 
         @SuppressLint("RestrictedApi")
