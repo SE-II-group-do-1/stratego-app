@@ -1,11 +1,14 @@
     package com.example.stratego_app.ui;
 
     import android.annotation.SuppressLint;
+    import android.app.Dialog;
     import android.os.Bundle;
     import androidx.annotation.NonNull;
     import androidx.annotation.Nullable;
 
     import androidx.fragment.app.Fragment;
+    import androidx.fragment.app.FragmentManager;
+
     import android.os.Handler;
     import android.os.SystemClock;
     import android.view.Gravity;
@@ -21,7 +24,7 @@
     import com.google.android.material.snackbar.Snackbar;
 
 
-    public class GameFragment extends Fragment {
+    public class GameFragment extends Fragment implements DialogFragmentLeaveGame.ConfirmLeaveDialogListener {
 
         ModelService modelService = ModelService.getInstance();
 
@@ -62,11 +65,27 @@
             startTimer();
 
             Button btnLeaveGame = view.findViewById(R.id.leaveGameButton);
-            btnLeaveGame.setOnClickListener(v -> {
-                ModelService.getInstance().leaveGame();
-                getParentFragmentManager().popBackStack();
-            });
+            btnLeaveGame.setOnClickListener(v -> showConfirmLeaveDialog());
         }
+
+        private void showConfirmLeaveDialog() {
+            pauseTimer();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            DialogFragmentLeaveGame dialog = new DialogFragmentLeaveGame(this);
+            dialog.show(fragmentManager, "ConfirmLeaveDialogFragment");
+        }
+
+        @Override
+        public void onConfirmLeave() {
+            modelService.leaveGame();
+            getParentFragmentManager().popBackStack();
+        }
+
+        @Override
+        public void onCancelLeave() {
+            startTimer();
+        }
+
 
         public void startTimer() {
             startTime = SystemClock.uptimeMillis();
