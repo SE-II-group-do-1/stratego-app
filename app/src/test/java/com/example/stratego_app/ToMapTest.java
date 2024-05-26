@@ -21,8 +21,9 @@ public class ToMapTest {
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("board", b);
         testMap.put("initiator", player.getId());
+        testMap.put("lobby", 1);
 
-        assertEquals(testMap, ToMap.updateToObject(b,player.getId()));
+        assertEquals(testMap, ToMap.updateToObject(b,player.getId(), 1));
 
     }
 

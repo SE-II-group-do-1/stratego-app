@@ -64,6 +64,11 @@ public class MainFragment extends Fragment {
             String username = usernameEntry.getText().toString().trim();
 
             if (!username.isEmpty()) {
+                //do not send/connect to server second time if already in lobby (player info assigned)
+                if(ModelService.getInstance().getCurrentPlayer() != null){
+                    return;
+                }
+
                 startGame.setEnabled(true);
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!

@@ -17,10 +17,11 @@ public class ToMap {
 
     private static final Gson gson = new Gson();
 
-    public static Map<String, Object> updateToObject(Board b, int initiator){
+    public static Map<String, Object> updateToObject(Board b, int initiator, int lobby){
         Map<String, Object> toReturn = new HashMap<>();
         toReturn.put("board", b);
         toReturn.put("initiator", initiator);
+        toReturn.put("lobby", lobby);
         return toReturn;
     }
 
