@@ -84,11 +84,12 @@ public class MainFragment extends Fragment {
 
             if (!username.isEmpty()) {
                 //do not send/connect to server second time if already in lobby (player info assigned)
-                if(ModelService.getInstance().getCurrentPlayer() != null){
+                if (ModelService.getInstance().getCurrentPlayer() != null) {
                     return;
                 }
 
                 startGame.setEnabled(true);
+            }
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient.connect();
@@ -122,10 +123,8 @@ public class MainFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) { }
-        });
-    }
-
-
+            });
+        }
 
     private void setButtonDisabled(Button button) {
         button.setEnabled(false);
