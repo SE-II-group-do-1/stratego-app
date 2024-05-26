@@ -82,6 +82,15 @@ public class MainFragment extends Fragment {
                     setButtonDisabled(enter); // Ensure it's disabled if no setup exists
                 }
 
+            if (!username.isEmpty()) {
+                //do not send/connect to server second time if already in lobby (player info assigned)
+                if(ModelService.getInstance().getCurrentPlayer() != null){
+                    return;
+                }
+
+                startGame.setEnabled(true);
+
+                //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient.connect();
                 LobbyClient.joinLobby(username);
 
