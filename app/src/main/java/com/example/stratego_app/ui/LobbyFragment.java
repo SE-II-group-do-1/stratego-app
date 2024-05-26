@@ -1,6 +1,7 @@
 package com.example.stratego_app.ui;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -58,15 +59,26 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
             addPlayerToView(oppName);
         });
     }
+
+    public void update(String msg) {
+        // method for updating UI with inGame message
+
+    }
+
     private void addPlayerToView(String playerName) {
         TextView playerView = new TextView(getContext());
         playerView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        playerView.setText(String.format("Player: %s     ... is ready to play.", playerName));
+        playerView.setText(String.format("Player: %s", playerName));
+
+        playerView.setTextSize(16);
+        playerView.setTypeface(playerView.getTypeface(), Typeface.BOLD);
+        playerView.setTextColor(getResources().getColor(R.color.black));
 
         playersContainer.addView(playerView);
     }
+
 
 
 }

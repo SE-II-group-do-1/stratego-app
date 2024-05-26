@@ -1,5 +1,6 @@
 package com.example.stratego_app.ui;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
 import com.example.stratego_app.model.SaveSetup;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,31 +83,27 @@ public class SettingsFragment extends Fragment {
         fillBoard.setOnClickListener(v -> {
             modelService.fillBoardRandomly();
             clearPiecesInRecyclerView();
+
+            showSnackbar(view, "Battle Formation Set!\nTo save your setup, PRESS save button.");
         });
 
         Button clearBoard = view.findViewById(R.id.clearButton);
         clearBoard.setOnClickListener(v -> {
             modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
+
+            showSnackbar(view, "Setup cleared");
         });
 
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         saveGameSetUp.setOnClickListener(v -> {
-            SaveSetup.saveGameSetup(getContext());
+            String username = getArguments().getString("username", "defaultUsername");
+            SaveSetup.saveGameSetup(getContext(), username);
 
-            // Inflate the custom toast layout.
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast_layout, null);
-
-            TextView text = layout.findViewById(R.id.toastText);
-            text.setText("Game setup successfully saved");
-
-            Toast toast = new Toast(getContext());
-            toast.setGravity(Gravity.CENTER, 0, 0); // Center the toast
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show();
+            showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
         });
+
+
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
         leave.setOnClickListener(v ->{
@@ -123,7 +122,6 @@ public class SettingsFragment extends Fragment {
         piecesAdapter.notifyDataSetChanged();
     }
 
-
     // Helper method to get a list of all pieces
     private List<Piece> getPiecesList() {
         List<Piece> pieces = new ArrayList<>();
@@ -141,6 +139,39 @@ public class SettingsFragment extends Fragment {
         pieces.addAll(Collections.nCopies(6, new Piece(Rank.BOMB, ModelService.getInstance().getPlayerColor())));
 
         return pieces;
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG);
+
+        // Inflate custom layout
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        View customView = inflater.inflate(R.layout.custom_snack_layout, null);
+
+        // Set the message in the custom layout
+        TextView textView = customView.findViewById(R.id.snackbar_text);
+        textView.setText(message);
+
+        // Get the Snackbar's view
+        Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+        // Hide the default Snackbar text
+        TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
+        if (snackbarText != null) {
+            snackbarText.setVisibility(View.INVISIBLE);
+        }
+
+        // Add the custom layout to the Snackbar
+        snackbarLayout.addView(customView, 0);
+
+        // Adjust Snackbar position
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarLayout.getLayoutParams();
+        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        params.topMargin = 500; // Adjust this value as needed
+        snackbarLayout.setLayoutParams(params);
+
+        snackbar.show();
     }
 
 

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,11 +28,11 @@ public class SaveSetup {
      * @param context
      */
 
-    public static boolean saveGameSetup(Context context) {
+    public static boolean saveGameSetup(Context context, String username) {
         FileOutputStream fileOutStream = null;
         JsonWriter writer = null;
         try {
-            fileOutStream = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
+            fileOutStream = context.openFileOutput(username + "_game_setup.json", Context.MODE_PRIVATE);
             writer = new JsonWriter(new OutputStreamWriter(fileOutStream, "UTF-8"));
             writer.setIndent("  ");
             writer.beginObject();
@@ -62,13 +63,18 @@ public class SaveSetup {
         }
     }
 
-    public static Piece[][] readGameSetup(Context context){
-        try (InputStream is = context.openFileInput("game_setup.json")) {
+    public static Piece[][] readGameSetup(Context context, String username){
+        try (InputStream is = context.openFileInput(username + "_game_setup.json")) {
             Piece[][] savedSetup = new Piece[10][10];
 
             String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
             JSONTokener tokener = new JSONTokener(jsonString);
             JSONObject jsonObject = new JSONObject(tokener);
+
+            String savedUsername = jsonObject.getString("username");
+            if (!savedUsername.equals(username)) {
+                return null;  // If the username doesn't match, return null
+            }
 
             Iterator<?> keys = jsonObject.keys();
             while (keys.hasNext()) {
@@ -93,5 +99,10 @@ public class SaveSetup {
             //Log.e(tag, "Error reading game setup", e);
             return null;
         }
+    }
+
+    public static boolean doesGameSetupExist(Context context, String username) {
+        File file = context.getFileStreamPath(username + "_game_setup.json");
+        return file.exists();
     }
 }

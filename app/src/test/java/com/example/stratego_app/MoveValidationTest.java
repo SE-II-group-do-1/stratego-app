@@ -25,11 +25,9 @@ import com.example.stratego_app.model.*;
     private Player player = new Player("TEST", 1);
 
 
-
-
    @BeforeAll
    void setup(){
-      LobbyClient lobbyClient = LobbyClient.getInstance();
+       modelService = ModelService.getInstance();
       modelService.setPlayerColor(Color.RED);
       modelService.Player(player);
    }
