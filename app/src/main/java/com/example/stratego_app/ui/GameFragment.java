@@ -2,6 +2,7 @@
 
     import android.annotation.SuppressLint;
     import android.app.Dialog;
+    import android.graphics.Color;
     import android.os.Bundle;
     import androidx.annotation.NonNull;
     import androidx.annotation.Nullable;
@@ -114,6 +115,8 @@
             textView.setText(message);
 
             @SuppressLint("RestrictedApi") Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+            snackbarLayout.setBackgroundColor(Color.TRANSPARENT);
 
             // Hide default Snackbar elements
             TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);

@@ -2,6 +2,7 @@ package com.example.stratego_app.ui;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -155,6 +156,8 @@ public class SettingsFragment extends Fragment {
 
         // Get the Snackbar's view
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+        snackbarLayout.setBackgroundColor(Color.TRANSPARENT);
 
         // Hide the default Snackbar text
         TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
