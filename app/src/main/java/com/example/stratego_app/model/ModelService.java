@@ -298,4 +298,8 @@ public class ModelService implements ModelServiceI{
             LobbyClient.leaveLobby(currentPlayer.getId());
         }
     }
+
+    public boolean areTwoPlayersConnected() {
+        return currentPlayer != null && currentOpponent != null;
+    }
 }
