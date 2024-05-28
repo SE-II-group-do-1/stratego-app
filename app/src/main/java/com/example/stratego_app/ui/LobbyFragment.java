@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,13 +59,25 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
             playersContainer.removeAllViews();
             addPlayerToView(ownName);
             addPlayerToView(oppName);
+
+            // Check if both players are connected
+            if (ModelService.getInstance().areTwoPlayersConnected()) {
+                startGameAutomatically();  // Call to start the game automatically
+            }
         });
     }
+    private void startGameAutomatically() {
+        // Ensure that the activity is still valid
+        if (getActivity() == null) return;
 
-    public void update(String msg) {
-        // method for updating UI with inGame message
-
+        // Transition to the game fragment
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
+
 
     private void addPlayerToView(String playerName) {
         TextView playerView = new TextView(getContext());

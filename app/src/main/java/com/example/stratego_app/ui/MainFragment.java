@@ -2,6 +2,7 @@ package com.example.stratego_app.ui;
 
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -60,16 +61,15 @@ public class MainFragment extends Fragment {
         });
 
         setButtonDisabled(enter);
-        setButtonDisabled(startGame);
 
 
-        startGame.setOnClickListener(v -> {
+        /*startGame.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-        });
+        });*/
 
 
         enter.setOnClickListener(view1 -> {
