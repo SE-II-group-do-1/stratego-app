@@ -22,10 +22,11 @@
 
     import com.example.stratego_app.R;
     import com.example.stratego_app.model.ModelService;
+    import com.example.stratego_app.model.ObserverModelService;
     import com.google.android.material.snackbar.Snackbar;
 
 
-    public class GameFragment extends Fragment implements DialogFragmentLeaveGame.ConfirmLeaveDialogListener {
+    public class GameFragment extends Fragment implements DialogFragmentLeaveGame.ConfirmLeaveDialogListener, ObserverModelService {
 
         ModelService modelService = ModelService.getInstance();
 
@@ -59,6 +60,7 @@
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
+            ModelService.subscribe(this);
 
             currentSnackbar = showSnackbar(view, "Game started!");
 
@@ -102,11 +104,23 @@
         public void onDestroyView() {
             super.onDestroyView();
             pauseTimer();
+            ModelService.unsubscribe(this);
+        }
+
+        /*
+        ToDo: implement functionality that snackbar text is shown when players change, moves are made... 
+         */
+        @Override
+        public void update() {
+            if (modelService.getCurrentPlayer() != null) {
+                String playerTurnText = "It's " + modelService.getCurrentPlayer().getUsername() + "'s turn";
+                updateSnackbarText(currentSnackbar, playerTurnText);
+            }
         }
 
         @SuppressLint("RestrictedApi")
         private Snackbar showSnackbar(View view, String message) {
-            Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_SHORT);
 
             LayoutInflater inflater = LayoutInflater.from(view.getContext());
             View customView = inflater.inflate(R.layout.custom_snack_layout, null);
@@ -144,10 +158,18 @@
 
         @SuppressLint("RestrictedApi")
         private void updateSnackbarText(Snackbar snackbar, String message) {
-            Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-            TextView textView = snackbarLayout.findViewById(R.id.snackbar_text);
-            textView.setText(message);
+            if (snackbar != null) {
+                Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+                TextView textView = snackbarLayout.findViewById(R.id.snackbar_text);
+                textView.setText(message);
+                if (textView.getVisibility() != View.VISIBLE) {
+                    textView.setVisibility(View.VISIBLE);
+                }
+            } else {
+                snackbar = showSnackbar(getView(), message);
+            }
         }
+
 
 
     }
