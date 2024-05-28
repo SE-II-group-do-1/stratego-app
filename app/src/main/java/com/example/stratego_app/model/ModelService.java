@@ -281,6 +281,18 @@ public class ModelService implements ModelServiceI{
         return pieces;
     }
 
+    public boolean isSetupComplete() {
+        for (int y = 6; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (gameBoard.getField(y, x) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
     public void leaveGame() {
         if(currentGameState == GameState.INGAME){
             LobbyClient.leaveLobby(currentPlayer.getId());
