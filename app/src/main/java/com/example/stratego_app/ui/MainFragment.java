@@ -38,7 +38,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button settingsButton = view.findViewById(R.id.settings);
-        Button startGame = view.findViewById(R.id.startGame);
+        //Button startGame = view.findViewById(R.id.startGame);
         Button enter = view.findViewById(R.id.enterButton);
         EditText usernameEntry = view.findViewById(R.id.enterUsername);
 
@@ -77,7 +77,7 @@ public class MainFragment extends Fragment {
             if (username != null && !username.isEmpty()) {
                 if (SaveSetup.doesGameSetupExist(getContext(), username)) {
                     setButtonEnabled(enter);
-                    setButtonEnabled(startGame);
+                    //setButtonEnabled(startGame);
                 } else {
                     setButtonDisabled(enter); // Ensure it's disabled if no setup exists
                 }
@@ -88,7 +88,7 @@ public class MainFragment extends Fragment {
                     return;
                 }
 
-                startGame.setEnabled(true);
+                //startGame.setEnabled(true);
             }
 
                 //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!

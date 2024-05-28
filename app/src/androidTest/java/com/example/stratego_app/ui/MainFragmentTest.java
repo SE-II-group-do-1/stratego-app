@@ -36,12 +36,12 @@ public class MainFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
     }
-    @Test
+    /*@Test
     public void testStartGameButton() {
         onView(ViewMatchers.withId(R.id.startGame))
                 .check(matches(isDisplayed()))
                 .perform(click());
-    }
+    }*/
 
 
 
