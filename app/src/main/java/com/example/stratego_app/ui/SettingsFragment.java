@@ -50,6 +50,7 @@ public class SettingsFragment extends Fragment {
         Button saveGameSetUp = view.findViewById(R.id.saveButton);
         Button fillBoard = view.findViewById(R.id.fillButton);
         Button clearBoard = view.findViewById(R.id.clearButton);
+        setButtonDisabled(saveGameSetUp);
 
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
         gameBoardView.setConfigMode(false);
@@ -215,7 +216,7 @@ public class SettingsFragment extends Fragment {
     private void setButtonEnabled(Button button) {
         button.setEnabled(true);
         button.setAlpha(1.0f);
-        button.setTextColor(getResources().getColor(R.color.white));
+        button.setTextColor(getResources().getColor(R.color.black));
     }
 
 
