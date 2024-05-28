@@ -81,7 +81,11 @@ public class SettingsFragment extends Fragment {
                 piecesAdapter.removeItem(position);
                 piecesAdapter.notifyItemRemoved(position);
                 piecesAdapter.notifyItemRangeChanged(position, piecesAdapter.getItemCount());
-                saveGameSetUp.setEnabled(modelService.isSetupComplete());
+                if (modelService.isSetupComplete()) {
+                    setButtonEnabled(saveGameSetUp);
+                } else {
+                    setButtonDisabled(saveGameSetUp);
+                }
             }
         });
 
@@ -90,7 +94,13 @@ public class SettingsFragment extends Fragment {
         fillBoard.setOnClickListener(v -> {
             modelService.fillBoardRandomly();
             clearPiecesInRecyclerView();
-            saveGameSetUp.setEnabled(modelService.isSetupComplete());
+
+            if (modelService.isSetupComplete()) {
+                setButtonEnabled(saveGameSetUp);
+            } else {
+                setButtonDisabled(saveGameSetUp);
+            }
+
             showSnackbar(view, "Battle Formation Set!\nTo save your setup, PRESS save button.");
         });
 
@@ -98,7 +108,13 @@ public class SettingsFragment extends Fragment {
         clearBoard.setOnClickListener(v -> {
             modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
-            saveGameSetUp.setEnabled(modelService.isSetupComplete());
+
+            if (modelService.isSetupComplete()) {
+                setButtonEnabled(saveGameSetUp);
+            } else {
+                setButtonDisabled(saveGameSetUp);
+            }
+
             showSnackbar(view, "Setup cleared");
         });
 
@@ -189,6 +205,19 @@ public class SettingsFragment extends Fragment {
 
         snackbar.show();
     }
+
+    private void setButtonDisabled(Button button) {
+        button.setEnabled(false);
+        button.setAlpha(0.5f);
+        button.setTextColor(getResources().getColor(R.color.disabled_text_color));
+    }
+
+    private void setButtonEnabled(Button button) {
+        button.setEnabled(true);
+        button.setAlpha(1.0f);
+        button.setTextColor(getResources().getColor(R.color.white));
+    }
+
 
 
 }
