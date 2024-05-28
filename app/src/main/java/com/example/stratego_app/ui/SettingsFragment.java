@@ -47,6 +47,10 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Button saveGameSetUp = view.findViewById(R.id.saveButton);
+        Button fillBoard = view.findViewById(R.id.fillButton);
+        Button clearBoard = view.findViewById(R.id.clearButton);
+
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
         gameBoardView.setConfigMode(false);
         gameBoardView.setDisplayLowerHalfOnly(true);
@@ -77,38 +81,46 @@ public class SettingsFragment extends Fragment {
                 piecesAdapter.removeItem(position);
                 piecesAdapter.notifyItemRemoved(position);
                 piecesAdapter.notifyItemRangeChanged(position, piecesAdapter.getItemCount());
+                saveGameSetUp.setEnabled(modelService.isSetupComplete());
             }
         });
 
-        Button fillBoard = view.findViewById(R.id.fillButton);
+
+
         fillBoard.setOnClickListener(v -> {
             modelService.fillBoardRandomly();
             clearPiecesInRecyclerView();
-
+            saveGameSetUp.setEnabled(modelService.isSetupComplete());
             showSnackbar(view, "Battle Formation Set!\nTo save your setup, PRESS save button.");
         });
 
-        Button clearBoard = view.findViewById(R.id.clearButton);
+
         clearBoard.setOnClickListener(v -> {
             modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
-
+            saveGameSetUp.setEnabled(modelService.isSetupComplete());
             showSnackbar(view, "Setup cleared");
         });
 
-        Button saveGameSetUp = view.findViewById(R.id.saveButton);
-        saveGameSetUp.setOnClickListener(v -> {
-            String username = getArguments().getString("username", "defaultUsername");
-            SaveSetup.saveGameSetup(getContext(), username);
 
-            showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
+        saveGameSetUp.setEnabled(modelService.isSetupComplete());
+        saveGameSetUp.setOnClickListener(v -> {
+            if (modelService.isSetupComplete()) {
+                String username = getArguments().getString("username", "defaultUsername");
+                if (SaveSetup.saveGameSetup(getContext(), username)) {
+                    showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
+                } else {
+                    showSnackbar(view, "Error saving setup.");
+                }
+            } else {
+                showSnackbar(view, "Setup is incomplete. Please place all pieces.");
+            }
         });
 
 
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
         leave.setOnClickListener(v ->{
-            //modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
             getParentFragmentManager().popBackStack();
         });
@@ -116,7 +128,7 @@ public class SettingsFragment extends Fragment {
 
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());
-        piecesAdapter.notifyDataSetChanged(); //maybe use more specific change event here!
+        piecesAdapter.notifyDataSetChanged();
     }
     private void clearPiecesInRecyclerView() {
         piecesAdapter.clearPieces();
@@ -141,6 +153,7 @@ public class SettingsFragment extends Fragment {
 
         return pieces;
     }
+
 
     @SuppressLint("RestrictedApi")
     private void showSnackbar(View view, String message) {
