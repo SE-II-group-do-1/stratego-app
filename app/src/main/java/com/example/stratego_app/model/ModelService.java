@@ -60,7 +60,8 @@ public class ModelService implements ModelServiceI{
         if(getInstance().playerColor == Color.BLUE) {
             LobbyClient.sendUpdate(getInstance().getGameBoard());
         } else {
-            Board copyForRotation = getInstance().getGameBoard();
+            Board copyForRotation = new Board();
+            copyForRotation.setBoard(getInstance().getGameBoard());
             copyForRotation.rotateBoard();
             LobbyClient.sendUpdate(copyForRotation);
         }
