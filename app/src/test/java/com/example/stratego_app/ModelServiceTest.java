@@ -5,13 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
@@ -23,10 +22,6 @@ import com.example.stratego_app.model.Rank;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.Iterator;
-import java.util.List;
 
 
 public class ModelServiceTest {
