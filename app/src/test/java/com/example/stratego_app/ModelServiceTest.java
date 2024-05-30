@@ -139,19 +139,6 @@ public class ModelServiceTest {
         // Further assertions can be made based on the initial state of the Board
     }
 
-    // ---- tests for updateBoard() ----
-
-    @Test
-    public void testUpdateBoard_NullBoard() {
-        // Setup
-        ModelService spyModelService = spy(modelService);
-
-        // Act
-        spyModelService.updateBoard(null);
-
-        // Assert
-        verify(spyModelService, never()).notifyUI();
-    }
 
 
 
@@ -251,6 +238,19 @@ public class ModelServiceTest {
         board.setField(9, 9, null);
     }
 
+    // ---- tests for updateBoard() ----
+
+    @Test
+    public void testUpdateBoard_NullBoard() {
+        // Setup
+        ModelService spyModelService = spy(modelService);
+
+        // Act
+        spyModelService.updateBoard(null);
+
+        // Assert
+        verify(spyModelService, never()).notifyUI();
+    }
 
 
 
