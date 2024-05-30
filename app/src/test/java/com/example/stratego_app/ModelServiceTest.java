@@ -6,11 +6,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
@@ -135,22 +139,30 @@ public class ModelServiceTest {
         // Further assertions can be made based on the initial state of the Board
     }
 
-    /*@Test
-    public void testUpdateBoard() {
-        Board newBoard = mock(Board.class);
-        when(newBoard.getBoard()).thenReturn(new Piece[10][10]);
-        modelService.updateBoard(newBoard);
+    // ---- tests for updateBoard() ----
 
-        verify(newBoard, times(1)).rotateBoard();
-        assertNotNull(modelService.getGameBoard());
-        verify(mockObserver, times(1)).update();
-    }*/
+    @Test
+    public void testUpdateBoard_NullBoard() {
+        // Setup
+        ModelService spyModelService = spy(modelService);
+
+        // Act
+        spyModelService.updateBoard(null);
+
+        // Assert
+        verify(spyModelService, never()).notifyUI();
+    }
+
+
+
+
 
     @Test
     public void testNotifyUI() {
         ModelService.notifyUI();
         verify(mockObserver, times(1)).update();
     }
+
 
     @Test
     public void testGetCurrentOpponent() {
@@ -190,6 +202,8 @@ public class ModelServiceTest {
         assertTrue(modelService.areTwoPlayersConnected());
     }
 
+
+
     @Test
     void testAreTwoPlayersConnected_CurrentPlayerNull() {
         ModelService modelService = ModelService.getInstance();
@@ -224,6 +238,8 @@ public class ModelServiceTest {
         assertFalse(modelService.isSetupComplete());
     }
 
+
+
     // Helper methods to set up the board for tests
 
     private void fillBoardForSetupWithOneEmpty(Board board) {
@@ -234,4 +250,9 @@ public class ModelServiceTest {
         }
         board.setField(9, 9, null);
     }
+
+
+
+
+
 }

@@ -83,27 +83,17 @@ public class ModelService implements ModelServiceI{
             movingPiece = gameBoard.getField(startX, startY);
             //Piece destinationPiece = gameBoard.getField(endX, endY);
             // Perform the move
-            gameBoard.setField(endX, endY, movingPiece); // Move the piece to the new position
-            gameBoard.setField(startX, startY, null); // Clear the original position
-
-            //check why this doesnt send shit
-            //speicere method calls in eigenen Variablen und schritt für schritt debuggen
-            //manchmal keine fehlermeldung bei Null objekten
-            //kommt nachricht beim Server an? kommt nur response nicht an?
-
-            //to retrieve info for inGame messages - determine the action and generate the message
-           /*String action = (destinationPiece != null) ? "captured" : "moved to";
-            String destinationPieceName = (destinationPiece != null) ? destinationPiece.getRank().toString() : String.format("(%d, %d)", endX, endY);
-            String message = String.format("Player %s %s %s", currentPlayer.getUsername(), action, destinationPieceName);*/
+            gameBoard.setField(endX, endY, movingPiece);
+            gameBoard.setField(startX, startY, null);
 
             notifyClient();
             notifyUI();
 
-            return true; // Move was successful
+            return true;
         }
         return false;
     }
-    private boolean validateMove(int startX, int startY, int endX, int endY) {
+    public boolean validateMove(int startX, int startY, int endX, int endY) {
 
         Piece movingPiece = gameBoard.getField(startX, startY);
         //boolean notMyPiece = movingPiece.getColor() != playerColor;
@@ -314,5 +304,9 @@ public class ModelService implements ModelServiceI{
 
     public boolean areTwoPlayersConnected() {
         return currentPlayer != null && currentOpponent != null;
+    }
+
+    public void setGameBoardForTesting(Board board) {
+        this.gameBoard = board;
     }
 }
