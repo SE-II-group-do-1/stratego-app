@@ -9,6 +9,7 @@ import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Player;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +30,8 @@ public class LobbyClient implements Disposable {
 
     private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
     private static final CompositeDisposable disposable = new CompositeDisposable();
-    private static final Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().serializeNulls().create();
+
     private static int currentLobbyID;
 
     private static String username;

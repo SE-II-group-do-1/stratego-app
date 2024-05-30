@@ -60,7 +60,8 @@ public class ModelService implements ModelServiceI{
         if(getInstance().playerColor == Color.BLUE) {
             LobbyClient.sendUpdate(getInstance().getGameBoard());
         } else {
-            Board copyForRotation = getInstance().getGameBoard();
+            Board copyForRotation = new Board();
+            copyForRotation.setBoard(getInstance().getGameBoard());
             copyForRotation.rotateBoard();
             LobbyClient.sendUpdate(copyForRotation);
         }
@@ -183,6 +184,18 @@ public class ModelService implements ModelServiceI{
 
     public void setPlayerColor(Color color){
         playerColor = color;
+
+
+        //also set color of Pieces
+        if(gameBoard != null){
+            for(int i=0; i<gameBoard.getBoard().length; i++){
+                for(int j=0; j<gameBoard.getBoard()[0].length; j++){
+                    if(gameBoard.getField(i,j).getClass() == Piece.class){
+                        gameBoard.getField(i,j).setColor(playerColor);
+                    }
+                }
+            }
+        }
     }
 
     public void setGameState(GameState newState) {

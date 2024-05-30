@@ -44,6 +44,10 @@ public class Piece {
         return color;
     }
 
+    public void setColor(Color c){
+        color = c;
+    }
+
     public void setVisible(boolean b){
         this.isVisible = b;
     }
