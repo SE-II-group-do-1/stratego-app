@@ -5,9 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.Color;
@@ -22,6 +24,9 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Iterator;
+import java.util.List;
 
 
 public class ModelServiceTest {
@@ -138,7 +143,7 @@ public class ModelServiceTest {
     @Test
     public void testUpdateBoard() {
         Board newBoard = mock(Board.class);
-        Mockito.when(newBoard.getBoard()).thenReturn(new Piece[10][10]);
+        when(newBoard.getBoard()).thenReturn(new Piece[10][10]);
         modelService.setPlayerColor(Color.RED);
 
         modelService.updateBoard(newBoard);
@@ -183,6 +188,63 @@ public class ModelServiceTest {
         assertEquals(piece, board.getField(0, 0));
         assertNull(board.getField(8, 8));
         verify(mockObserver, times(0)).update(); // No notification should happen
+    }
+
+    @Test
+    void testAreTwoPlayersConnected_BothNotNull() {
+        ModelService modelService = ModelService.getInstance();
+        modelService.Player(new Player("player1", 1));
+        modelService.Opponent(new Player("opponent", 2));
+        assertTrue(modelService.areTwoPlayersConnected());
+    }
+
+    @Test
+    void testAreTwoPlayersConnected_CurrentPlayerNull() {
+        ModelService modelService = ModelService.getInstance();
+        modelService.Player(null);
+        modelService.Opponent(new Player("opponent", 2));
+        assertFalse(modelService.areTwoPlayersConnected());
+    }
+
+    @Test
+    void testAreTwoPlayersConnected_CurrentOpponentNull() {
+        ModelService modelService = ModelService.getInstance();
+        modelService.Player(new Player("player1", 1));
+        modelService.Opponent(null);
+        assertFalse(modelService.areTwoPlayersConnected());
+    }
+
+    @Test
+    void testAreTwoPlayersConnected_BothNull() {
+        ModelService modelService = ModelService.getInstance();
+        modelService.Player(null);
+        modelService.Opponent(null);
+        assertFalse(modelService.areTwoPlayersConnected());
+    }
+
+    // Tests for isSetupComplete method
+
+    @Test
+    void testIsSetupComplete_AtLeastOneFieldEmpty() {
+        Board newBoard = mock(Board.class);
+
+        ModelService modelService = ModelService.getInstance();
+        fillBoardForSetupWithOneEmpty(board); // Helper method to fill the board with one empty field
+
+        assertFalse(modelService.isSetupComplete());
+    }
+
+    // Helper methods to set up the board for tests
+
+
+
+    private void fillBoardForSetupWithOneEmpty(Board board) {
+        for (int y = 6; y < 10; y++) {
+            for (int x = 0; x < 9; x++) { // Leave one field empty
+                board.setField(y, x, new Piece(Rank.SPY));
+            }
+        }
+        board.setField(9, 9, null); // Set last field as empty
     }
 
 
