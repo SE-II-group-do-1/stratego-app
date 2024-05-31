@@ -45,22 +45,21 @@ public class MainFragment extends Fragment {
 
         settingsButton.setOnClickListener(v -> {
             username = usernameEntry.getText().toString().trim();
-            if (!username.isEmpty()) {
-                Bundle bundle = new Bundle();
-                bundle.putString("username", username);
+            Bundle bundle = new Bundle();
+            bundle.putString("username", username);
 
-                SettingsFragment settingsFragment = new SettingsFragment();
-                settingsFragment.setArguments(bundle);
+            SettingsFragment settingsFragment = new SettingsFragment();
+            settingsFragment.setArguments(bundle);
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, settingsFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, settingsFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
         setButtonDisabled(enter);
+        setButtonDisabled(startGame);
 
 
         startGame.setOnClickListener(v -> {
@@ -75,8 +74,7 @@ public class MainFragment extends Fragment {
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
             if (!username.isEmpty()) {
-                if (!SaveSetup.doesGameSetupExist(getContext(), username)) {
-                    // No setup exists, create a random one and save
+                if (!SaveSetup.doesGameSetupExist(getContext(), username)) {//no setup exists in settings editor
                     modelService.fillBoardRandomly();
                     SaveSetup.saveGameSetup(getContext(), username);
                 }
@@ -96,7 +94,8 @@ public class MainFragment extends Fragment {
 
         usernameEntry.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -109,9 +108,10 @@ public class MainFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
-            });
-        }
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
 
     private void setButtonDisabled(Button button) {
         button.setEnabled(false);
