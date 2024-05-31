@@ -38,7 +38,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button settingsButton = view.findViewById(R.id.settings);
-        //Button startGame = view.findViewById(R.id.startGame);
+        Button startGame = view.findViewById(R.id.startGame);
         Button enter = view.findViewById(R.id.enterButton);
         EditText usernameEntry = view.findViewById(R.id.enterUsername);
 
@@ -63,43 +63,31 @@ public class MainFragment extends Fragment {
         setButtonDisabled(enter);
 
 
-        /*startGame.setOnClickListener(v -> {
+        startGame.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-        });*/
+        });
 
 
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
-            if (username != null && !username.isEmpty()) {
-                if (SaveSetup.doesGameSetupExist(getContext(), username)) {
-                    setButtonEnabled(enter);
-                    //setButtonEnabled(startGame);
-                } else {
-                    setButtonDisabled(enter); // Ensure it's disabled if no setup exists
-                }
-
             if (!username.isEmpty()) {
-                //do not send/connect to server second time if already in lobby (player info assigned)
-                if (ModelService.getInstance().getCurrentPlayer() != null) {
-                    return;
+                if (!SaveSetup.doesGameSetupExist(getContext(), username)) {
+                    // No setup exists, create a random one and save
+                    modelService.fillBoardRandomly();
+                    SaveSetup.saveGameSetup(getContext(), username);
                 }
 
-                //startGame.setEnabled(true);
-            }
-
-                //ModelService.getInstance().Player(username, -1);//has to be updated as id is received by server!
                 LobbyClient.connect();
                 LobbyClient.joinLobby(username);
 
-                // Navigate to LobbyFragment
                 LobbyFragment lobbyFragment = new LobbyFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainerView, lobbyFragment); // Use the correct ID
+                fragmentTransaction.replace(R.id.fragmentContainerView, lobbyFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -112,10 +100,9 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String username = s.toString().trim();
-                if (!username.isEmpty() && SaveSetup.doesGameSetupExist(getContext(), username)) {
+                username = s.toString().trim();
+                if (!username.isEmpty()) {
                     setButtonEnabled(enter);
-
                 } else {
                     setButtonDisabled(enter);
                 }
@@ -128,13 +115,13 @@ public class MainFragment extends Fragment {
 
     private void setButtonDisabled(Button button) {
         button.setEnabled(false);
-        button.setAlpha(0.5f); // Set transparency to indicate disabled state
+        button.setAlpha(0.5f);
         button.setTextColor(getResources().getColor(R.color.disabled_text_color));
     }
 
     private void setButtonEnabled(Button button) {
         button.setEnabled(true);
-        button.setAlpha(1.0f); // Reset transparency to indicate enabled state
+        button.setAlpha(1.0f);
         button.setTextColor(getResources().getColor(R.color.white));
     }
 }
