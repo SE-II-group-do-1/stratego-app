@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         playersContainer = view.findViewById(R.id.playersContainer);
 
         ModelService.subscribe(this);
+        update();
     }
 
     @Override
@@ -52,23 +54,7 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         super.onDestroyView();
 
     }
-
-
-    /*@Override
-    public void update() {
-        if (getActivity() == null) return;
-
-        String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
-        String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
-
-        getActivity().runOnUiThread(() -> {
-            playersContainer.removeAllViews();
-            addPlayerToView(ownName);
-            addPlayerToView(oppName);
-        });
-    }*/
-
-
+    
 
     @Override
     public void update() {
