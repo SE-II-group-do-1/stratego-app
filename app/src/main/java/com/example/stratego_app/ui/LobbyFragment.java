@@ -7,8 +7,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +18,15 @@ import android.widget.TextView;
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
+import com.example.stratego_app.model.Player;
+
+import java.util.List;
 
 
 public class LobbyFragment extends Fragment implements ObserverModelService {
 
     private LinearLayout playersContainer;
+
     public LobbyFragment() {
         // Required empty public constructor
     }
@@ -49,9 +53,11 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
 
     }
 
-    @Override
+
+    /*@Override
     public void update() {
         if (getActivity() == null) return;
+
         String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
         String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
 
@@ -59,23 +65,29 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
             playersContainer.removeAllViews();
             addPlayerToView(ownName);
             addPlayerToView(oppName);
-
-            // Check if both players are connected
-            if (ModelService.getInstance().areTwoPlayersConnected()) {
-                startGameAutomatically();  // Call to start the game automatically
-            }
         });
-    }
-    private void startGameAutomatically() {
-        // Ensure that the activity is still valid
+    }*/
+
+
+
+    @Override
+    public void update() {
         if (getActivity() == null) return;
 
-        // Transition to the game fragment
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        String ownName = (ModelService.getInstance().getCurrentPlayer() == null) ? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
+        String oppName = (ModelService.getInstance().getCurrentOpponent() == null) ? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
+
+        getActivity().runOnUiThread(() -> {
+            playersContainer.removeAllViews();
+            addPlayerToView(ownName);
+            addPlayerToView(oppName);
+
+            // Update the player count in the ViewModel based on current lobby state
+            int playerCount = 0;
+            if (ModelService.getInstance().getCurrentPlayer() != null) playerCount++;
+            if (ModelService.getInstance().getCurrentOpponent() != null) playerCount++;
+            updatePlayerCount(new ViewModelProvider(requireActivity()).get(LobbyViewModel.class), playerCount);
+        });
     }
 
 
@@ -93,6 +105,21 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         playersContainer.addView(playerView);
     }
 
+    private void startGameAutomatically() {
+        // Ensure that the activity is still valid
+        if (getActivity() == null) return;
+
+        // Transition to the game fragment
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void updatePlayerCount(LobbyViewModel viewModel, int playerCount) {
+        viewModel.setNumberOfPlayers(playerCount);
+    }
 
 
 }

@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,6 +43,9 @@ public class MainFragment extends Fragment {
         Button enter = view.findViewById(R.id.enterButton);
         EditText usernameEntry = view.findViewById(R.id.enterUsername);
 
+        setButtonDisabled(enter);
+        setButtonDisabled(startGame);
+
 
         settingsButton.setOnClickListener(v -> {
             username = usernameEntry.getText().toString().trim();
@@ -58,10 +62,15 @@ public class MainFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-        setButtonDisabled(enter);
-        setButtonDisabled(startGame);
-
-
+        /*LobbyViewModel lobbyViewModel = new ViewModelProvider(requireActivity()).get(LobbyViewModel.class);
+        lobbyViewModel.getNumberOfPlayers().observe(getViewLifecycleOwner(), numberOfPlayers -> {
+            if (numberOfPlayers >= 2) {
+                setButtonEnabled(startGame);
+            } else {
+                setButtonDisabled(startGame);
+            }
+        });*/
+        setButtonEnabled(startGame);
         startGame.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
