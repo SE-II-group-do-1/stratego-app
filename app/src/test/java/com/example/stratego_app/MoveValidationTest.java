@@ -28,7 +28,6 @@ import com.example.stratego_app.model.*;
    @BeforeAll
    void setup(){
        modelService = ModelService.getInstance();
-      modelService.setPlayerColor(Color.RED);
       modelService.Player(player);
    }
 
@@ -88,8 +87,8 @@ import com.example.stratego_app.model.*;
 
     @Test
      void DestinationNotEmpty(){
-        Piece marshal = new Piece(Rank.MARSHAL, Color.RED);
-        Piece jeff = new Piece(Rank.BOMB, Color.RED);
+        Piece marshal = new Piece(Rank.MARSHAL);
+        Piece jeff = new Piece(Rank.BOMB);
         modelService.getGameBoard().setField(0,0,marshal);
         modelService.getGameBoard().setField(1,0,jeff);
         assertEquals(false, modelService.movePiece(0,0,1,0));

@@ -82,7 +82,7 @@
         android:id="@+id/btnLeaveSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="284dp"
+        android:layout_marginStart="292dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/DeepRed"
         android:text="leave"

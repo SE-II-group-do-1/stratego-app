@@ -13,6 +13,9 @@
     <color name="GreyGreen">#E5F4DD</color>
 
     <color name="disabled_text_color">#B0B0B0</color>
+    <color name="gradient_start">#FFCCCCCC</color>
+    <color name="gradient_end">#FF777777</color>
+
 
 
 </resources>

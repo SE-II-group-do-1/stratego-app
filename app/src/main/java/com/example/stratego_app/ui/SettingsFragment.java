@@ -2,6 +2,7 @@ package com.example.stratego_app.ui;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,11 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Button saveGameSetUp = view.findViewById(R.id.saveButton);
+        Button fillBoard = view.findViewById(R.id.fillButton);
+        Button clearBoard = view.findViewById(R.id.clearButton);
+        setButtonDisabled(saveGameSetUp);
+
         GameBoardView gameBoardView = view.findViewById(R.id.settingsGameBoardView);
         gameBoardView.setConfigMode(false);
         gameBoardView.setDisplayLowerHalfOnly(true);
@@ -76,38 +82,62 @@ public class SettingsFragment extends Fragment {
                 piecesAdapter.removeItem(position);
                 piecesAdapter.notifyItemRemoved(position);
                 piecesAdapter.notifyItemRangeChanged(position, piecesAdapter.getItemCount());
+                if (modelService.isSetupComplete()) {
+                    setButtonEnabled(saveGameSetUp);
+                } else {
+                    setButtonDisabled(saveGameSetUp);
+                }
             }
         });
 
-        Button fillBoard = view.findViewById(R.id.fillButton);
+
+
         fillBoard.setOnClickListener(v -> {
             modelService.fillBoardRandomly();
             clearPiecesInRecyclerView();
 
+            if (modelService.isSetupComplete()) {
+                setButtonEnabled(saveGameSetUp);
+            } else {
+                setButtonDisabled(saveGameSetUp);
+            }
+
             showSnackbar(view, "Battle Formation Set!\nTo save your setup, PRESS save button.");
         });
 
-        Button clearBoard = view.findViewById(R.id.clearButton);
+
         clearBoard.setOnClickListener(v -> {
             modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
 
+            if (modelService.isSetupComplete()) {
+                setButtonEnabled(saveGameSetUp);
+            } else {
+                setButtonDisabled(saveGameSetUp);
+            }
+
             showSnackbar(view, "Setup cleared");
         });
 
-        Button saveGameSetUp = view.findViewById(R.id.saveButton);
-        saveGameSetUp.setOnClickListener(v -> {
-            String username = getArguments().getString("username", "defaultUsername");
-            SaveSetup.saveGameSetup(getContext(), username);
 
-            showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
+        saveGameSetUp.setEnabled(modelService.isSetupComplete());
+        saveGameSetUp.setOnClickListener(v -> {
+            if (modelService.isSetupComplete()) {
+                String username = getArguments().getString("username", "defaultUsername");
+                if (SaveSetup.saveGameSetup(getContext(), username)) {
+                    showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
+                } else {
+                    showSnackbar(view, "Error saving setup.");
+                }
+            } else {
+                showSnackbar(view, "Setup is incomplete. Please place all pieces.");
+            }
         });
 
 
 
         Button leave = view.findViewById(R.id.btnLeaveSettings);
         leave.setOnClickListener(v ->{
-            //modelService.clearBoardExceptLakes();
             resetPiecesInRecycleView();
             getParentFragmentManager().popBackStack();
         });
@@ -115,7 +145,7 @@ public class SettingsFragment extends Fragment {
 
     private void resetPiecesInRecycleView() {
         piecesAdapter.setPieces(getPiecesList());
-        piecesAdapter.notifyDataSetChanged(); //maybe use more specific change event here!
+        piecesAdapter.notifyDataSetChanged();
     }
     private void clearPiecesInRecyclerView() {
         piecesAdapter.clearPieces();
@@ -141,6 +171,7 @@ public class SettingsFragment extends Fragment {
         return pieces;
     }
 
+
     @SuppressLint("RestrictedApi")
     private void showSnackbar(View view, String message) {
         Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG);
@@ -155,6 +186,8 @@ public class SettingsFragment extends Fragment {
 
         // Get the Snackbar's view
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+        snackbarLayout.setBackgroundColor(Color.TRANSPARENT);
 
         // Hide the default Snackbar text
         TextView snackbarText = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
@@ -173,6 +206,19 @@ public class SettingsFragment extends Fragment {
 
         snackbar.show();
     }
+
+    private void setButtonDisabled(Button button) {
+        button.setEnabled(false);
+        button.setAlpha(0.5f);
+        button.setTextColor(getResources().getColor(R.color.disabled_text_color));
+    }
+
+    private void setButtonEnabled(Button button) {
+        button.setEnabled(true);
+        button.setAlpha(1.0f);
+        button.setTextColor(getResources().getColor(R.color.black));
+    }
+
 
 
 }
