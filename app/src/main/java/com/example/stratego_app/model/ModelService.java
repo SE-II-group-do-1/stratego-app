@@ -186,6 +186,7 @@ public class ModelService implements ModelServiceI{
                 }
             }
         }
+        notifyUI();
     }
 
     public void setGameState(GameState newState) {
@@ -201,10 +202,12 @@ public class ModelService implements ModelServiceI{
 
     public void Player(Player player){
         currentPlayer = player;
+        notifyUI();
     }
 
     public void Opponent(Player opponent) {
         currentOpponent = opponent;
+        notifyUI();
     }
 
     public Player getCurrentPlayer() {
