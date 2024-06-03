@@ -78,7 +78,7 @@ public class LobbyClient implements Disposable {
                 .subscribe(LobbyClient::onLobbyResponse, throwable -> Log.e(TAG, errorMsg, throwable));
 
 
-        errors = client.topic("/topic/errors")
+        errors = client.topic("/user/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(LobbyClient::handleException, throwable -> Log.e(TAG, errorMsg, throwable));
