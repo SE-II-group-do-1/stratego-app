@@ -19,7 +19,7 @@ public class ToMap {
 
     public static Map<String, Object> updateToObject(Board b, int initiator, int lobby){
         Map<String, Object> toReturn = new HashMap<>();
-        toReturn.put("board", b);
+        toReturn.put("board", b.getBoard());
         toReturn.put("initiator", initiator);
         toReturn.put("lobby", lobby);
         return toReturn;
