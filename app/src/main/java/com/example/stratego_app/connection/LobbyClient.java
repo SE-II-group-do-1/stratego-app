@@ -147,6 +147,8 @@ public class LobbyClient implements Disposable {
             ModelService.getInstance().Opponent(opponent);
             ModelService.getInstance().setGameState(GameState.INGAME);
 
+            Log.i(TAG, "after assigning vals");
+
             //unsub from reply
             disposable.remove(reply);
             reply.dispose();

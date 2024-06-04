@@ -180,7 +180,7 @@ public class ModelService implements ModelServiceI{
         if(gameBoard != null){
             for(int i=0; i<gameBoard.getBoard().length; i++){
                 for(int j=0; j<gameBoard.getBoard()[0].length; j++){
-                    if(gameBoard.getField(i,j).getClass() == Piece.class){
+                    if(gameBoard.getField(i,j) != null){
                         gameBoard.getField(i,j).setColor(playerColor);
                     }
                 }
