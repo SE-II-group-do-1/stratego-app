@@ -96,13 +96,13 @@ public class ModelService implements ModelServiceI{
     public boolean validateMove(int startX, int startY, int endX, int endY) {
 
         Piece movingPiece = gameBoard.getField(startX, startY);
-        //boolean notMyPiece = movingPiece.getColor() != playerColor;
+        boolean notMyPiece = movingPiece.getColor() != playerColor;
         boolean isPieceMovable= movingPiece.isMovable();
         boolean isMoveDiagonal = startX != endX && startY != endY;
         boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
 
-        if (!areCoordinatesWithinBounds || isMoveDiagonal || !isPieceMovable || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
+        if (!areCoordinatesWithinBounds || notMyPiece|| isMoveDiagonal || !isPieceMovable || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
             return false;
         }
 
