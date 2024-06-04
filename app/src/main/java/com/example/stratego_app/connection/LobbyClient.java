@@ -220,6 +220,7 @@ public class LobbyClient implements Disposable {
         client.send("/app/leave", data).subscribe();
         disposable.remove(currentLobby);
         currentLobby.dispose();
+
         ModelService.getInstance().setGameState(GameState.DONE);
     }
 

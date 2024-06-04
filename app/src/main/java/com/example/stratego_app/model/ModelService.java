@@ -302,6 +302,7 @@ public class ModelService implements ModelServiceI{
     public void leaveGame() {
         if(currentGameState == GameState.INGAME){
             LobbyClient.leaveLobby(currentPlayer.getId());
+            ModelService.instance = new ModelService();
         }
     }
 

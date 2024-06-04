@@ -38,6 +38,8 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        LobbyClient.connect();
+
         Button settingsButton = view.findViewById(R.id.settings);
         Button startGame = view.findViewById(R.id.startGame);
         Button enter = view.findViewById(R.id.enterButton);
@@ -88,7 +90,6 @@ public class MainFragment extends Fragment {
                     SaveSetup.saveGameSetup(getContext(), username);
                 }
 
-                LobbyClient.connect();
                 LobbyClient.joinLobby(username);
 
                 LobbyFragment lobbyFragment = new LobbyFragment();
