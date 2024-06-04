@@ -108,7 +108,6 @@ public class LobbyClient implements Disposable {
      * @param message - Map containing player info, color for game, and lobby ID
      */
     private static void onLobbyResponse(StompMessage message) {
-        Log.i(TAG, message.getPayload());
         Map<String, Object> payload = ToMap.parseMessage(message);
         try{
             //parse message
@@ -125,6 +124,9 @@ public class LobbyClient implements Disposable {
             Player selfInfo;
             Player opponent;
             Color color;
+            // if username is not one of the returned, just ignore
+            if(!(Objects.equals(playerBlue, username)) && !(Objects.equals(playerRed, username))) return;
+
             if(Objects.equals(playerRed, username)){
                 selfInfo = new Player(playerRed, idRed.intValue());
                 opponent = new Player(playerBlue, idBlue.intValue());
@@ -155,6 +157,7 @@ public class LobbyClient implements Disposable {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(LobbyClient::handleUpdate, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
             disposable.add(currentLobby);
+            Log.i(TAG, "subbed to currentLobby"+currentLobby);
 
         }
         catch (Exception e){
@@ -177,7 +180,7 @@ public class LobbyClient implements Disposable {
      * Handles all in game server responses (mostly updating Board).
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
-    //TODO: Error parsing message. LinkTreeMap to Board
+    //TODO: Error parsing message. LinkHashMap to Board
     private static void handleUpdate(StompMessage message){
         if(message.getPayload().equals("close")){
             ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up
@@ -203,7 +206,7 @@ public class LobbyClient implements Disposable {
      * @param message - exception from server.
      */
     private static void handleException(StompMessage message){
-        Log.e(TAG, message.getPayload());
+        Log.e("Server Error", message.getPayload());
     }
 
     /**
