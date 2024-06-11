@@ -28,7 +28,7 @@ public class LobbyClient implements Disposable {
 
     private static final String TAG = "LobbyClient";
 
-    private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
+    private static final String URL = "ws://10.0.2.2:53216/ws/websocket";
     private static final CompositeDisposable disposable = new CompositeDisposable();
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -77,7 +77,7 @@ public class LobbyClient implements Disposable {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(LobbyClient::onLobbyResponse, throwable -> Log.e(TAG, errorMsg, throwable));
 
-
+        // TODO: All clients get all errors
         errors = client.topic("/user/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -173,7 +173,15 @@ public class LobbyClient implements Disposable {
      */
     public static void sendUpdate(Board b){
         int id = ModelService.getInstance().getCurrentPlayer().getId();
-        String data = gson.toJson(updateToObject(b,id, currentLobbyID));
+
+        UpdateMessage updateMessage = new UpdateMessage();
+
+        updateMessage.setInitiator(id);
+        updateMessage.setLobbyID(currentLobbyID);
+        updateMessage.setBoard(b);
+
+        String data = gson.toJson(updateMessage);
+
         client.send("/app/update", data).subscribe();
         Log.i(TAG, "message sent");
     }
@@ -191,7 +199,7 @@ public class LobbyClient implements Disposable {
         else {
             try {
                 //parse message
-                Board b = (Board) ToMap.parseMessage(message);
+                Board b = gson.fromJson(message.getPayload(),Board.class);
 
                 //commit changes
                 ModelService.getInstance().updateBoard(b);
