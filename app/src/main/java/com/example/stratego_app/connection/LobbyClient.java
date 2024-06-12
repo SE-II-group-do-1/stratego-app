@@ -1,7 +1,5 @@
 package com.example.stratego_app.connection;
 
-import static com.example.stratego_app.connection.ToMap.updateToObject;
-
 import android.util.Log;
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
@@ -24,10 +22,9 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
     //TODO:
+    // comms only with DTOs
     // automatically load GameBaordView when recieving first update from handleUpdate()
     // remove start game button
-
-    private static LobbyClient instance;
 
     private static final String TAG = "LobbyClient";
 
@@ -109,41 +106,31 @@ public class LobbyClient implements Disposable {
      * setup topic with given ID, for initial Board setup.
      * @param message - Map containing player info, color for game, and lobby ID
      */
-    private static void onLobbyResponse(StompMessage message) {
-        Map<String, Object> payload = ToMap.parseMessage(message);
+    private static void onLobbyResponse(LobbyMessage message) {
         try{
-            //parse message
-            Double id = (Double) payload.get("id");
-            Double idRed = (Double) payload.get("playerRedID");
-            Double idBlue = (Double) payload.get("playerBlueID");
-            currentLobbyID = id.intValue();
-            String playerRed = (String) payload.get("playerRedName");
-            String playerBlue = (String) payload.get("playerBlueName");
+            //get vals
+            currentLobbyID = message.getLobbyID();
+            Player blue = message.getBlue();
+            Player red = message.getRed();
 
-            Log.i(TAG, payload.toString());
+            Log.i(TAG, message.toString());
 
             //check who is self
             Player selfInfo;
             Player opponent;
             Color color;
             // if username is not one of the returned, just ignore
-            if(!(Objects.equals(playerBlue, username)) && !(Objects.equals(playerRed, username))) return;
+            if(!(Objects.equals(blue.getUsername(), username)) && !(Objects.equals(red.getUsername(), username))) return;
 
-            if(Objects.equals(playerRed, username)){
-                selfInfo = new Player(playerRed, idRed.intValue());
-                opponent = new Player(playerBlue, idBlue.intValue());
-                color = Color.RED;
+            if(Objects.equals(blue.getUsername(), username)){
+                ModelService.getInstance().setPlayerColor(Color.BLUE);
+                ModelService.getInstance().Player(blue);
+                ModelService.getInstance().Opponent(red);
+            } else{
+                ModelService.getInstance().setPlayerColor(Color.RED);
+                ModelService.getInstance().Player(red);
+                ModelService.getInstance().Opponent(blue);
             }
-            else{
-                selfInfo = new Player(playerBlue, idBlue.intValue());
-                opponent = new Player(playerRed, idRed.intValue());
-                color = Color.BLUE;
-            }
-
-            //update info in ModelService
-            ModelService.getInstance().Player(selfInfo);
-            ModelService.getInstance().setPlayerColor(color);
-            ModelService.getInstance().Opponent(opponent);
             ModelService.getInstance().setGameState(GameState.INGAME);
 
             Log.i(TAG, "after assigning vals");
