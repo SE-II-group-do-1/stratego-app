@@ -168,7 +168,7 @@ public class LobbyClient implements Disposable {
         updateMessage.setBoard(b);
 
         String data = gson.toJson(updateMessage);
-        client.send("/app/setup", data);
+        client.send("/app/setup", data).subscribe();
 
     }
 
