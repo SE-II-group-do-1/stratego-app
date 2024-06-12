@@ -104,10 +104,11 @@ public class LobbyClient implements Disposable {
      * Called after connecting to server and receiving response. Assigns player its info
      * and starts listening to specific lobby topic with given ID. Also listens to specific
      * setup topic with given ID, for initial Board setup.
-     * @param message - Map containing player info, color for game, and lobby ID
+     * @param payload - Map containing player info, color for game, and lobby ID
      */
-    private static void onLobbyResponse(LobbyMessage message) {
+    private static void onLobbyResponse(StompMessage payload) {
         try{
+            LobbyMessage message = gson.fromJson(payload.getPayload(), LobbyMessage.class);
             //get vals
             currentLobbyID = message.getLobbyID();
             Player blue = message.getBlue();
