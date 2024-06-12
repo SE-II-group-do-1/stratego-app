@@ -116,13 +116,9 @@ public class LobbyClient implements Disposable {
 
             Log.i(TAG, message.toString());
 
-            //check who is self
-            Player selfInfo;
-            Player opponent;
-            Color color;
             // if username is not one of the returned, just ignore
             if(!(Objects.equals(blue.getUsername(), username)) && !(Objects.equals(red.getUsername(), username))) return;
-
+            //assign values
             if(Objects.equals(blue.getUsername(), username)){
                 ModelService.getInstance().setPlayerColor(Color.BLUE);
                 ModelService.getInstance().Player(blue);
