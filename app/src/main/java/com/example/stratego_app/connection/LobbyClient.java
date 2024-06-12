@@ -24,7 +24,6 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
     //TODO:
-    // send board to /setup when receive Lobby Info from onLobbyResponse()
     // automatically load GameBaordView when recieving first update from handleUpdate()
     // remove start game button
 
@@ -161,10 +160,32 @@ public class LobbyClient implements Disposable {
             disposable.add(currentLobby);
             Log.i(TAG, "subbed to currentLobby"+currentLobby);
 
+            //send baord setup
+            sendBoardSetup(ModelService.getInstance().getGameBoard());
+
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
+    }
+
+    /**
+     * Called from onLobbyResponse. Automatically sends the Player's Board setup to the
+     * Server /setup endpoint. When both Players sent their setup, the Server sends a
+     * response to handleUpdateMessage, setting the board and allowing the game to start.
+     * @param b - the player's board.
+     */
+    public static void sendBoardSetup(Board b){
+        int id = ModelService.getInstance().getCurrentPlayer().getId();
+        UpdateMessage updateMessage = new UpdateMessage();
+
+        updateMessage.setInitiator(id);
+        updateMessage.setLobbyID(currentLobbyID);
+        updateMessage.setBoard(b);
+
+        String data = gson.toJson(updateMessage);
+        client.send("/app/setup", data);
+
     }
 
     /**
