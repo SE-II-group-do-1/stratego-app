@@ -23,6 +23,10 @@ import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
+    //TODO:
+    // send board to /setup when receive Lobby Info from onLobbyResponse()
+    // automatically load GameBaordView when recieving first update from handleUpdate()
+    // remove start game button
 
     private static LobbyClient instance;
 
@@ -77,7 +81,6 @@ public class LobbyClient implements Disposable {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(LobbyClient::onLobbyResponse, throwable -> Log.e(TAG, errorMsg, throwable));
 
-        // TODO: All clients get all errors
         errors = client.topic("/user/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -138,9 +141,6 @@ public class LobbyClient implements Disposable {
                 color = Color.BLUE;
             }
 
-            //TODO: ModelService doesnt need a Player class. keep values in normal form!
-            //  leave for now. maybe in sprint 3!!!!!
-
             //update info in ModelService
             ModelService.getInstance().Player(selfInfo);
             ModelService.getInstance().setPlayerColor(color);
@@ -190,7 +190,6 @@ public class LobbyClient implements Disposable {
      * Handles all in game server responses (mostly updating Board).
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
-    //TODO: Error parsing message. LinkHashMap to Board
     private static void handleUpdate(StompMessage message){
         if(message.getPayload().equals("close")){
             ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up
