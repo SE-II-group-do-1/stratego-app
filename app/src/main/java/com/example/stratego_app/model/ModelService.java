@@ -57,13 +57,17 @@ public class ModelService implements ModelServiceI{
 
     public static void notifyClient(){
         //blue version of board is right way up. if red player -> turn board for server
+        LobbyClient.sendUpdate(checkForRotation());
+    }
+
+    public static Board checkForRotation(){
         if(getInstance().playerColor == Color.BLUE) {
-            LobbyClient.sendUpdate(getInstance().getGameBoard());
+            return getInstance().gameBoard;
         } else {
             Board copyForRotation = new Board();
-            copyForRotation.setBoard(getInstance().getGameBoard());
+            copyForRotation.setBoard(getInstance().gameBoard);
             copyForRotation.rotateBoard();
-            LobbyClient.sendUpdate(copyForRotation);
+            return copyForRotation;
         }
     }
 

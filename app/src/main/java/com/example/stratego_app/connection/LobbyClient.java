@@ -22,7 +22,6 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
     //TODO:
-    // comms only with DTOs
     // automatically load GameBaordView when recieving first update from handleUpdate()
     // remove start game button
 
@@ -145,7 +144,7 @@ public class LobbyClient implements Disposable {
             Log.i(TAG, "subbed to currentLobby"+currentLobby);
 
             //send baord setup
-            sendBoardSetup(ModelService.getInstance().getGameBoard());
+            sendBoardSetup(ModelService.checkForRotation());
 
         }
         catch (Exception e){
