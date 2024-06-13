@@ -22,12 +22,13 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
     //TODO:
+    // enemy pieces shouldnt be seen unless explicitly visible
     // automatically load GameBaordView when recieving first update from handleUpdate()
     // remove start game button
 
     private static final String TAG = "LobbyClient";
 
-    private static final String URL = "ws://10.0.2.2:53216/ws/websocket";
+    private static final String URL = "ws://192.168.178.42:53216/ws/websocket";
     private static final CompositeDisposable disposable = new CompositeDisposable();
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -144,7 +145,7 @@ public class LobbyClient implements Disposable {
             Log.i(TAG, "subbed to currentLobby"+currentLobby);
 
             //send baord setup
-            sendBoardSetup(ModelService.checkForRotation());
+            sendBoardSetup(ModelService.checkForRotation(ModelService.getInstance().getGameBoard()));
 
         }
         catch (Exception e){

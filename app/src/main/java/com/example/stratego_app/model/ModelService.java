@@ -55,19 +55,17 @@ public class ModelService implements ModelServiceI{
         listeners.forEach(ObserverModelService::update);
     }
 
-    public static void notifyClient(){
+    public static void notifyClient(Board copyForServer){
         //blue version of board is right way up. if red player -> turn board for server
-        LobbyClient.sendUpdate(checkForRotation());
+        LobbyClient.sendUpdate(checkForRotation(copyForServer));
     }
 
-    public static Board checkForRotation(){
+    public static Board checkForRotation(Board copy){
         if(getInstance().playerColor == Color.BLUE) {
-            return getInstance().gameBoard;
+            return copy;
         } else {
-            Board copyForRotation = new Board();
-            copyForRotation.setBoard(getInstance().gameBoard);
-            copyForRotation.rotateBoard();
-            return copyForRotation;
+            copy.rotateBoard();
+            return copy;
         }
     }
 
@@ -85,12 +83,13 @@ public class ModelService implements ModelServiceI{
         Piece movingPiece;
         if (validateMove(startX, startY, endX, endY)) {
             movingPiece = gameBoard.getField(startX, startY);
-            //Piece destinationPiece = gameBoard.getField(endX, endY);
-            // Perform the move
-            gameBoard.setField(endX, endY, movingPiece);
-            gameBoard.setField(startX, startY, null);
+            //create copy on which to perform move -> send copy as request to server. only server updates actual board
+            Board copyForRequestToServer = new Board();
+            copyForRequestToServer.setBoard(gameBoard);
+            copyForRequestToServer.setField(endX, endY, movingPiece);
+            copyForRequestToServer.setField(startX, startY, null);
 
-            notifyClient();
+            notifyClient(copyForRequestToServer);
             notifyUI();
 
             return true;
