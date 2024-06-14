@@ -1,4 +1,5 @@
 # Stratego
+
 ## Project Details
 #### Description
 Stratego is a two player game where each player has a 40 piece army. The first player to enter the lobby is assigned the blue color. Before the start of the game, players arrange their 40 pieces in a 4×10 configuration at either end of the board. 
@@ -73,4 +74,35 @@ NOTE: The Flag and the Bombs cannot attack. They can only wait for the opposing 
 
 ##### Game Win: 
 - A player attacks and captures his/her opponent’s flag. The attacking player is the winner.
-- A player cannot move a piece or attack. The opposing player is the winner. 
+- A player cannot move a piece or attack. The opposing player is the winner.
+
+ -------------------------------------------------------------
+
+## Dev Setup 
+#### Use of emulator and second device(connected via USB)
+
+1. Google Chrome am PC öffnen 
+2. enter chrome://inspect 
+![start](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/6a307156-17a7-4df5-a78e-58cd95ec7b06)
+
+3. click "Port Forwarding"
+   Port: 53216
+   IP adresse and port: localhost:53216
+![portForwardingSettings](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/a43e315d-c812-4649-bf0f-00986c8e983f)
+
+4. click "Configure"
+   IP adresse and port: localhost:53216
+![targetDiscoverySettings](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/7ec8def8-ef67-4ac0-af28-617cad5f7237)
+
+5. Open Android Studio and both on the emulator as well as your second device GoogleChrome should be opened
+6. enter localhost:53216
+7. When both devices are connected your PC GoogleChrome page should look like this
+![EndScreen](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/bd7e8599-7af3-4028-9e33-f83029cadfe9)
+
+ATTENTION! Do not close the Google Chrome Pages while operating! 
+
+#### Start Server
+1. Open IntelliJ and start server repository
+2. run StrategoApplication.java
+
+
