@@ -33,8 +33,8 @@ public class GameBoardView extends View implements ObserverModelService {
     private Map<Rank, Drawable> drawableCache = new HashMap<>();
 
     private Piece selected;
-    private int selectedX;
-    private int selectedY;
+    private int selectedX = -1;
+    private int selectedY = -1;
 
 
     private int cellWidth;
@@ -131,11 +131,14 @@ public class GameBoardView extends View implements ObserverModelService {
 
         for (int row = startRow; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
-                if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
-                    paint.setColor(Color.parseColor("#4169E1"));
+                if (row == selectedY && col == selectedX) {
+                    paint.setColor(Color.parseColor("#66b5defd")); //color when cell is active
+                } else if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
+                    paint.setColor(Color.parseColor("#4169E1"));//color lakes
                 } else {
-                    paint.setColor(Color.LTGRAY);
+                    paint.setColor(Color.LTGRAY); // Default cell color
                 }
+
 
                 canvas.drawRect(
                         (float) col * widthCell,
@@ -251,6 +254,7 @@ public class GameBoardView extends View implements ObserverModelService {
             Log.i(TAG, "click1" + selected);
             selectedX = col;
             selectedY = row;
+            invalidate(); // redraw the cell to add visual feedback
             return false;
         }
         Log.i(TAG, "click2" + selected);
@@ -258,6 +262,9 @@ public class GameBoardView extends View implements ObserverModelService {
         Log.i(TAG, String.valueOf(selectedY));
         modelService.movePiece(selectedY, selectedX, row, col);
         selected = null;
+        selectedX = -1; //reset cell when piece is moved
+        selectedY = -1;
+        invalidate(); //redraw cell to remove visual feedback
         return true;
     }
 
