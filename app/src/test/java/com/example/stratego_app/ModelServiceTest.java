@@ -40,7 +40,7 @@ public class ModelServiceTest {
 
     @BeforeEach
     public void setUp() {
-        modelService = new ModelService();
+        modelService = ModelService.getInstance();
         board = modelService.getGameBoard();
         mockObserver = mock(ObserverModelService.class);
         ModelService.subscribe(mockObserver);
@@ -49,6 +49,7 @@ public class ModelServiceTest {
     @AfterEach
     public void validate() {
         validateMockitoUsage();
+        modelService.newInstance();
     }
 
     @Test
@@ -147,26 +148,11 @@ public class ModelServiceTest {
         // Further assertions can be made based on the initial state of the Board
     }
 
-
-
-
-
-
     @Test
     public void testNotifyUI() {
         ModelService.notifyUI();
         verify(mockObserver, times(1)).update();
     }
-
-
-   /* @Test
-    public void testGetCurrentOpponent() {
-        Player opponent = new Player("opponent", 2);
-        modelService.Opponent(opponent);
-        assertEquals(opponent, modelService.getCurrentOpponent());
-    }
-
-    */
 
     @Test
     public void testOpponent() {
@@ -179,7 +165,7 @@ public class ModelServiceTest {
     public void testMovePiece_InvalidMove() {
         // Arrange
         Piece piece = new Piece(Rank.MARSHAL, Color.RED);
-        board.setField(0, 0, piece);
+        modelService.getGameBoard().setField(0, 0, piece);
 
         // Invalid move (out of bounds)
         boolean result = modelService.movePiece(0, 0, 8, 8);
@@ -187,7 +173,7 @@ public class ModelServiceTest {
         // Assert
         assertFalse(result);
         //assertEquals(piece, board.getField(0, 0));
-        assertNull(board.getField(8, 8));
+        assertNull(modelService.getGameBoard().getField(8, 8));
         verify(mockObserver, times(0)).update(); // No notification should happen
     }
 
@@ -196,7 +182,7 @@ public class ModelServiceTest {
         ModelService modelService = ModelService.getInstance();
         modelService.Player(new Player("player1", 1));
         modelService.Opponent(new Player("opponent", 2));
-        assertTrue(modelService.areTwoPlayersConnected());
+        assertTrue(modelService.getCurrentPlayer() != null && modelService.getCurrentOpponent() != null);
     }
 
 
@@ -206,7 +192,7 @@ public class ModelServiceTest {
         ModelService modelService = ModelService.getInstance();
         modelService.Player(null);
         modelService.Opponent(new Player("opponent", 2));
-        assertFalse(modelService.areTwoPlayersConnected());
+        assertFalse(modelService.getCurrentPlayer() != null && modelService.getCurrentOpponent() != null);
     }
 
     @Test
@@ -214,7 +200,7 @@ public class ModelServiceTest {
         ModelService modelService = ModelService.getInstance();
         modelService.Player(new Player("player1", 1));
         modelService.Opponent(null);
-        assertFalse(modelService.areTwoPlayersConnected());
+        assertFalse(modelService.getCurrentPlayer() != null && modelService.getCurrentOpponent() != null);
     }
 
     @Test
@@ -222,7 +208,7 @@ public class ModelServiceTest {
         ModelService modelService = ModelService.getInstance();
         modelService.Player(null);
         modelService.Opponent(null);
-        assertFalse(modelService.areTwoPlayersConnected());
+        assertFalse(modelService.getCurrentPlayer() != null && modelService.getCurrentOpponent() != null);
     }
 
     @Test
@@ -235,6 +221,28 @@ public class ModelServiceTest {
         assertFalse(modelService.isSetupComplete());
     }
 
+    @Test
+    void testCheckForRotationRed(){
+        modelService.getGameBoard().setField(0,0, new Piece(Rank.GENERAL));
+        modelService.setPlayerColor(Color.RED);
+        Board n = ModelService.checkForRotation(modelService.getGameBoard());
+        assertEquals(Rank.GENERAL, n.getField(9,9).getRank());
+    }
+
+    @Test
+    void testCheckForRotationBlue(){
+        modelService.getGameBoard().setField(0,0, new Piece(Rank.GENERAL));
+        modelService.setPlayerColor(Color.BLUE);
+        Board n = ModelService.checkForRotation(modelService.getGameBoard());
+        assertEquals(Rank.GENERAL, n.getField(0,0).getRank());
+
+    }
+    @Test
+    void testSetPlayerColor(){
+        modelService.getGameBoard().setField(9,9, new Piece(Rank.GENERAL));
+        modelService.setPlayerColor(Color.RED);
+        assertEquals(Color.RED, modelService.getPieceAtPosition(9,9).getColor());
+    }
 
 
     // Helper methods to set up the board for tests
@@ -247,25 +255,4 @@ public class ModelServiceTest {
         }
         board.setField(9, 9, null);
     }
-
-    // ---- tests for updateBoard() ----
-
-    /*
-    @Test
-    public void testUpdateBoard_NullBoard() {
-        // Setup
-        ModelService spyModelService = spy(modelService);
-
-        // Act
-        spyModelService.updateBoard(null);
-
-        // Assert
-        verify(spyModelService, never());
-        ModelService.notifyUI();
-    }
-     */
-
-
-
-
 }
