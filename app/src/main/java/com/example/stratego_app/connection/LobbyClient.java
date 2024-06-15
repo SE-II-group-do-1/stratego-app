@@ -21,14 +21,8 @@ import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
-    //TODO:
-    // enemy pieces shouldnt be seen unless explicitly visible
-    // automatically load GameBaordView when recieving first update from handleUpdate()
-    // remove start game button
-
     private static final String TAG = "LobbyClient";
-
-    private static final String URL = "ws://localhost:53216/ws/websocket";
+    private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
     private static final CompositeDisposable disposable = new CompositeDisposable();
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -196,6 +190,8 @@ public class LobbyClient implements Disposable {
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
     private static void handleUpdate(StompMessage message){
+        //TODO: 1. change updateMessage to include win/lose
+        //      2. if not in GameBoardView -> load GameBoardView. utilise currentGameState in ModelService
         if(message.getPayload().equals("close")){
             ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up
             Log.i(TAG, "Opponent left lobby");
