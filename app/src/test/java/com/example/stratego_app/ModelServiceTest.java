@@ -247,20 +247,34 @@ public class ModelServiceTest {
     @Test
     void testLeaveGame(){
         ModelService mockModel = mock(ModelService.class);
+        mockModel.setGameState(GameState.INGAME);
         mockModel.leaveGame();
         verify(mockModel).leaveGame();
     }
 
-    /*
     @Test
-    void testMovePieceTrue(){
-        modelService.Player(new Player("n", 1));
-        modelService.setPlayerColor(Color.BLUE);
-        modelService.getGameBoard().setField(0,0, new Piece(Rank.GENERAL, Color.BLUE));
-        assertTrue(modelService.movePiece(0,0,0,1));
+    void testUpdateBoardNull(){
+        modelService.updateBoard(null);
+        assertNotNull(modelService.getGameBoard());
     }
 
-     */
+    @Test
+    void testUpdateBoardRed(){
+        Board b = new Board();
+        b.setField(0,0, new Piece(Rank.GENERAL));
+        modelService.setPlayerColor(Color.RED);
+        modelService.updateBoard(b);
+        assertTrue(modelService.getGameBoard().getField(9,9).getRank() == Rank.GENERAL);
+    }
+
+    @Test
+    void testUpdateBoardBlue(){
+        Board b = new Board();
+        b.setField(0,0, new Piece(Rank.GENERAL));
+        modelService.setPlayerColor(Color.BLUE);
+        modelService.updateBoard(b);
+        assertTrue(modelService.getGameBoard().getField(0,0).getRank() == Rank.GENERAL);
+    }
 
     // Helper methods to set up the board for tests
 
