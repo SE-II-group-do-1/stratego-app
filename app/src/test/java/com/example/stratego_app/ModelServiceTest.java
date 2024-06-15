@@ -249,7 +249,14 @@ public class ModelServiceTest {
         ModelService mockModel = mock(ModelService.class);
         mockModel.setGameState(GameState.INGAME);
         mockModel.leaveGame();
-        verify(mockModel).leaveGame();
+        verify(mockModel, times(1)).leaveGame();
+    }
+
+    @Test
+    public void testLeaveGame_NotInGame() {
+        ModelService mockModel = mock(ModelService.class);
+        verify(mockModel, never()).leaveGame();
+        verify(mockModel, never()).newInstance();
     }
 
     @Test
