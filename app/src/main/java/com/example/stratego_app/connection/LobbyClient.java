@@ -28,7 +28,7 @@ public class LobbyClient implements Disposable {
 
     private static final String TAG = "LobbyClient";
 
-    private static final String URL = "ws://192.168.178.42:53216/ws/websocket";
+    private static final String URL = "ws://localhost:53216/ws/websocket";
     private static final CompositeDisposable disposable = new CompositeDisposable();
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 

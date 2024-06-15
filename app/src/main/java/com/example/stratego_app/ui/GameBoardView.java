@@ -16,6 +16,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
@@ -213,9 +215,15 @@ public class GameBoardView extends View implements ObserverModelService {
                 if (piece == null) {
                     continue;  // Skip drawing if no piece is present
                 }
+                //TODO: Implement visiblity here
+                // Piece.color != OwnColor && Piece.visible = false
+                // continue
+                // if(piece.getColor() != ModelService.getInstance().getPlayerColor() && !piece.isVisible()) {
+                // }
                 Drawable drawable = drawableCache.get(piece.getRank());
                 if (drawable != null) {
                     drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
+                    DrawableCompat.setTint(drawable, getAndroidColorFromPiece(piece));
                     drawable.draw(canvas);  // Draw the piece
                 }
             }
@@ -333,6 +341,20 @@ public class GameBoardView extends View implements ObserverModelService {
             cellHeight = h / 10;
             loadDrawableCache();
         }
+    }
+
+    private static int getAndroidColorFromPiece(Piece piece) {
+        if(piece.getColor() != null) {
+            switch (piece.getColor()) {
+                case RED:
+                    return Color.RED;
+                case BLUE:
+                    return Color.BLUE;
+                default:
+                    return Color.BLACK;
+            }
+        }
+        return Color.BLACK;
     }
 
 
