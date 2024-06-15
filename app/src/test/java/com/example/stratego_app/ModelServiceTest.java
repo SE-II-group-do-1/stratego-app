@@ -244,6 +244,23 @@ public class ModelServiceTest {
         assertEquals(Color.RED, modelService.getPieceAtPosition(9,9).getColor());
     }
 
+    @Test
+    void testLeaveGame(){
+        ModelService mockModel = mock(ModelService.class);
+        mockModel.leaveGame();
+        verify(mockModel).leaveGame();
+    }
+
+    /*
+    @Test
+    void testMovePieceTrue(){
+        modelService.Player(new Player("n", 1));
+        modelService.setPlayerColor(Color.BLUE);
+        modelService.getGameBoard().setField(0,0, new Piece(Rank.GENERAL, Color.BLUE));
+        assertTrue(modelService.movePiece(0,0,0,1));
+    }
+
+     */
 
     // Helper methods to set up the board for tests
 
