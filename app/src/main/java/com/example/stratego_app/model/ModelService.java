@@ -91,7 +91,7 @@ public class ModelService implements ModelServiceI{
 
             notifyClient(copyForRequestToServer);
             notifyUI();
-
+            
             return true;
         }
         return false;
