@@ -53,11 +53,6 @@ public class ModelServiceTest {
     }
 
     @Test
-    void getPieceTest() {
-        assertNull(modelService.getPieceAtPosition(1,1));
-    }
-
-    @Test
     void getBoard() {
         assertNotNull(modelService.getGameBoard());
     }
@@ -88,8 +83,8 @@ public class ModelServiceTest {
         modelService.clearBoardExceptLakes();
 
         // Assert
-        assertNull(modelService.getPieceAtPosition(0, 1));
-        assertNull(modelService.getPieceAtPosition(1, 0));
+        assertNull(modelService.getGameBoard().getField(0, 1));
+        assertNull(modelService.getGameBoard().getField(1, 0));
     }
 
 
@@ -100,7 +95,7 @@ public class ModelServiceTest {
         boolean allFilled = true;
         for (int y = 6; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
-                if (modelService.getPieceAtPosition(x, y) == null) {
+                if (modelService.getGameBoard().getField(y, x) == null) {
                     allFilled = false;
                 }
             }
@@ -241,7 +236,7 @@ public class ModelServiceTest {
     void testSetPlayerColor(){
         modelService.getGameBoard().setField(9,9, new Piece(Rank.GENERAL));
         modelService.setPlayerColor(Color.RED);
-        assertEquals(Color.RED, modelService.getPieceAtPosition(9,9).getColor());
+        assertEquals(Color.RED, modelService.getGameBoard().getField(9,9).getColor());
     }
 
     @Test

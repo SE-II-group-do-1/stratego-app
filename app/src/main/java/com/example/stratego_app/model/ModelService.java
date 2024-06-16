@@ -172,11 +172,6 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-    @Override
-    public Piece getPieceAtPosition(int x, int y) {
-        return gameBoard.getField(y, x);
-    }
-
     public Board getGameBoard() {
         return gameBoard;
     }
