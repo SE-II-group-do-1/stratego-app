@@ -177,9 +177,6 @@ public class ModelService implements ModelServiceI{
 
     public void setPlayerColor(Color color){
         playerColor = color;
-
-
-        //also set color of Pieces
         if(gameBoard != null){
             for(int i=0; i<gameBoard.getBoard().length; i++){
                 for(int j=0; j<gameBoard.getBoard()[0].length; j++){
@@ -301,19 +298,14 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-
     public void leaveGame() {
         if(currentGameState == GameState.INGAME){
             LobbyClient.leaveLobby(currentPlayer.getId());
-            ModelService.instance = new ModelService();
+            newInstance();
         }
     }
 
-    public boolean areTwoPlayersConnected() {
-        return currentPlayer != null && currentOpponent != null;
-    }
-
-    public void setGameBoardForTesting(Board board) {
-        this.gameBoard = board;
+    public void newInstance(){
+        ModelService.instance = new ModelService();
     }
 }
