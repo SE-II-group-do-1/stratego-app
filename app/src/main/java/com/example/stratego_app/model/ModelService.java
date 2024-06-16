@@ -123,9 +123,7 @@ public class ModelService implements ModelServiceI{
         // Check if the piece is a Scout
         if (movingPiece.getRank() == Rank.SCOUT) {
             // Iterate over all intermediate spaces between the start and end points
-            if (!iterateOverAllIntermediateSpaces(startX,endX,startY,endY)){
-                return false;
-            }
+            return iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
         } else {
             // For non-Scout pieces, check if the move exceeds the maximum step size
             int distanceX = Math.abs(endX - startX);
@@ -147,7 +145,7 @@ public class ModelService implements ModelServiceI{
         int currentX = startX;
         int currentY = startY;
 
-        while ((isHorizontal && currentY != endY) || (isVertical && currentX != endX)) {
+        while ((isHorizontal && currentY != endY-step) || (isVertical && currentX != endX-step)) {
             // Move to the next intermediate space
             if (isHorizontal) {
                 currentY += step;
