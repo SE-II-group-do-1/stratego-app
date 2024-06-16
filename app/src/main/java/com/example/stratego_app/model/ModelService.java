@@ -1,6 +1,8 @@
 package com.example.stratego_app.model;
 
 
+import android.util.Log;
+
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
@@ -58,6 +60,16 @@ public class ModelService implements ModelServiceI{
     public static void notifyClient(Board copyForServer){
         //blue version of board is right way up. if red player -> turn board for server
         LobbyClient.sendUpdate(checkForRotation(copyForServer));
+    }
+
+    public void checkWin(Player winner) {
+        if(winner == null) return;
+        if(winner.equals(currentPlayer)){
+            Log.i("ModelService", "win");
+        } else {
+            Log.i("ModelService", "lose");
+        }
+
     }
 
     public static Board checkForRotation(Board copy){
