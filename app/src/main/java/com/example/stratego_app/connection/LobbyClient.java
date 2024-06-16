@@ -194,7 +194,7 @@ public class LobbyClient implements Disposable {
             //parse message
             UpdateMessage u = gson.fromJson(message.getPayload(), UpdateMessage.class);
             Board b = u.getBoard();
-            Player winner = u.getWinner();
+            Color winner = u.getWinner();
 
             ModelService.getInstance().checkWin(winner);
 

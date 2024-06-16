@@ -62,9 +62,9 @@ public class ModelService implements ModelServiceI{
         LobbyClient.sendUpdate(checkForRotation(copyForServer));
     }
 
-    public void checkWin(Player winner) {
+    public void checkWin(Color winner) {
         if(winner == null) return;
-        if(winner.equals(currentPlayer)){
+        if(winner == playerColor){
             Log.i("ModelService", "win");
         } else {
             Log.i("ModelService", "lose");

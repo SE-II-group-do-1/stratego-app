@@ -2,6 +2,7 @@ package com.example.stratego_app.connection;
 
 
 import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.Player;
 
 public class UpdateMessage {
@@ -28,17 +29,17 @@ public class UpdateMessage {
     public void setLobbyID(int lobbyID) {
         this.lobbyID = lobbyID;
     }
-    public void setWinner(Player winner){
+    public void setWinner(Color winner){
         this.winner = winner;
     }
-    public Player getWinner() {
+    public Color getWinner() {
         return winner;
     }
 
     private Board board;
     private int initiator;
     private int lobbyID;
-    private Player winner;
+    private Color winner;
 
 }
 
