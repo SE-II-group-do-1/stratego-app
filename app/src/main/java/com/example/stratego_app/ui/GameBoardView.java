@@ -25,7 +25,7 @@ import com.example.stratego_app.model.Rank;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameBoardView extends View implements ObserverModelService {
+public class GameBoardView extends View  implements ObserverModelService {
     ModelService modelService = ModelService.getInstance();
 
     private static final String TAG = "gbv";
@@ -79,6 +79,8 @@ public class GameBoardView extends View implements ObserverModelService {
         invalidate();
     }
 
+
+
     /**
      * loading and caching drawable pieces associated with different ranks
      */
@@ -100,6 +102,7 @@ public class GameBoardView extends View implements ObserverModelService {
 
     public void setDisplayLowerHalfOnly(boolean displayLowerHalfOnly) {
         this.displayLowerHalfOnly = displayLowerHalfOnly;
+        setConfigMode(false);
         invalidate(); // Redraw the view
     }
 
@@ -363,7 +366,5 @@ public class GameBoardView extends View implements ObserverModelService {
         }
         return Color.BLACK;
     }
-
-
 
 }

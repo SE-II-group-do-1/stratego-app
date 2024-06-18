@@ -1,6 +1,7 @@
 package com.example.stratego_app.model;
 
 
+import android.util.Log;
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ModelService implements ModelServiceI{
+    private static final String TAG = "modelservice";
     private static ModelService instance;
     private GameState currentGameState;
     private Board gameBoard;
@@ -52,6 +54,7 @@ public class ModelService implements ModelServiceI{
     }
 
     public static void notifyUI(){
+        Log.d(TAG, "notifyUI() called, notifying observers.");
         listeners.forEach(ObserverModelService::update);
     }
 
@@ -137,6 +140,15 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
+    public boolean isValidMove(int startX, int startY, int endX, int endY) {
+        Piece movingPiece = gameBoard.getField(startX, startY);
+        if (movingPiece == null || movingPiece.getColor() != playerColor) return false;
+
+        return validateMove(startX, startY, endX, endY) && checkStepSize(movingPiece, startX, endX, startY, endY);
+    }
+
+
+
     private boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
         // Determine the direction of movement (horizontal or vertical)
         boolean isHorizontal = startX == endX;
@@ -191,8 +203,11 @@ public class ModelService implements ModelServiceI{
 
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
+            Log.d(TAG, "Setting game state from " + currentGameState + " to " + newState);
             this.currentGameState = newState;
             notifyUI();
+        } else {
+            Log.d(TAG, "Attempt to set game state to current state: " + newState);
         }
     }
 
