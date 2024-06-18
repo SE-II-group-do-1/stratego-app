@@ -123,8 +123,8 @@ public class SettingsFragment extends Fragment {
         saveGameSetUp.setEnabled(modelService.isSetupComplete());
         saveGameSetUp.setOnClickListener(v -> {
             if (modelService.isSetupComplete()) {
-                String username = getArguments().getString("username", "defaultUsername");
-                if (SaveSetup.saveGameSetup(getContext(), username)) {
+                //String username = getArguments().getString("username", "defaultUsername");
+                if (SaveSetup.saveGameSetup()) {
                     showSnackbar(view, "Formation Locked.\nSetup successfully saved!");
                 } else {
                     showSnackbar(view, "Error saving setup.");

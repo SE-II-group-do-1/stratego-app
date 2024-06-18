@@ -19,6 +19,7 @@ import android.widget.EditText;
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.SaveSetup;
 
 
@@ -85,10 +86,8 @@ public class MainFragment extends Fragment {
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
             if (!username.isEmpty()) {
-                if (!SaveSetup.doesGameSetupExist(getContext(), username)) {//no setup exists in settings editor
-                    modelService.fillBoardRandomly();
-                    SaveSetup.saveGameSetup(getContext(), username);
-                }
+                if(!SaveSetup.readGameSetup()) ModelService.getInstance().fillBoardRandomly();
+
 
                 LobbyClient.joinLobby(username);
 
