@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,8 +87,10 @@ public class MainFragment extends Fragment {
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
             if (!username.isEmpty()) {
-                if(!SaveSetup.readGameSetup()) ModelService.getInstance().fillBoardRandomly();
-
+                if(!SaveSetup.readGameSetup(getContext())) {
+                    ModelService.getInstance().fillBoardRandomly();
+                    Log.i("SaveSetup", "random board");
+                }
 
                 LobbyClient.joinLobby(username);
 
