@@ -215,11 +215,17 @@ public class GameBoardView extends View implements ObserverModelService {
                 if (piece == null) {
                     continue;  // Skip drawing if no piece is present
                 }
-                //TODO: Implement visiblity here
-                // Piece.color != OwnColor && Piece.visible = false
-                // continue
-                // if(piece.getColor() != ModelService.getInstance().getPlayerColor() && !piece.isVisible()) {
-                // }
+
+                if(piece.getColor() != ModelService.getInstance().getPlayerColor() && !piece.isVisible()) {
+                    // TODO: Exchange piece.getRank() with a special drawable for not visible pieces
+                    Drawable drawable = drawableCache.get(piece.getRank());
+                    if (drawable != null) {
+                        drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
+                        DrawableCompat.setTint(drawable, Color.parseColor("#006400"));
+                        drawable.draw(canvas);  // Draw the piece
+                    }
+                    continue;
+                }
                 Drawable drawable = drawableCache.get(piece.getRank());
                 if (drawable != null) {
                     drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
