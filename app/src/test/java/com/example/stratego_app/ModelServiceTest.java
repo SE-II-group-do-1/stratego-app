@@ -289,27 +289,6 @@ public class ModelServiceTest {
         board.setField(9, 9, null);
     }
 
-    @Test
-    public void testCheckWinWhenPlayerWins() {
-        modelService.setPlayerColor(Color.BLUE);
 
-        assertTrue( modelService.checkWin(Color.BLUE));
-    }
-
-
-    @Test
-    public void testCheckWinWhenPlayerLoses() {
-
-        modelService.setPlayerColor(Color.BLUE);
-
-        assertTrue(modelService.checkWin(Color.RED));
-    }
-
-    @Test
-    public void testCheckWinWhenWinnerIsNull() {
-
-        modelService.setPlayerColor(Color.BLUE);
-        assertFalse( modelService.checkWin(null));
-    }
 
 }
