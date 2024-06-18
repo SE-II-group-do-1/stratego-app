@@ -62,15 +62,12 @@ public class ModelService implements ModelServiceI{
         LobbyClient.sendUpdate(checkForRotation(copyForServer));
     }
 
-    public boolean checkWin(Color winner) {
-        boolean win = false;
-        if(winner == null) return false;
+    public void checkWin(Color winner) {
+        if(winner == null) return;
         if(winner == playerColor){
-            //Log.i("ModelService", "win");
-            return true;
+            Log.i("ModelService", "win");
         } else {
-            //Log.i("ModelService", "lose");
-            return true;
+            Log.i("ModelService", "lose");
         }
     }
 
