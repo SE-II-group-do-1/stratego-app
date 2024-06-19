@@ -14,6 +14,7 @@ import com.example.stratego_app.model.*;
 public class SaveSetupTest {
 
     private Context context;
+
     private ModelService modelService;
     private Board gameBoard;
     private String username;
