@@ -35,11 +35,18 @@ public class UpdateMessage {
     public Color getWinner() {
         return winner;
     }
+    public void setClose(boolean close){
+        this.close = close;
+    }
+    public boolean getClose(){
+        return this.close;
+    }
 
     private Board board;
     private int initiator;
     private int lobbyID;
     private Color winner;
+    private boolean close;
 
 }
 
