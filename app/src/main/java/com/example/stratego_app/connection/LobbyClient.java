@@ -189,6 +189,7 @@ public class LobbyClient implements Disposable {
      */
     private static void handleUpdate(StompMessage message){
         if(message.getPayload().equals("close")){
+
             Log.i(TAG, "opponent left lobby");
             return;
         }

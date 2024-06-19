@@ -18,6 +18,7 @@ import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.SaveSetup;
 
@@ -73,9 +74,9 @@ public class MainFragment extends Fragment implements ObserverModelService{
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
             if (!username.isEmpty()) {
-                if (!SaveSetup.doesGameSetupExist(getContext(), username)) {//no setup exists in settings editor
-                    modelService.fillBoardRandomly();
-                    SaveSetup.saveGameSetup(getContext(), username);
+                if(!SaveSetup.readGameSetup(getContext())) {
+                    ModelService.getInstance().fillBoardRandomly();
+                    Log.i("SaveSetup", "random board");
                 }
 
                 LobbyClient.joinLobby(username);
