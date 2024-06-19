@@ -1,8 +1,7 @@
 package com.example.stratego_app.model;
 
 
-import android.util.Log;
-
+//import android.util.Log;
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ModelService implements ModelServiceI{
+    private static final String TAG = "modelservice";
     private static ModelService instance;
     private GameState currentGameState;
     private Board gameBoard;
@@ -54,6 +54,7 @@ public class ModelService implements ModelServiceI{
     }
 
     public static void notifyUI(){
+        //Log.d(TAG, "notifyUI() called, notifying observers.");
         listeners.forEach(ObserverModelService::update);
     }
 
@@ -65,11 +66,12 @@ public class ModelService implements ModelServiceI{
     public void checkWin(Color winner) {
         if(winner == null) return;
         if(winner == playerColor){
-            Log.i("ModelService", "win");
+            //Log.i("ModelService", "win");
+            setGameState(GameState.WIN);
         } else {
-            Log.i("ModelService", "lose");
+            setGameState(GameState.LOSE);
+            //Log.i("ModelService", "lose");
         }
-
     }
 
     public static Board checkForRotation(Board copy){
@@ -103,7 +105,7 @@ public class ModelService implements ModelServiceI{
 
             notifyClient(copyForRequestToServer);
             notifyUI();
-
+            
             return true;
         }
         return false;
@@ -147,7 +149,16 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-    private boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
+    /*public boolean isValidMove(int startX, int startY, int endX, int endY) {
+        Piece movingPiece = gameBoard.getField(startX, startY);
+        if (movingPiece == null || movingPiece.getColor() != playerColor) return false;
+
+        return validateMove(startX, startY, endX, endY) && checkStepSize(movingPiece, startX, endX, startY, endY);
+    }*/
+
+
+
+    public boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
         // Determine the direction of movement (horizontal or vertical)
         boolean isHorizontal = startX == endX;
         boolean isVertical = startY == endY;
@@ -196,8 +207,11 @@ public class ModelService implements ModelServiceI{
 
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
+            //Log.d(TAG, "Setting game state from " + currentGameState + " to " + newState);
             this.currentGameState = newState;
             notifyUI();
+        } else {
+            //Log.d(TAG, "Attempt to set game state to current state: " + newState);
         }
     }
 

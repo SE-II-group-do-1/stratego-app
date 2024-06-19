@@ -1,7 +1,6 @@
     package com.example.stratego_app.ui;
 
     import android.annotation.SuppressLint;
-    import android.app.Dialog;
     import android.graphics.Color;
     import android.os.Bundle;
     import androidx.annotation.NonNull;
@@ -9,6 +8,7 @@
 
     import androidx.fragment.app.Fragment;
     import androidx.fragment.app.FragmentManager;
+    import androidx.fragment.app.FragmentTransaction;
 
     import android.os.Handler;
     import android.os.SystemClock;
@@ -36,6 +36,7 @@
         private long timeInMilliseconds = 0L;
         private long timeBuff = 0L;
         private Snackbar currentSnackbar;
+
 
         private final Runnable runnable = new Runnable() {
             @SuppressLint("DefaultLocale")
@@ -81,7 +82,18 @@
         @Override
         public void onConfirmLeave() {
             modelService.leaveGame();
-            getParentFragmentManager().popBackStack();
+            navigateToMainFragment();
+        }
+
+        private void navigateToMainFragment() {
+            if (getActivity() != null) {
+                // Clear back stack to avoid stacking up fragments
+                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new MainFragment());
+                fragmentTransaction.commit();
+            }
         }
 
         @Override
@@ -112,10 +124,9 @@
          */
         @Override
         public void update() {
-            if (modelService.getCurrentPlayer() != null) {
-                String playerTurnText = "It's " + modelService.getCurrentPlayer().getUsername() + "'s turn";
-                updateSnackbarText(currentSnackbar, playerTurnText);
-            }
+            String playerTurnText = "It's " + modelService.getCurrentPlayer().getUsername() + "'s turn";
+            //String playerTurnText =
+            updateSnackbarText(currentSnackbar, playerTurnText);
         }
 
         @SuppressLint("RestrictedApi")
@@ -169,7 +180,5 @@
                 snackbar = showSnackbar(getView(), message);
             }
         }
-
-
 
     }

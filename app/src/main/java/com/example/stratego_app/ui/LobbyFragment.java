@@ -5,11 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +16,6 @@ import android.widget.TextView;
 import com.example.stratego_app.R;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
-import com.example.stratego_app.model.Player;
-
-import java.util.List;
 
 
 public class LobbyFragment extends Fragment implements ObserverModelService {
@@ -60,8 +54,8 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
     public void update() {
         if (getActivity() == null) return;
 
-        String ownName = (ModelService.getInstance().getCurrentPlayer() == null) ? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
-        String oppName = (ModelService.getInstance().getCurrentOpponent() == null) ? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
+        String ownName = (ModelService.getInstance().getCurrentPlayer() == null) ? "... waiting to connect." : ModelService.getInstance().getCurrentPlayer().getUsername();
+        String oppName = (ModelService.getInstance().getCurrentOpponent() == null) ? "... waiting to connect." : ModelService.getInstance().getCurrentOpponent().getUsername();
 
         getActivity().runOnUiThread(() -> {
             playersContainer.removeAllViews();
@@ -91,21 +85,8 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         playersContainer.addView(playerView);
     }
 
-    private void startGameAutomatically() {
-        // Ensure that the activity is still valid
-        if (getActivity() == null) return;
-
-        // Transition to the game fragment
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
     private void updatePlayerCount(LobbyViewModel viewModel, int playerCount) {
         viewModel.setNumberOfPlayers(playerCount);
     }
-
 
 }

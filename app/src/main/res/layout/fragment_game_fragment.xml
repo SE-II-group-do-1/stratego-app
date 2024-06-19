@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:tag="gamefragment">
 
 
     <Button
@@ -24,8 +25,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/time_background_gameboard"
-        android:padding="8dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/labelTimePlayed"
@@ -43,20 +44,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/gameStats"
-        android:layout_width="372dp"
-        android:layout_height="158dp"
-        android:layout_below="@id/gameBoardView"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/frame_game_events"
-        android:text="1 x Marshall"
-        android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="italic" />
 
     <com.example.stratego_app.ui.GameBoardView
         android:id="@+id/gameBoardView"

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.stratego_app.connection.UpdateMessage;
 import com.example.stratego_app.model.Board;
+import com.example.stratego_app.model.Color;
 
 public class UpdateMessageTest {
     private UpdateMessage updateMessage;
@@ -31,5 +32,12 @@ public class UpdateMessageTest {
     void setInitiatorForUpdateMessage() {
         updateMessage.setInitiator(0);
         assertEquals(updateMessage.getInitiator(),0);
+    }
+
+    @Test
+    void setWinnerForUpdateMessage() {
+        Color winner = Color.RED;
+        updateMessage.setWinner(winner);
+        assertEquals(Color.RED,updateMessage.getWinner());
     }
 }

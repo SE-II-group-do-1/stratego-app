@@ -1,12 +1,9 @@
 package com.example.stratego_app.ui;
 
 import android.os.Bundle;
-
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,16 +16,21 @@ import android.widget.EditText;
 
 import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
+import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Piece;
+import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.SaveSetup;
 
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements ObserverModelService{
 
 
+    private static final String TAG = "main";
     ModelService modelService = ModelService.getInstance();
     private String username;
+
+    private boolean isGameFragmentLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,19 +38,21 @@ public class MainFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_main_fragment, container, false);
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         LobbyClient.connect();
+        ModelService.subscribe(this);
 
         Button settingsButton = view.findViewById(R.id.settings);
-        Button startGame = view.findViewById(R.id.startGame);
         Button enter = view.findViewById(R.id.enterButton);
         EditText usernameEntry = view.findViewById(R.id.enterUsername);
 
         setButtonDisabled(enter);
-        setButtonDisabled(startGame);
+
+
 
 
         settingsButton.setOnClickListener(v -> {
@@ -62,23 +66,6 @@ public class MainFragment extends Fragment {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, settingsFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        });
-
-        /*LobbyViewModel lobbyViewModel = new ViewModelProvider(requireActivity()).get(LobbyViewModel.class);
-        lobbyViewModel.getNumberOfPlayers().observe(getViewLifecycleOwner(), numberOfPlayers -> {
-            if (numberOfPlayers >= 2) {
-                setButtonEnabled(startGame);
-            } else {
-                setButtonDisabled(startGame);
-            }
-        });*/
-        setButtonEnabled(startGame);
-        startGame.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
@@ -104,6 +91,8 @@ public class MainFragment extends Fragment {
             usernameEntry.setText("");
         });
 
+
+
         usernameEntry.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,6 +112,27 @@ public class MainFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+
+    }
+
+    @Override
+    public void update() {
+        Log.d(TAG, "Observer update() called. Current game state: " + modelService.getGameState());
+        if (modelService.getGameState() == GameState.INGAME && !isGameFragmentLoaded) {
+            Log.d(TAG, "Game state is INGAME. Navigating to GameFragment.");
+            navigateToGameFragment();
+        } else {
+            Log.d(TAG, "Game state is not INGAME. Current state: " + modelService.getGameState());
+        }
+    }
+    private void navigateToGameFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container, GameFragment.class, null, "gamefragment")
+                .addToBackStack(null)
+                .commit();
+        isGameFragmentLoaded = true;
     }
 
     private void setButtonDisabled(Button button) {
