@@ -321,7 +321,16 @@ public class GameBoardView extends View  implements ObserverModelService {
        int col = (int) (x / cellWidth);
         int row = (int) (y / cellHeight);
 
-        ClipData.Item item = event.getClipData().getItemAt(0);
+       // check first if piece exists at drop position
+       if (modelService.getGameBoard().getField(row, col) != null) {
+           if (dropListener != null && draggedPosition != -1) {
+               dropListener.onDrop(false, draggedPosition);
+           }
+           return false;
+       }
+
+
+       ClipData.Item item = event.getClipData().getItemAt(0);
         String pieceType = item.getText().toString();
         Piece droppedPiece = createPieceFromType(pieceType);
 
