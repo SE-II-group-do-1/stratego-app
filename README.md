@@ -95,7 +95,7 @@ NOTE: The Flag and the Bombs cannot attack. They can only wait for the opposing 
 ![targetDiscoverySettings](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/7ec8def8-ef67-4ac0-af28-617cad5f7237)
 
 5. Open Android Studio and both on the emulator as well as your second device GoogleChrome should be opened
-6. enter localhost:53216
+6. enter localhost:53216 in Google Chrome on your device/emulator
 7. When both devices are connected your PC GoogleChrome page should look like this
 ![EndScreen](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/bd7e8599-7af3-4028-9e33-f83029cadfe9)
 
