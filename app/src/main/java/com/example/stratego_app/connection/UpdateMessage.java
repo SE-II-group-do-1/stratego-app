@@ -42,11 +42,26 @@ public class UpdateMessage {
         return this.close;
     }
 
+    public void setCheat(boolean cheat){
+        this.cheat = cheat;
+    }
+    public boolean getCheat(){
+        return this.cheat;
+    }
+    public void setCheck(boolean check){
+        this.check = check;
+    }
+    public boolean getCheck(){
+        return this.check;
+    }
+
     private Board board;
     private int initiator;
     private int lobbyID;
     private Color winner;
     private boolean close;
+    private boolean cheat;
+    private boolean check;
 
 }
 

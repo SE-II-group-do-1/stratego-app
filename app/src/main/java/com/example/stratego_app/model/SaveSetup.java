@@ -34,7 +34,6 @@ public class SaveSetup {
      */
 
     public static boolean saveGameSetup(Context context) {
-        Log.i(tag, "in savesetup");
         Gson gson = new GsonBuilder().create();
         String jsonString = gson.toJson(ModelService.getInstance().getGameBoard());
 
@@ -47,20 +46,17 @@ public class SaveSetup {
             osw.flush();
             return true;
         } catch (IOException e) {
-            Log.e(tag, e.toString());
         } finally {
             if (osw != null) {
                 try {
                     osw.close();
                 } catch (IOException e) {
-                    Log.e(tag, e.toString());
                 }
             }
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (IOException e) {
-                    Log.e(tag, e.toString());
                 }
             }
         }
@@ -68,7 +64,6 @@ public class SaveSetup {
     }
 
     public static boolean readGameSetup(Context context){
-        Log.i(tag, "in readsetup");
         FileInputStream fis = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -89,27 +84,23 @@ public class SaveSetup {
             }
             return false;
         } catch (IOException e) {
-            Log.e(tag, e.toString());
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
-                    Log.e(tag, e.toString());
                 }
             }
             if (isr != null) {
                 try {
                     isr.close();
                 } catch (IOException e) {
-                    Log.e(tag, e.toString());
                 }
             }
             if (fis != null) {
                 try {
                     fis.close();
                 } catch (IOException e) {
-                    Log.e(tag, e.toString());
                 }
             }
         }

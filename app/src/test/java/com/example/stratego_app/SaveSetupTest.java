@@ -28,13 +28,13 @@ public class SaveSetupTest {
     }
     @Test
     public void testReadGameSetup_FileNotFound() {
-        assertFalse(SaveSetup.readGameSetup());
+        assertFalse(SaveSetup.readGameSetup(context.getApplicationContext()));
     }
 
     @Test
     public void testSaveGameSetup_NullBoard() {
         ModelService.getInstance().getGameBoard();
-        boolean result = SaveSetup.saveGameSetup();
+        boolean result = SaveSetup.saveGameSetup(context.getApplicationContext());
         Assertions.assertFalse(result);
     }
 
