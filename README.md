@@ -101,6 +101,10 @@ NOTE: The Flag and the Bombs cannot attack. They can only wait for the opposing 
 
 ATTENTION! Do not close the Google Chrome Pages while operating! 
 
+#### Alternatively use Terminal
+![konsole](https://github.com/SE-II-group-do-1/stratego-app/assets/161967717/bdadfa90-588e-4d12-b91c-e6a92c4dab4f)
+
+
 #### Start Server
 1. Open IntelliJ and start server repository
 2. run StrategoApplication.java
