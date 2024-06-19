@@ -190,26 +190,27 @@ public class LobbyClient implements Disposable {
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
     private static void handleUpdate(StompMessage message){
-        //TODO: 1. change updateMessage to include win/lose
-        //      2. if not in GameBoardView -> load GameBoardView. utilise currentGameState in ModelService
         if(message.getPayload().equals("close")){
-            ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up
-            Log.i(TAG, "Opponent left lobby");
+            Log.i(TAG, "opponent left lobby");
+            return;
         }
-        else {
-            try {
-                //parse message
-                Board b = gson.fromJson(message.getPayload(),Board.class);
+        try {
+            //parse message
+            UpdateMessage u = gson.fromJson(message.getPayload(), UpdateMessage.class);
+            Board b = u.getBoard();
+            Color winner = u.getWinner();
 
-                //commit changes
-                ModelService.getInstance().updateBoard(b);
+            //commit changes
+            ModelService.getInstance().updateBoard(b);
 
-                Log.i(TAG, message.toString());
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
+            ModelService.getInstance().checkWin(winner);
+
+            Log.i(TAG, message.toString());
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
         }
     }
+
 
     /**
      * Handles exceptions sent by server. Simply logs them.

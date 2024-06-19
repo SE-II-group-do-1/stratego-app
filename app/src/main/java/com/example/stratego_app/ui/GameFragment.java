@@ -1,7 +1,6 @@
     package com.example.stratego_app.ui;
 
     import android.annotation.SuppressLint;
-    import android.app.Dialog;
     import android.graphics.Color;
     import android.os.Bundle;
     import androidx.annotation.NonNull;
