@@ -146,7 +146,7 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-    private boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
+    public boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
         // Determine the direction of movement (horizontal or vertical)
         boolean isHorizontal = startX == endX;
         boolean isVertical = startY == endY;

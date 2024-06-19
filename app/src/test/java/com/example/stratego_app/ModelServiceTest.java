@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -289,6 +290,70 @@ public class ModelServiceTest {
         board.setField(9, 9, null);
     }
 
+    @Test
+    public void testHorizontalClearPath() {
+        int startX = 1;
+        int endX = 1;
+        int startY = 1;
+        int endY = 5;
 
+        boolean isPathClear = modelService.iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
+
+        assertTrue(isPathClear);
+    }
+    @Test
+    public void testVerticalClearPath() {
+        int startX = 3;
+        int endX = 1;
+        int startY = 3;
+        int endY = 4;
+
+        boolean isPathClear = modelService.iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
+
+        assertTrue(isPathClear);
+    }
+
+
+    @Test
+    public void testVerticalObstructedPath() {
+        Board gameBoard = modelService.getGameBoard();
+        gameBoard.setField(3, 3, new Piece(Rank.SPY, Color.RED));
+
+        assertFalse(modelService.iterateOverAllIntermediateSpaces(3, 3, 1, 4));
+    }
+
+    @Test
+    public void testNoMovement() {
+        assertTrue(modelService.iterateOverAllIntermediateSpaces(1, 1, 1, 1));
+    }
+
+    @Test
+    public void testOneStepLeft() {
+        int startX = 3;
+        int endX = 2;
+        int startY = 3;
+        int endY = 3;
+
+        boolean isPathClear = modelService.iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
+
+        assertTrue(isPathClear);
+    }
+
+    @Test
+    public void testOneStepRigth() {
+        int startX = 3;
+        int endX = 3;
+        int startY = 3;
+        int endY = 3;
+
+        boolean isPathClear = modelService.iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
+
+        assertTrue(isPathClear);
+    }
 
 }
+
+
+
+
+
