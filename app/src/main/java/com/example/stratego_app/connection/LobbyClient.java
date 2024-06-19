@@ -200,10 +200,10 @@ public class LobbyClient implements Disposable {
             Board b = u.getBoard();
             Color winner = u.getWinner();
 
-            ModelService.getInstance().checkWin(winner);
-
             //commit changes
             ModelService.getInstance().updateBoard(b);
+
+            ModelService.getInstance().checkWin(winner);
 
             Log.i(TAG, message.toString());
         } catch (Exception e) {
