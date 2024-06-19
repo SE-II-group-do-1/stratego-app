@@ -29,6 +29,8 @@ public class MainFragment extends Fragment implements ObserverModelService{
     ModelService modelService = ModelService.getInstance();
     private String username;
 
+    private boolean isGameFragmentLoaded = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,7 +117,7 @@ public class MainFragment extends Fragment implements ObserverModelService{
     @Override
     public void update() {
         Log.d(TAG, "Observer update() called. Current game state: " + modelService.getGameState());
-        if (modelService.getGameState() == GameState.INGAME) {
+        if (modelService.getGameState() == GameState.INGAME && !isGameFragmentLoaded) {
             Log.d(TAG, "Game state is INGAME. Navigating to GameFragment.");
             navigateToGameFragment();
         } else {
@@ -124,10 +126,12 @@ public class MainFragment extends Fragment implements ObserverModelService{
     }
     private void navigateToGameFragment() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container, GameFragment.class, null, "gamefragment")
+                .addToBackStack(null)
+                .commit();
+        isGameFragmentLoaded = true;
     }
 
     private void setButtonDisabled(Button button) {
