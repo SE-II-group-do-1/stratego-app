@@ -1,7 +1,7 @@
 package com.example.stratego_app.model;
 
 
-import android.util.Log;
+//import android.util.Log;
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ModelService implements ModelServiceI{
     }
 
     public static void notifyUI(){
-        Log.d(TAG, "notifyUI() called, notifying observers.");
+        //Log.d(TAG, "notifyUI() called, notifying observers.");
         listeners.forEach(ObserverModelService::update);
     }
 
@@ -203,11 +203,11 @@ public class ModelService implements ModelServiceI{
 
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
-            Log.d(TAG, "Setting game state from " + currentGameState + " to " + newState);
+            //Log.d(TAG, "Setting game state from " + currentGameState + " to " + newState);
             this.currentGameState = newState;
             notifyUI();
         } else {
-            Log.d(TAG, "Attempt to set game state to current state: " + newState);
+            //Log.d(TAG, "Attempt to set game state to current state: " + newState);
         }
     }
 
