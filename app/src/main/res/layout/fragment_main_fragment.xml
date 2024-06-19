@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/board1">
+    android:background="#3F51B5">
 
-    <TextView
-        android:id="@+id/gameTitle"
-        android:layout_width="409dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="60dp"
-        android:background="#B3C5EDF1"
-        android:fontFamily="@font/advent_pro_medium"
-        android:text="@string/StrateGoo"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="289dp"
+        android:layout_height="379dp"
+        android:src="@drawable/stratego_logo"
+        tools:layout_editor_absoluteX="61dp"
+        tools:layout_editor_absoluteY="-54dp" />
 
     <EditText
         android:id="@+id/enterUsername"
         android:layout_width="241dp"
         android:layout_height="53dp"
-        android:layout_marginTop="72dp"
+        android:autofillHints=""
         android:background="@android:color/white"
         android:ems="10"
         android:foregroundTint="@color/AshGray"
@@ -39,8 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameTitle"
-        android:autofillHints="" />
+        tools:layout_editor_absoluteY="207dp" />
 
     <Button
         android:id="@+id/enterButton"
