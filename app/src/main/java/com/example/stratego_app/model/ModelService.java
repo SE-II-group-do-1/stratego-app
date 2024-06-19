@@ -149,12 +149,12 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-    public boolean isValidMove(int startX, int startY, int endX, int endY) {
+    /*public boolean isValidMove(int startX, int startY, int endX, int endY) {
         Piece movingPiece = gameBoard.getField(startX, startY);
         if (movingPiece == null || movingPiece.getColor() != playerColor) return false;
 
         return validateMove(startX, startY, endX, endY) && checkStepSize(movingPiece, startX, endX, startY, endY);
-    }
+    }*/
 
 
 
