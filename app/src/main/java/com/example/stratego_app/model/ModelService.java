@@ -63,6 +63,17 @@ public class ModelService implements ModelServiceI{
         LobbyClient.sendUpdate(checkForRotation(copyForServer));
     }
 
+    public void checkWin(Color winner) {
+        if(winner == null) return;
+        if(winner == playerColor){
+            //Log.i("ModelService", "win");
+            setGameState(GameState.WIN);
+        } else {
+            setGameState(GameState.LOSE);
+            //Log.i("ModelService", "lose");
+        }
+    }
+
     public static Board checkForRotation(Board copy){
         if(getInstance().playerColor == Color.BLUE) {
             return copy;
@@ -126,9 +137,7 @@ public class ModelService implements ModelServiceI{
         // Check if the piece is a Scout
         if (movingPiece.getRank() == Rank.SCOUT) {
             // Iterate over all intermediate spaces between the start and end points
-            if (!iterateOverAllIntermediateSpaces(startX,endX,startY,endY)){
-                return false;
-            }
+            return iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
         } else {
             // For non-Scout pieces, check if the move exceeds the maximum step size
             int distanceX = Math.abs(endX - startX);
@@ -149,7 +158,7 @@ public class ModelService implements ModelServiceI{
 
 
 
-    private boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
+    public boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
         // Determine the direction of movement (horizontal or vertical)
         boolean isHorizontal = startX == endX;
         boolean isVertical = startY == endY;
@@ -159,7 +168,7 @@ public class ModelService implements ModelServiceI{
         int currentX = startX;
         int currentY = startY;
 
-        while ((isHorizontal && currentY != endY) || (isVertical && currentX != endX)) {
+        while ((isHorizontal && currentY != endY-step) || (isVertical && currentX != endX-step)) {
             // Move to the next intermediate space
             if (isHorizontal) {
                 currentY += step;
@@ -172,11 +181,6 @@ public class ModelService implements ModelServiceI{
             }
         }
         return true;
-    }
-
-    @Override
-    public Piece getPieceAtPosition(int x, int y) {
-        return gameBoard.getField(y, x);
     }
 
     public Board getGameBoard() {
