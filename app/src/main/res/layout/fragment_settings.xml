@@ -36,52 +36,70 @@
         app:layout_constraintVertical_bias="0.376"
         android:elevation="5dp" />
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="90dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="116dp"
-        android:backgroundTint="@color/OliveDrab"
-        android:text="@string/save"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fillButton"
         android:layout_width="131dp"
         android:layout_height="45dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:layout_marginBottom="116dp"
         android:backgroundTint="@color/AshGray"
+        android:elevation="16dp"
         android:text="@string/fill_board"
         android:textColor="@color/black"
+        android:translationZ="4dp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
 
-    <Button
-        android:id="@+id/clearButton"
-        android:layout_width="92dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="24dp"
+        app:strokeWidth="2dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveButton"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="116dp"
-        android:backgroundTint="@color/Cream"
-        android:text="@string/clear"
+        android:backgroundTint="@color/OliveDrab"
+        android:elevation="16dp"
+        android:text="@string/save"
         android:textColor="@color/black"
+        android:translationZ="40dp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/fillButton" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeWidth="2dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLeaveSettings"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:layout_marginStart="288dp"
+        android:layout_marginStart="304dp"
         android:layout_marginTop="4dp"
         android:backgroundTint="@color/DeepRed"
+        android:elevation="16dp"
         android:text="leave"
+        android:translationZ="4dp"
+        app:cornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/saveButton" />
+        app:layout_constraintTop_toBottomOf="@id/saveButton"
+
+        app:strokeWidth="2dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/clearButton"
+        android:layout_width="92dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="116dp"
+        android:backgroundTint="@color/Cream"
+        android:elevation="16dp"
+        android:text="@string/clear"
+        android:textColor="@color/black"
+        android:translationZ="4dp"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fillButton"
+        app:strokeWidth="2dp" />
 
     <TextView
         android:id="@+id/textSettingsEditor"

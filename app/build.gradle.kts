@@ -110,4 +110,5 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxandroid:2.1.0")
     testImplementation("org.mockito:mockito-junit-jupiter:4.8.0")
     implementation ("com.google.android.material:material:1.5.0")
+    implementation("androidx.compose.material3:material3-common-android:1.0.0-alpha01")
 }
