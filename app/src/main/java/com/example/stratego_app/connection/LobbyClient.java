@@ -199,10 +199,7 @@ public class LobbyClient implements Disposable {
             Color winner = u.getWinner();
 
                 //commit changes
-                ModelService.getInstance().updateBoard(b);
-                ModelService.getInstance().setGameState(GameState.WAITING);
-
-
+            ModelService.getInstance().updateBoard(b);
             ModelService.getInstance().checkWin(winner);
 
             Log.i(TAG, message.toString());
