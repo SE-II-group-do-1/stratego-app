@@ -8,34 +8,40 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/piecesRecyclerView"
-        android:layout_width="416dp"
-        android:layout_height="284dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="60dp"
         android:padding="4dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/settingsGameBoardView"
+        app:layout_constraintBottom_toBottomOf="@id/settingsGameBoardView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        android:elevation="10dp" />
 
     <view
         android:id="@+id/settingsGameBoardView"
         class="com.example.stratego_app.ui.GameBoardView"
-        android:layout_width="410dp"
-        android:layout_height="404dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/piecesRecyclerView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.376"
+        android:elevation="5dp" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="90dp"
         android:layout_height="45dp"
         android:layout_marginEnd="36dp"
-        android:layout_marginBottom="320dp"
+        android:layout_marginBottom="116dp"
         android:backgroundTint="@color/OliveDrab"
         android:text="@string/save"
         android:textColor="@color/black"
@@ -43,11 +49,23 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
+        android:id="@+id/fillButton"
+        android:layout_width="131dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="116dp"
+        android:backgroundTint="@color/AshGray"
+        android:text="@string/fill_board"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/clearButton"
         android:layout_width="92dp"
         android:layout_height="46dp"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="320dp"
+        android:layout_marginBottom="116dp"
         android:backgroundTint="@color/Cream"
         android:text="@string/clear"
         android:textColor="@color/black"
@@ -55,16 +73,15 @@
         app:layout_constraintStart_toEndOf="@id/fillButton" />
 
     <Button
-        android:id="@+id/fillButton"
-        android:layout_width="131dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="320dp"
-        android:backgroundTint="@color/AshGray"
-        android:text="@string/fill_board"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/btnLeaveSettings"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
+        android:layout_marginStart="288dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/DeepRed"
+        android:text="leave"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/saveButton" />
 
     <TextView
         android:id="@+id/textSettingsEditor"
@@ -77,16 +94,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnLeaveSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="292dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/DeepRed"
-        android:text="leave"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
