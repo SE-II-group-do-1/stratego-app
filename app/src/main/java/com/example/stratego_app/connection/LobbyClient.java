@@ -176,6 +176,8 @@ public class LobbyClient implements Disposable {
         updateMessage.setInitiator(id);
         updateMessage.setLobbyID(currentLobbyID);
         updateMessage.setBoard(b);
+        updateMessage.setCheat(false);
+        updateMessage.setCheck(false);
 
         String data = gson.toJson(updateMessage);
 
