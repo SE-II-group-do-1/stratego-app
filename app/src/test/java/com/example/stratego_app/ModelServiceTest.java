@@ -351,6 +351,20 @@ public class ModelServiceTest {
         assertTrue(isPathClear);
     }
 
+    @Test
+    public void testCheckWin() {
+        modelService.setPlayerColor(Color.BLUE);
+
+        modelService.checkWin(Color.BLUE);
+        assertEquals(GameState.WIN, modelService.getGameState());
+
+        modelService.checkWin(Color.RED);
+        assertEquals(GameState.LOSE, modelService.getGameState());
+
+        modelService.checkWin(null);
+        assertEquals(GameState.LOSE, modelService.getGameState());
+    }
+
 }
 
 

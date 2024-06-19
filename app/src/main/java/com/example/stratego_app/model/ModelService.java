@@ -65,11 +65,11 @@ public class ModelService implements ModelServiceI{
     public void checkWin(Color winner) {
         if(winner == null) return;
         if(winner == playerColor){
-            Log.i("ModelService", "win");
+            //Log.i("ModelService", "win");
             setGameState(GameState.WIN);
         } else {
             setGameState(GameState.LOSE);
-            Log.i("ModelService", "lose");
+            //Log.i("ModelService", "lose");
         }
     }
 
