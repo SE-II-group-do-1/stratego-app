@@ -11,6 +11,7 @@ import com.example.stratego_app.model.ModelService;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

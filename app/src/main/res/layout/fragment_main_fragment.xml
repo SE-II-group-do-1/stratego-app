@@ -57,7 +57,7 @@
         android:id="@+id/settings"
         android:layout_width="237dp"
         android:layout_height="53dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="92dp"
         android:backgroundTint="@color/AshGray"
         android:clickable="true"
         android:focusable="true"
@@ -73,32 +73,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/enterUsername" />
 
-    <Button
-        android:id="@+id/startGame"
-        android:layout_width="182dp"
-        android:layout_height="89dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/DeepRed"
-        android:text="@string/startGame"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="com.example.stratego_app.ui.LobbyFragment"
         android:layout_width="349dp"
         android:layout_height="171dp"
-        android:layout_marginBottom="174dp"
+        android:layout_marginBottom="132dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

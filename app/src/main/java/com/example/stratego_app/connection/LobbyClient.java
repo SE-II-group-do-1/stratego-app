@@ -8,8 +8,6 @@ import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -122,8 +120,8 @@ public class LobbyClient implements Disposable {
                 ModelService.getInstance().Player(red);
                 ModelService.getInstance().Opponent(blue);
             }
-            ModelService.getInstance().setGameState(GameState.INGAME);
 
+            ModelService.getInstance().setGameState(GameState.INGAME);
             Log.i(TAG, "after assigning vals");
 
             //unsub from reply
@@ -200,8 +198,10 @@ public class LobbyClient implements Disposable {
             Board b = u.getBoard();
             Color winner = u.getWinner();
 
-            //commit changes
-            ModelService.getInstance().updateBoard(b);
+                //commit changes
+                ModelService.getInstance().updateBoard(b);
+                ModelService.getInstance().setGameState(GameState.WAITING);
+
 
             ModelService.getInstance().checkWin(winner);
 
