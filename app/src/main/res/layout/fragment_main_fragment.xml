@@ -10,9 +10,11 @@
         android:id="@+id/imageView"
         android:layout_width="289dp"
         android:layout_height="379dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="396dp"
         android:src="@drawable/stratego_logo"
-        tools:layout_editor_absoluteX="61dp"
-        tools:layout_editor_absoluteY="-54dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/enterUsername"
