@@ -21,6 +21,7 @@
     import android.widget.TextView;
 
     import com.example.stratego_app.R;
+    import com.example.stratego_app.model.GameState;
     import com.example.stratego_app.model.ModelService;
     import com.example.stratego_app.model.ObserverModelService;
     import com.google.android.material.snackbar.Snackbar;
@@ -127,6 +128,16 @@
             String playerTurnText = "It's " + modelService.getCurrentPlayer().getUsername() + "'s turn";
             //String playerTurnText =
             updateSnackbarText(currentSnackbar, playerTurnText);
+
+            if(ModelService.getInstance().getGameState() == GameState.DONE){
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.fragment_container, MainFragment.class, null)
+                        .addToBackStack(null)
+                        .commit();
+                ModelService.getInstance().newInstance();
+            }
         }
 
         @SuppressLint("RestrictedApi")

@@ -18,6 +18,7 @@ import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
+import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.SaveSetup;
 
@@ -28,6 +29,8 @@ public class MainFragment extends Fragment implements ObserverModelService{
     private static final String TAG = "main";
     ModelService modelService = ModelService.getInstance();
     private String username;
+
+    private boolean isGameFragmentLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,9 +74,9 @@ public class MainFragment extends Fragment implements ObserverModelService{
         enter.setOnClickListener(view1 -> {
             username = usernameEntry.getText().toString().trim();
             if (!username.isEmpty()) {
-                if (!SaveSetup.doesGameSetupExist(getContext(), username)) {//no setup exists in settings editor
-                    modelService.fillBoardRandomly();
-                    SaveSetup.saveGameSetup(getContext(), username);
+                if(!SaveSetup.readGameSetup(getContext())) {
+                    ModelService.getInstance().fillBoardRandomly();
+                    Log.i("SaveSetup", "random board");
                 }
 
                 LobbyClient.joinLobby(username);
@@ -115,7 +118,7 @@ public class MainFragment extends Fragment implements ObserverModelService{
     @Override
     public void update() {
         Log.d(TAG, "Observer update() called. Current game state: " + modelService.getGameState());
-        if (modelService.getGameState() == GameState.INGAME) {
+        if (modelService.getGameState() == GameState.INGAME && !isGameFragmentLoaded) {
             Log.d(TAG, "Game state is INGAME. Navigating to GameFragment.");
             navigateToGameFragment();
         } else {
@@ -124,10 +127,12 @@ public class MainFragment extends Fragment implements ObserverModelService{
     }
     private void navigateToGameFragment() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new GameFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container, GameFragment.class, null, "gamefragment")
+                .addToBackStack(null)
+                .commit();
+        isGameFragmentLoaded = true;
     }
 
     private void setButtonDisabled(Button button) {

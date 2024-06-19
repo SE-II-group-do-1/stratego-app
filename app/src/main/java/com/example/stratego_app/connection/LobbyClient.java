@@ -188,21 +188,19 @@ public class LobbyClient implements Disposable {
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
     private static void handleUpdate(StompMessage message){
-        if(message.getPayload().equals("close")){
-            Log.i(TAG, "opponent left lobby");
-            return;
-        }
         try {
             //parse message
             UpdateMessage u = gson.fromJson(message.getPayload(), UpdateMessage.class);
             Board b = u.getBoard();
             Color winner = u.getWinner();
+            boolean close = u.getClose();
+            if(close){
+                ModelService.getInstance().setGameState(GameState.DONE);
+                return;
+            }
 
                 //commit changes
-                ModelService.getInstance().updateBoard(b);
-                ModelService.getInstance().setGameState(GameState.WAITING);
-
-
+            ModelService.getInstance().updateBoard(b);
             ModelService.getInstance().checkWin(winner);
 
             Log.i(TAG, message.toString());
