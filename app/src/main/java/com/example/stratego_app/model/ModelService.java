@@ -43,6 +43,7 @@ public class ModelService implements ModelServiceI{
             newBoard.rotateBoard();
         }
         gameBoard.setBoard(newBoard); //set entire board state
+        this.currentTurn = true;
         notifyUI();
     }
 
@@ -61,7 +62,10 @@ public class ModelService implements ModelServiceI{
 
     public static void notifyClient(Board copyForServer){
         //blue version of board is right way up. if red player -> turn board for server
-        if(instance.currentTurn) LobbyClient.sendUpdate(checkForRotation(copyForServer));
+        if(instance.currentTurn){
+            LobbyClient.sendUpdate(checkForRotation(copyForServer));
+            instance.currentTurn = false;
+        }
     }
 
     public void checkWin(Color winner) {
@@ -194,7 +198,7 @@ public class ModelService implements ModelServiceI{
 
     public void setPlayerColor(Color color){
         playerColor = color;
-        this.currentTurn = playerColor == Color.BLUE;
+        this.currentTurn = playerColor == Color.RED;
         if(gameBoard != null){
             for(int i=0; i<gameBoard.getBoard().length; i++){
                 for(int j=0; j<gameBoard.getBoard()[0].length; j++){
@@ -326,8 +330,8 @@ public class ModelService implements ModelServiceI{
         }
     }
 
-    public void toggleCurrentTurn(){
-        this.currentTurn = !this.currentTurn;
+    public void setCurrentTurn(boolean f){
+        this.currentTurn = f;
     }
     public boolean isCurrentTurn(){
         return this.currentTurn;
