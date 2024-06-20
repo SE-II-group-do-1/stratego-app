@@ -330,9 +330,6 @@ public class ModelService implements ModelServiceI{
         }
     }
 
-    public void setCurrentTurn(boolean f){
-        this.currentTurn = f;
-    }
     public boolean isCurrentTurn(){
         return this.currentTurn;
     }
