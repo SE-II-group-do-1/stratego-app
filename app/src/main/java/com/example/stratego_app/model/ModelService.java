@@ -61,7 +61,7 @@ public class ModelService implements ModelServiceI{
 
     public static void notifyClient(Board copyForServer){
         //blue version of board is right way up. if red player -> turn board for server
-        LobbyClient.sendUpdate(checkForRotation(copyForServer));
+        if(instance.currentTurn) LobbyClient.sendUpdate(checkForRotation(copyForServer));
     }
 
     public void checkWin(Color winner) {
