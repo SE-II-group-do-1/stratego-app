@@ -18,7 +18,6 @@ import com.example.stratego_app.R;
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
-import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.SaveSetup;
 

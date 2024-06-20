@@ -3,7 +3,6 @@ package com.example.stratego_app.connection;
 
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
-import com.example.stratego_app.model.Player;
 
 public class UpdateMessage {
     public Board getBoard() {
