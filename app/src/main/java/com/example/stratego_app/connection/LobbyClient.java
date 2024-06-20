@@ -1,6 +1,8 @@
 package com.example.stratego_app.connection;
 
 import android.util.Log;
+import android.view.Display;
+
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
@@ -182,6 +184,7 @@ public class LobbyClient implements Disposable {
         String data = gson.toJson(updateMessage);
 
         client.send("/app/update", data).subscribe();
+        ModelService.getInstance().toggleCurrentTurn();
         Log.i(TAG, "message sent");
     }
 
@@ -204,6 +207,7 @@ public class LobbyClient implements Disposable {
                 //commit changes
             ModelService.getInstance().updateBoard(b);
             ModelService.getInstance().checkWin(winner);
+            ModelService.getInstance().toggleCurrentTurn();
 
             Log.i(TAG, message.toString());
         } catch (Exception e) {

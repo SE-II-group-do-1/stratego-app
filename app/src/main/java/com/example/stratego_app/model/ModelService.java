@@ -16,6 +16,7 @@ public class ModelService implements ModelServiceI{
     private Player currentPlayer;
     private Player currentOpponent;
     private Color playerColor;
+    private boolean currentTurn;
 
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
@@ -193,6 +194,7 @@ public class ModelService implements ModelServiceI{
 
     public void setPlayerColor(Color color){
         playerColor = color;
+        this.currentTurn = playerColor == Color.BLUE;
         if(gameBoard != null){
             for(int i=0; i<gameBoard.getBoard().length; i++){
                 for(int j=0; j<gameBoard.getBoard()[0].length; j++){
@@ -322,6 +324,13 @@ public class ModelService implements ModelServiceI{
             LobbyClient.leaveLobby(currentPlayer.getId());
             newInstance();
         }
+    }
+
+    public void toggleCurrentTurn(){
+        this.currentTurn = !this.currentTurn;
+    }
+    public boolean isCurrentTurn(){
+        return this.currentTurn;
     }
 
     public void newInstance(){
