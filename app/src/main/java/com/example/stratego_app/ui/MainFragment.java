@@ -144,6 +144,6 @@ public class MainFragment extends Fragment implements ObserverModelService{
     private void setButtonEnabled(Button button) {
         button.setEnabled(true);
         button.setAlpha(1.0f);
-        button.setTextColor(getResources().getColor(R.color.white));
+        button.setTextColor(getResources().getColor(R.color.black));
     }
 }
