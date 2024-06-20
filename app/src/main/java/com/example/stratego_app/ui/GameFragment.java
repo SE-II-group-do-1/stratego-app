@@ -168,7 +168,7 @@
 
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarLayout.getLayoutParams();
             params.gravity = Gravity.CENTER_HORIZONTAL;
-            params.topMargin = 1250;
+            params.topMargin = 1500;
             snackbarLayout.setLayoutParams(params);
 
             snackbar.show();

@@ -49,11 +49,12 @@
         android:text="@string/enterUsername"
         android:translationZ="16dp"
         app:cornerRadius="8dp"
+        app:strokeColor="@color/gradient_end"
+        app:strokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enterUsername"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:strokeColor="@color/gradient_end"
-        app:strokeWidth="2dp" />
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings"
