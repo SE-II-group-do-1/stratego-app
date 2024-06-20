@@ -8,6 +8,7 @@ import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Player;
+import com.example.stratego_app.model.Position;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.Objects;
@@ -172,6 +173,8 @@ public class LobbyClient implements Disposable {
      */
     public static void sendUpdate(Board b){
         int id = ModelService.getInstance().getCurrentPlayer().getId();
+        Position oldPos = ModelService.getInstance().getOldPos();
+        Position newPos = ModelService.getInstance().getNewPos();
 
         UpdateMessage updateMessage = new UpdateMessage();
 
@@ -180,6 +183,8 @@ public class LobbyClient implements Disposable {
         updateMessage.setBoard(b);
         updateMessage.setCheat(false);
         updateMessage.setCheck(false);
+        updateMessage.setOldPos(oldPos);
+        updateMessage.setNewPos(newPos);
 
         String data = gson.toJson(updateMessage);
 
@@ -198,6 +203,8 @@ public class LobbyClient implements Disposable {
             Board b = u.getBoard();
             Color winner = u.getWinner();
             boolean close = u.getClose();
+            Position oldPos = u.getOldPos();
+            Position newPos = u.getNewPos();
             if(close){
                 ModelService.getInstance().setGameState(GameState.DONE);
                 return;
@@ -205,6 +212,8 @@ public class LobbyClient implements Disposable {
 
                 //commit changes
             ModelService.getInstance().updateBoard(b);
+            ModelService.getInstance().setOldPos(oldPos);
+            ModelService.getInstance().setNewPos(newPos);
             ModelService.getInstance().checkWin(winner);
 
             Log.i(TAG, message.toString());

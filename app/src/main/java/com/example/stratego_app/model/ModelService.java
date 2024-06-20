@@ -20,6 +20,9 @@ public class ModelService implements ModelServiceI{
 
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
+    private Position oldPos; //Previous position of last changed piece, opponent and self
+    private Position newPos; //New position of last changed piece
+
     public static synchronized ModelService getInstance() {
         if (instance == null) {
             instance = new ModelService();
@@ -241,6 +244,22 @@ public class ModelService implements ModelServiceI{
 
     public Player getCurrentOpponent() {
         return currentOpponent;
+    }
+
+    public Position getOldPos() {
+        return oldPos;
+    }
+
+    public void setOldPos(Position oldPos) {
+        this.oldPos = oldPos;
+    }
+
+    public Position getNewPos() {
+        return newPos;
+    }
+
+    public void setNewPos(Position newPos) {
+        this.newPos = newPos;
     }
 
     /**
