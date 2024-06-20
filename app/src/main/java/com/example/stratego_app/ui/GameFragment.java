@@ -27,7 +27,7 @@
     import com.google.android.material.snackbar.Snackbar;
 
 
-    public class GameFragment extends Fragment implements DialogFragmentLeaveGame.ConfirmLeaveDialogListener, ObserverModelService {
+    public class GameFragment extends Fragment implements DialogFragmentLeaveGame.ConfirmLeaveDialogListener, ObserverModelService, DialogFragmentWinLose.WinLoseDialogListener {
 
         ModelService modelService = ModelService.getInstance();
 
@@ -86,6 +86,12 @@
             navigateToMainFragment();
         }
 
+        @Override
+        public void onAcceptLeave(){
+            modelService.newInstance();
+            navigateToMainFragment();
+        }
+
         private void navigateToMainFragment() {
             if (getActivity() != null) {
                 // Clear back stack to avoid stacking up fragments
@@ -137,6 +143,12 @@
                         .addToBackStack(null)
                         .commit();
                 ModelService.getInstance().newInstance();
+            }
+            else if(ModelService.getInstance().getGameState() == GameState.WIN || ModelService.getInstance().getGameState() == GameState.LOSE){
+                pauseTimer();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                DialogFragmentWinLose dialog = new DialogFragmentWinLose(this);
+                dialog.show(fragmentManager, "AcceptWinLoseDialog");
             }
         }
 
