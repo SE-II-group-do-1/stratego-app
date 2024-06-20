@@ -111,6 +111,11 @@ public class ModelService implements ModelServiceI{
             copyForRequestToServer.setField(endX, endY, movingPiece);
             copyForRequestToServer.setField(startX, startY, null);
 
+            oldPos.setX(startX);
+            oldPos.setY(startY);
+            newPos.setX(endX);
+            newPos.setY(endY);
+
             notifyClient(copyForRequestToServer);
             notifyUI();
             
