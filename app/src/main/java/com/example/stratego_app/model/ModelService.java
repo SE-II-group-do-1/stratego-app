@@ -93,6 +93,16 @@ public class ModelService implements ModelServiceI{
         }
     }
 
+    public static Position checkForRotationPos(Position pos){
+        Position ret = new Position(0,0);
+        if(instance.playerColor == Color.RED){
+            ret.setX(9 - pos.x); //9 because length of fields in board
+            ret.setY(9 - pos.y);
+            return ret;
+        }
+        return ret;
+    }
+
 
     /**
      * validates move, if valid -> updates Board -> sends request via LobbyClient, notifies UI
@@ -258,11 +268,6 @@ public class ModelService implements ModelServiceI{
     }
 
     public void setOldPos(Position oldPos) {
-        if(playerColor == Color.RED){
-            this.oldPos.setX(9 - oldPos.x); //9 because length of fields in board
-            this.oldPos.setY(9 - oldPos.y);
-            return;
-        }
         this.oldPos = oldPos;
     }
 
@@ -271,11 +276,6 @@ public class ModelService implements ModelServiceI{
     }
 
     public void setNewPos(Position newPos) {
-        if(playerColor == Color.RED){
-            this.oldPos.setX(9 - newPos.x); //9 because length of fields in board
-            this.oldPos.setY(9 - newPos.y);
-            return;
-        }
         this.newPos = newPos;
     }
 

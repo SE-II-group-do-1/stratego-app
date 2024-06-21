@@ -183,8 +183,8 @@ public class LobbyClient implements Disposable {
         updateMessage.setBoard(b);
         updateMessage.setCheat(false);
         updateMessage.setCheck(false);
-        updateMessage.setOldPos(oldPos);
-        updateMessage.setNewPos(newPos);
+        updateMessage.setOldPos(ModelService.checkForRotationPos(oldPos));
+        updateMessage.setNewPos(ModelService.checkForRotationPos(newPos));
 
         String data = gson.toJson(updateMessage);
 
@@ -212,8 +212,8 @@ public class LobbyClient implements Disposable {
 
                 //commit changes
             ModelService.getInstance().updateBoard(b);
-            ModelService.getInstance().setOldPos(oldPos);
-            ModelService.getInstance().setNewPos(newPos);
+            ModelService.getInstance().setOldPos(ModelService.checkForRotationPos(oldPos));
+            ModelService.getInstance().setNewPos(ModelService.checkForRotationPos(newPos));
             ModelService.getInstance().checkWin(winner);
 
             Log.i(TAG, message.toString());
