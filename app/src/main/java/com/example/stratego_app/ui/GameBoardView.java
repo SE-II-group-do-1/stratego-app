@@ -262,7 +262,7 @@ public class GameBoardView extends View  implements ObserverModelService {
     }
 
     private void onTouch(MotionEvent e) {
-        //if(!ModelService.getInstance().isCurrentTurn()) return;
+        if(!ModelService.getInstance().isCurrentTurn()) return;
 
         int col = (int) (e.getX() / cellWidth);
         int row = (int) (e.getY() / cellHeight);
