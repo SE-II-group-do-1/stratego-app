@@ -23,14 +23,15 @@
         android:layout_height="57dp"
         android:layout_marginTop="28dp"
         android:autofillHints=""
-        android:background="@android:color/white"
+        android:background="@color/white"
         android:ems="10"
-        android:foregroundTint="@color/AshGray"
+        android:foregroundTint="@color/black"
         android:hint="@string/username"
         android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textAlignment="textStart"
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/enterButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,17 +45,17 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="28dp"
         android:backgroundTint="@color/Gold"
-        android:textColor="@color/black"
         android:elevation="16dp"
         android:text="@string/enterUsername"
+        android:textColor="@color/black"
+        android:textColorLink="@color/AshGray"
         android:translationZ="16dp"
         app:cornerRadius="8dp"
-        app:strokeColor="@color/gradient_end"
-        app:strokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enterUsername"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        />
+        app:strokeColor="@color/gradient_end"
+        app:strokeWidth="2dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings"
@@ -89,11 +90,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        app:layout_constraintHeight_percent="0.3"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings"
+        app:layout_constraintWidth_percent="0.9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
