@@ -100,7 +100,7 @@ public class ModelService implements ModelServiceI{
             ret.setY(9 - pos.y);
             return ret;
         }
-        return ret;
+        return pos;
     }
 
 
