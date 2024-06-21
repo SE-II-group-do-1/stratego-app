@@ -33,6 +33,8 @@ public class ModelService implements ModelServiceI{
     public ModelService() {
         this.gameBoard = new Board();
         this.currentGameState = GameState.WAITING;
+        this.oldPos = new Position(-1,-1);
+        this.newPos = new Position(-1,-1);
     }
 
     //only for committing data from server

@@ -23,7 +23,7 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
     private static final String TAG = "LobbyClient";
-    private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
+    private static final String URL = "ws://localhost:53216/ws/websocket";
     private static final CompositeDisposable disposable = new CompositeDisposable();
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
