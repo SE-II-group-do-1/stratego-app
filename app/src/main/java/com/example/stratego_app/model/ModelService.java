@@ -20,6 +20,9 @@ public class ModelService implements ModelServiceI{
 
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
+    private Position oldPos; //Previous position of last changed piece, opponent and self
+    private Position newPos; //New position of last changed piece
+
     public static synchronized ModelService getInstance() {
         if (instance == null) {
             instance = new ModelService();
@@ -30,6 +33,8 @@ public class ModelService implements ModelServiceI{
     public ModelService() {
         this.gameBoard = new Board();
         this.currentGameState = GameState.WAITING;
+        this.oldPos = new Position(-1,-1);
+        this.newPos = new Position(-1,-1);
     }
 
     //only for committing data from server
@@ -88,6 +93,16 @@ public class ModelService implements ModelServiceI{
         }
     }
 
+    public static Position checkForRotationPos(Position pos){
+        Position ret = new Position(0,0);
+        if(instance.playerColor == Color.RED){
+            ret.setX(9 - pos.x); //9 because length of fields in board
+            ret.setY(9 - pos.y);
+            return ret;
+        }
+        return pos;
+    }
+
 
     /**
      * validates move, if valid -> updates Board -> sends request via LobbyClient, notifies UI
@@ -107,6 +122,11 @@ public class ModelService implements ModelServiceI{
             copyForRequestToServer.setBoard(gameBoard);
             copyForRequestToServer.setField(endX, endY, movingPiece);
             copyForRequestToServer.setField(startX, startY, null);
+
+            oldPos.setX(startY);
+            oldPos.setY(startX);
+            newPos.setX(endY);
+            newPos.setY(endX);
 
             notifyClient(copyForRequestToServer);
             notifyUI();
@@ -243,6 +263,22 @@ public class ModelService implements ModelServiceI{
         return currentOpponent;
     }
 
+    public Position getOldPos() {
+        return oldPos;
+    }
+
+    public void setOldPos(Position oldPos) {
+        this.oldPos = oldPos;
+    }
+
+    public Position getNewPos() {
+        return newPos;
+    }
+
+    public void setNewPos(Position newPos) {
+        this.newPos = newPos;
+    }
+
     /**
      * place a piece on the board during the game setup.
      *
@@ -330,9 +366,6 @@ public class ModelService implements ModelServiceI{
         }
     }
 
-    public void setCurrentTurn(boolean f){
-        this.currentTurn = f;
-    }
     public boolean isCurrentTurn(){
         return this.currentTurn;
     }

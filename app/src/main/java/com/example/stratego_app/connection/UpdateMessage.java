@@ -3,6 +3,7 @@ package com.example.stratego_app.connection;
 
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
+import com.example.stratego_app.model.Position;
 
 public class UpdateMessage {
     public Board getBoard() {
@@ -54,6 +55,22 @@ public class UpdateMessage {
         return this.check;
     }
 
+    public Position getOldPos() {
+        return oldPos;
+    }
+
+    public void setOldPos(Position oldPos) {
+        this.oldPos = oldPos;
+    }
+
+    public Position getNewPos() {
+        return newPos;
+    }
+
+    public void setNewPos(Position newPos) {
+        this.newPos = newPos;
+    }
+
     private Board board;
     private int initiator;
     private int lobbyID;
@@ -61,6 +78,9 @@ public class UpdateMessage {
     private boolean close;
     private boolean cheat;
     private boolean check;
+
+    private Position oldPos;
+    private Position newPos;
 
 }
 

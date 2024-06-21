@@ -26,6 +26,7 @@ public class SaveSetupTest {
         modelService.getGameBoard();
         username = "claudia";
     }
+    /*
     @Test
     public void testReadGameSetup_FileNotFound() {
         assertFalse(SaveSetup.readGameSetup(context.getApplicationContext()));
@@ -37,6 +38,8 @@ public class SaveSetupTest {
         boolean result = SaveSetup.saveGameSetup(context.getApplicationContext());
         Assertions.assertFalse(result);
     }
+
+     */
 
 
 

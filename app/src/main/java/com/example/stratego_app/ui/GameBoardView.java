@@ -140,6 +140,10 @@ public class GameBoardView extends View  implements ObserverModelService {
                     paint.setColor(Color.parseColor("#66b5defd")); //color when cell is active
                 } else if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
                     paint.setColor(Color.parseColor("#4169E1"));//color lakes
+                } else if (modelService.getOldPos() != null && row == modelService.getOldPos().getY() && col == modelService.getOldPos().getX()){
+                    paint.setColor(Color.GRAY);
+                } else if(modelService.getNewPos() != null && row == modelService.getNewPos().getY() && col == modelService.getNewPos().getX()){
+                    paint.setColor(Color.GRAY);
                 } else {
                     paint.setColor(Color.LTGRAY); // Default cell color
                 }
@@ -257,7 +261,8 @@ public class GameBoardView extends View  implements ObserverModelService {
         });
     }
 
-    private boolean onTouch(MotionEvent e) {
+    private void onTouch(MotionEvent e) {
+        if(!ModelService.getInstance().isCurrentTurn()) return;
 
         int col = (int) (e.getX() / cellWidth);
         int row = (int) (e.getY() / cellHeight);
@@ -271,7 +276,7 @@ public class GameBoardView extends View  implements ObserverModelService {
             selectedX = col;
             selectedY = row;
             invalidate(); // redraw the cell to add visual feedback
-            return false;
+            return;
         }
         Log.i(TAG, "click2" + selected);
         Log.i(TAG, String.valueOf(selectedX));
@@ -281,7 +286,6 @@ public class GameBoardView extends View  implements ObserverModelService {
         selectedX = -1; //reset cell when piece is moved
         selectedY = -1;
         invalidate(); //redraw cell to remove visual feedback
-        return true;
     }
 
     /*
