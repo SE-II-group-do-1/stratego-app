@@ -24,6 +24,7 @@ import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Player;
+import com.example.stratego_app.model.Position;
 import com.example.stratego_app.model.Rank;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
@@ -363,6 +364,36 @@ public class ModelServiceTest {
 
         modelService.checkWin(null);
         assertEquals(GameState.LOSE, modelService.getGameState());
+    }
+
+    @Test
+    public void testCheckForRotationPos(){
+        modelService.setPlayerColor(Color.BLUE);
+        Position p = new Position(1,2);
+        assertEquals(p, ModelService.checkForRotationPos(p));
+    }
+
+    @Test
+    public void testCheckForRotationPosRed(){
+        modelService.setPlayerColor(Color.RED);
+        Position p = new Position(9,4);
+        Position rotated = new Position(0, 5);
+        assertEquals(rotated.getX(), ModelService.checkForRotationPos(p).getX());
+        assertEquals(rotated.getY(), ModelService.checkForRotationPos(p).getY());
+    }
+
+    @Test
+    public void testGetAndSetOldPos(){
+        Position p = new Position(0,0);
+        modelService.setOldPos(p);
+        assertEquals(p, modelService.getOldPos());
+    }
+
+    @Test
+    public void testGetAnsSetNewPos(){
+        Position p = new Position(3,4);
+        modelService.setNewPos(p);
+        assertEquals(p, modelService.getNewPos());
     }
 
 }
