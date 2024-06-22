@@ -50,7 +50,7 @@ public class ModelService implements ModelServiceI, SensorEventListener {
         this.newPos = new Position(-1,-1);
         this.cheatingActivated = false;
 
-        Context context = Stratego.getAppContext();
+        Context context = Stratego.getInstance().getAppContext();
 
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
@@ -423,7 +423,7 @@ public class ModelService implements ModelServiceI, SensorEventListener {
             float z = event.values[2];
 
             float acceleration = (float) Math.sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH;
-            if (acceleration > 2) { // Threshold for shake detection
+            if (acceleration > 10) { // Threshold for shake detection
                 this.setCheatingActivated(!cheatingActivated);
                 notifyUI();
             }

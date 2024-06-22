@@ -2,10 +2,20 @@ package com.example.stratego_app;
 
 //import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
@@ -20,8 +30,19 @@ import com.example.stratego_app.model.Rank;
 //@RunWith(AndroidJUnit4.class)
 class BoardTest {
     private Board board = new Board();
+
+    @Mock
+    private Context mockContext;
+
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        Stratego mockStratego = mock(Stratego.class);
+        when(mockStratego.getAppContext()).thenReturn(mockContext);
+
+        Stratego.setInstance(mockStratego);
+
         board = new Board();
     }
 
@@ -103,8 +124,5 @@ class BoardTest {
         board.rotateBoard();
         assertEquals(flagPieceFromBlue,board.getField(9,9));
     }
-
-
-
 
 }
