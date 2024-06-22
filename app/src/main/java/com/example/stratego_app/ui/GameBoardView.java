@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -66,11 +67,13 @@ public class GameBoardView extends View  implements ObserverModelService {
         loadDrawableCache();
         setupDragListener();
         setupClickListener();
+        ModelService.getInstance().registerSensorListener();
         ModelService.subscribe(this);
     }
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        ModelService.getInstance().unregisterSensorListener();
         ModelService.unsubscribe(this);
     }
 
@@ -226,7 +229,7 @@ public class GameBoardView extends View  implements ObserverModelService {
                     continue;  // Skip drawing if no piece is present
                 }
 
-                if(piece.getColor() != ModelService.getInstance().getPlayerColor() && !piece.isVisible()) {
+                if(piece.getColor() != ModelService.getInstance().getPlayerColor() && !piece.isVisible() && !ModelService.getInstance().isCheatingActivated()) {
                     Drawable drawable = drawableCache.get(Rank.COVER);
                     if (drawable != null) {
                         drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
@@ -384,5 +387,7 @@ public class GameBoardView extends View  implements ObserverModelService {
         }
         return Color.BLACK;
     }
+
+
 
 }
