@@ -16,9 +16,10 @@
         android:elevation="10dp"
         android:padding="4dp"
         android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.3"
-        app:layout_constraintTop_toBottomOf="@+id/textSettingsEditor"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSettingsEditor" />
 
     <view
         android:id="@+id/settingsGameBoardView"
@@ -27,9 +28,10 @@
         android:layout_height="439dp"
         android:layout_marginTop="48dp"
         android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.6"
-        app:layout_constraintTop_toBottomOf="@+id/textSettingsEditor"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSettingsEditor" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/fillButton"
