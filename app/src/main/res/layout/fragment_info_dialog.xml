@@ -26,6 +26,20 @@
         <!-- Example items will be added programmatically -->
     </GridLayout>
 
+    <TextView
+        android:id="@+id/piece_strength_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Piece Strengths:\nMarshal (10), General (9), Colonel(8), Major(7), Captain(6), Lieutenant(5), Sergent(4), Miner(3), Scout(2), Spy(1) \n\nDefeats:\nMarshal > General, ..."
+        android:paddingTop="16dp"/>
+
+    <TextView
+        android:id="@+id/special_rules"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Special Rules:\n1. Only the Miner can defeat the bomb, everyone else loses\n2. The Spy can defeat the marshal if he attacks first\n3. Every moving piece can capture the flag and win the game"
+        android:paddingTop="16dp"/>
+
     <Button
         android:id="@+id/close_button"
         android:layout_width="wrap_content"

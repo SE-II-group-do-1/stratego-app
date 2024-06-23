@@ -31,6 +31,8 @@ public class InfoDialogFragment extends DialogFragment {
 
         GridLayout piecesGrid = view.findViewById(R.id.pieces_grid);
         Button closeButton = view.findViewById(R.id.close_button);
+        TextView pieceStrengthInfo = view.findViewById(R.id.piece_strength_info);
+        TextView specialRules = view.findViewById(R.id.special_rules);
 
         int[] pieceImages = {
                 R.drawable.flag, R.drawable.marshal, R.drawable.general, R.drawable.colonel, R.drawable.major, R.drawable.captain, R.drawable.lieutenant, R.drawable.sergeant, R.drawable.miner,R.drawable.scout, R.drawable.spy,
@@ -39,6 +41,11 @@ public class InfoDialogFragment extends DialogFragment {
         String[] pieceNames = {
                 "Flag", "Marshal", "General", "Colonel", "Major", "Captain", "Lieutenant", "Sergeant", "Miner", "Scout", "Spy",
         };
+        // Set strengths and defeats info
+        pieceStrengthInfo.setText("Piece Strengths:\nMarshal (10), General (9), Colonel(8), Major(7), Captain(6), Lieutenant(5), Sergent(4), Miner(3), Scout(2), Spy(1) \n\nDefeats:\nMarshal > General, ...");
+
+        // Set special rules
+        specialRules.setText("Special Rules:\n1. Only the Miner can defeat the bomb, everyone else loses\n2. The Spy can defeat the marshal if he attacks first\n3. Every moving piece can capture the flag and win the game");
 
         // Add pieces dynamically to the GridLayout
         addPiecesToGridLayout(piecesGrid, pieceImages, pieceNames, inflater);
