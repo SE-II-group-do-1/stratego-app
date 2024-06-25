@@ -82,22 +82,50 @@ public class ModelServiceTest {
     }
 
     @Test
-    public void testShakeDetection() throws NoSuchFieldException, IllegalAccessException {
-        // Register sensor listener
+    void testShakeDetection() throws NoSuchFieldException, IllegalAccessException {
         modelService.registerSensorListener();
 
-        // Create a mock sensor event
         SensorEvent mockEvent = createSensorEvent(new float[]{12.0f, 12.0f, 12.0f});
 
-        // Simulate sensor event
         modelService.onSensorChanged(mockEvent);
 
-        // Verify that cheatingActivated is toggled
         assertEquals(true, modelService.isCheatingActivated());
 
-        // Simulate sensor event again to toggle off
         modelService.onSensorChanged(mockEvent);
         assertFalse(modelService.isCheatingActivated());
+    }
+
+    @Test
+    void testNoShakeDetection() throws NoSuchFieldException, IllegalAccessException {
+        modelService.registerSensorListener();
+
+        SensorEvent mockEvent = createSensorEvent(new float[]{1.0f, 1.0f, 1.0f}); // Example values below threshold
+
+        modelService.onSensorChanged(mockEvent);
+
+        assertFalse(modelService.isCheatingActivated());
+    }
+
+    @Test
+    void testShakeDetectionThreshold() throws NoSuchFieldException, IllegalAccessException {
+        modelService.registerSensorListener();
+
+        SensorEvent mockEvent = createSensorEvent(new float[]{6.0f, 6.0f, 6.0f}); // Values slightly above the threshold
+
+        modelService.onSensorChanged(mockEvent);
+
+        assertTrue(modelService.isCheatingActivated());
+    }
+
+    @Test
+    void testNukeOtherPlayerPositiveCase() {
+        modelService.nukeOtherPlayer();
+        assertEquals(true, ModelService.getInstance().isNuke());
+    }
+
+    @Test
+    void testNukeOtherPlayerNegativeCase() {
+        assertEquals(false, ModelService.getInstance().isNuke());
     }
 
     @Test
