@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -116,6 +117,16 @@ public class ModelServiceTest {
     @Test
     void testNukeOtherPlayerNegativeCase() {
         assertEquals(false, ModelService.getInstance().isNuke());
+    }
+
+    @Test
+    public void testOnAccuracyChangedUnsupported() {
+        // Mock Sensor object for the test
+        Sensor mockSensor = mock(Sensor.class);
+
+        // Call onAccuracyChanged method and expect UnsupportedOperationException
+        assertThrows(UnsupportedOperationException.class,
+                () -> modelService.onAccuracyChanged(mockSensor, SensorManager.SENSOR_STATUS_ACCURACY_HIGH));
     }
 
     @Test
