@@ -23,12 +23,4 @@ public interface ModelServiceI {
      */
     void updateBoard(Board newBoard);
 
-    /**
-     * Retrieves the piece at a given board location.
-     *
-     * @param x the X-coordinate of the location on the board
-     * @param y the Y-coordinate of the location on the board
-     * @return the Piece at the specified location, or null if no piece is present
-     */
-    Piece getPieceAtPosition(int x, int y);
 }

@@ -3,16 +3,16 @@ package com.example.stratego_app.model;
 public class Piece {
     private static int nextID = 0;
     private Rank rank;
-    private boolean isVisible;
-    private boolean isMovable;
+    private boolean visible;
+    private boolean movable;
 
     private Color color;
 
     public Piece(Rank rank, Color color){
         this.color = color;
         this.rank = rank;
-        this.isVisible = false;
-        this.isMovable = rank != Rank.LAKE && rank != Rank.FLAG && rank != Rank.BOMB;
+        this.visible = false;
+        this.movable = rank != Rank.LAKE && rank != Rank.FLAG && rank != Rank.BOMB;
         nextID++;
     }
 
@@ -23,8 +23,8 @@ public class Piece {
     public Piece(Rank rank){
         if(rank != Rank.LAKE) new Piece(rank, ModelService.getInstance().getPlayerColor());
         this.rank = rank;
-        this.isVisible = true;
-        this.isMovable = false;
+        this.visible = true;
+        this.movable = false;
         this.color = null;
     }
 
@@ -33,18 +33,22 @@ public class Piece {
     }
 
     public boolean isVisible() {
-        return isVisible;
+        return visible;
     }
 
     public boolean isMovable() {
-        return isMovable;
+        return movable;
     }
 
     public Color getColor() {
         return color;
     }
 
+    public void setColor(Color c){
+        color = c;
+    }
+
     public void setVisible(boolean b){
-        this.isVisible = b;
+        this.visible = b;
     }
 }

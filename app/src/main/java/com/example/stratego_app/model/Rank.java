@@ -13,5 +13,6 @@ public enum Rank {
     SPY,
     FLAG,
     BOMB,
-    LAKE;
+    LAKE,
+    COVER; //cover for opponent pieces
 }

@@ -34,9 +34,7 @@ public class Board {
     public void setBoard(Board newBoard){
         Piece[][] newFields = newBoard.getBoard();
         for(int x=0; x<10;x++){
-            for(int y=0; y<10; y++){
-                if(newFields[x][y] != null) this.fields[x][y] = newFields[x][y];
-            }
+            System.arraycopy(newFields[x], 0, this.fields[x], 0, 10);
         }
     }
 

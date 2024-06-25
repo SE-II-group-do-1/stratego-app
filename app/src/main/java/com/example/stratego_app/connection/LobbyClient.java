@@ -1,16 +1,16 @@
 package com.example.stratego_app.connection;
 
-import static com.example.stratego_app.connection.ToMap.updateToObject;
-
 import android.util.Log;
+import android.view.Display;
+
 import com.example.stratego_app.model.Board;
 import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.Player;
+import com.example.stratego_app.model.Position;
 import com.google.gson.Gson;
-
-import java.util.Map;
+import com.google.gson.GsonBuilder;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,40 +22,29 @@ import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class LobbyClient implements Disposable {
-
-    private static LobbyClient instance;
-
     private static final String TAG = "LobbyClient";
-
     private static final String URL = "ws://se2-demo.aau.at:53216/ws/websocket";
-    private final CompositeDisposable disposable = new CompositeDisposable();
-    private final Gson gson = new Gson();
-    private int currentLobbyID;
+    private static final CompositeDisposable disposable = new CompositeDisposable();
+    private static Gson gson = new GsonBuilder().serializeNulls().create();
 
-    private String username;
-    private StompClient client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
+    private static int currentLobbyID;
 
-    Disposable reply;
-    Disposable errors;
-    Disposable currentLobby;
+    private static String username;
+    private static StompClient client = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL);
 
-    public static synchronized LobbyClient getInstance(){
-        if(instance == null){
-            return new LobbyClient();
-        }
-        else{
-            return instance;
-        }
-    }
+    private static Disposable reply;
+    private static Disposable errors;
+    private static Disposable currentLobby;
+
 
     /**
      * Establishes connection with server and listens to topics concerning errors and
      * initial server response (only after sending join lobby request)
      */
-    public void connect() {
+    public static void connect() {
 
         String errorMsg = "error";
-        this.client.withClientHeartbeat(1000).withServerHeartbeat(1000);
+        client.withClientHeartbeat(1000).withServerHeartbeat(1000);
         Disposable lifecycle = client.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -78,30 +67,29 @@ public class LobbyClient implements Disposable {
         disposable.add(lifecycle);
 
 
-        reply = this.client.topic("/topic/reply")
+        reply = client.topic("/topic/reply")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onLobbyResponse, throwable -> Log.e(TAG, errorMsg, throwable));
+                .subscribe(LobbyClient::onLobbyResponse, throwable -> Log.e(TAG, errorMsg, throwable));
 
-
-        errors = this.client.topic("/topic/errors")
+        errors = client.topic("/user/topic/errors")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleException, throwable -> Log.e(TAG, errorMsg, throwable));
+                    .subscribe(LobbyClient::handleException, throwable -> Log.e(TAG, errorMsg, throwable));
 
         disposable.add(reply);
         disposable.add(errors);
 
-        this.client.connect();
+        client.connect();
     }
 
     /**
      * Called when pressing a button to request joining a lobby to start playing.
-     * @param username - sent to server to create player and get asigned to a lobby.
+     * @param u - sent to server to create player and get asigned to a lobby.
      *                 response is handled in onLobbyResponse()
      */
-    public void joinLobby(String username) {
-        this.username = username;
+    public static void joinLobby(String u) {
+        username = u;
         Log.i(TAG, username);
         String data = gson.toJson(username);
         client.send("/app/join", data).subscribe();
@@ -111,56 +99,48 @@ public class LobbyClient implements Disposable {
      * Called after connecting to server and receiving response. Assigns player its info
      * and starts listening to specific lobby topic with given ID. Also listens to specific
      * setup topic with given ID, for initial Board setup.
-     * @param message - Map containing player info, color for game, and lobby ID
+     * @param payload - Map containing player info, color for game, and lobby ID
      */
-    private void onLobbyResponse(StompMessage message) {
-        Log.i(TAG, message.getPayload());
-        Map<String, Object> payload = ToMap.parseMessage(message);
+    private static void onLobbyResponse(StompMessage payload) {
         try{
-            //parse message
-            Double id = (Double) payload.get("id");
-            Double idRed = (Double) payload.get("playerRedID");
-            Double idBlue = (Double) payload.get("playerBlueID");
-            currentLobbyID = id.intValue();
-            String playerRed = (String) payload.get("playerRedName");
-            String playerBlue = (String) payload.get("playerBlueName");
+            LobbyMessage message = gson.fromJson(payload.getPayload(), LobbyMessage.class);
+            //get vals
+            currentLobbyID = message.getLobbyID();
+            Player blue = message.getBlue();
+            Player red = message.getRed();
 
-            Log.i(TAG, payload.toString());
+            Log.i(TAG, message.toString());
 
-            //check who is self
-            Player selfInfo;
-            Player opponent;
-            Color color;
-            if(Objects.equals(playerRed, this.username)){
-                selfInfo = new Player(playerRed, idRed.intValue());
-                opponent = new Player(playerBlue, idBlue.intValue());
-                color = Color.RED;
-            }
-            else{
-                selfInfo = new Player(playerBlue, idBlue.intValue());
-                opponent = new Player(playerRed, idRed.intValue());
-                color = Color.BLUE;
+            // if username is not one of the returned, just ignore
+            if(!(Objects.equals(blue.getUsername(), username)) && !(Objects.equals(red.getUsername(), username))) return;
+            //assign values
+            if(Objects.equals(blue.getUsername(), username)){
+                ModelService.getInstance().setPlayerColor(Color.BLUE);
+                ModelService.getInstance().Player(blue);
+                ModelService.getInstance().Opponent(red);
+            } else{
+                ModelService.getInstance().setPlayerColor(Color.RED);
+                ModelService.getInstance().Player(red);
+                ModelService.getInstance().Opponent(blue);
             }
 
-            //TODO: ModelService doesnt need a Player class. keep values in normal form!
-            //  leave for now. maybe in sprint 3!!!!!
-
-            //update info in ModelService
-            ModelService.getInstance().Player(selfInfo);
-            ModelService.getInstance().setPlayerColor(color);
-            ModelService.getInstance().Opponent(opponent);
             ModelService.getInstance().setGameState(GameState.INGAME);
+            Log.i(TAG, "after assigning vals");
 
             //unsub from reply
             disposable.remove(reply);
             reply.dispose();
 
             //sub to lobby
-            this.currentLobby = this.client.topic("/topic/lobby-"+currentLobbyID)
+            currentLobby = client.topic("/topic/lobby-"+currentLobbyID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleUpdate, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
-            disposable.add(this.currentLobby);
+                    .subscribe(LobbyClient::handleUpdate, throwable -> Log.e(TAG, "error subscribing to lobby", throwable));
+            disposable.add(currentLobby);
+            Log.i(TAG, "subbed to currentLobby"+currentLobby);
+
+            //send baord setup
+            sendBoardSetup(ModelService.checkForRotation(ModelService.getInstance().getGameBoard()));
 
         }
         catch (Exception e){
@@ -169,13 +149,46 @@ public class LobbyClient implements Disposable {
     }
 
     /**
+     * Called from onLobbyResponse. Automatically sends the Player's Board setup to the
+     * Server /setup endpoint. When both Players sent their setup, the Server sends a
+     * response to handleUpdateMessage, setting the board and allowing the game to start.
+     * @param b - the player's board.
+     */
+    public static void sendBoardSetup(Board b){
+        int id = ModelService.getInstance().getCurrentPlayer().getId();
+        UpdateMessage updateMessage = new UpdateMessage();
+
+        updateMessage.setInitiator(id);
+        updateMessage.setLobbyID(currentLobbyID);
+        updateMessage.setBoard(b);
+
+        String data = gson.toJson(updateMessage);
+        client.send("/app/setup", data).subscribe();
+
+    }
+
+    /**
      * Called from ModelService after a button is pressed. Sends player move to server.
      * @param b - updated Board, id is sent implicitly
      */
-    public void sendUpdate(Board b){
+    public static void sendUpdate(Board b){
         int id = ModelService.getInstance().getCurrentPlayer().getId();
-        String data = gson.toJson(updateToObject(b,id));
-        client.send("/topic/lobby-"+currentLobbyID, data).subscribe();
+        Position oldPos = ModelService.getInstance().getOldPos();
+        Position newPos = ModelService.getInstance().getNewPos();
+
+        UpdateMessage updateMessage = new UpdateMessage();
+
+        updateMessage.setInitiator(id);
+        updateMessage.setLobbyID(currentLobbyID);
+        updateMessage.setBoard(b);
+        updateMessage.setCheat(ModelService.getInstance().isCheatingActivated());
+        updateMessage.setCheck(ModelService.getInstance().isNuke());
+        updateMessage.setOldPos(ModelService.checkForRotationPos(oldPos));
+        updateMessage.setNewPos(ModelService.checkForRotationPos(newPos));
+
+        String data = gson.toJson(updateMessage);
+
+        client.send("/app/update", data).subscribe();
         Log.i(TAG, "message sent");
     }
 
@@ -183,43 +196,51 @@ public class LobbyClient implements Disposable {
      * Handles all in game server responses (mostly updating Board).
      * @param message - can be "close" if other participant left, or updated position of Piece
      */
-    private void handleUpdate(StompMessage message){
-        if(message.getPayload().equals("close")){
-            ModelService.getInstance().setGameState(GameState.DONE); // u won, other person gave up
-            Log.i(TAG, "Opponent left lobby");
-        }
-        else {
-            try {
-                //parse message
-                Board b = (Board) ToMap.parseMessage(message);
+    private static void handleUpdate(StompMessage message){
+        try {
+            //parse message
+            UpdateMessage u = gson.fromJson(message.getPayload(), UpdateMessage.class);
+            Board b = u.getBoard();
+            Color winner = u.getWinner();
+            boolean close = u.getClose();
+            Position oldPos = u.getOldPos();
+            Position newPos = u.getNewPos();
+            if(close){
+                ModelService.getInstance().setGameState(GameState.DONE);
+                return;
+            }
 
                 //commit changes
-                ModelService.getInstance().updateBoard(b);
+            ModelService.getInstance().updateBoard(b);
+            ModelService.getInstance().setOldPos(ModelService.checkForRotationPos(oldPos));
+            ModelService.getInstance().setNewPos(ModelService.checkForRotationPos(newPos));
+            ModelService.getInstance().checkWin(winner);
 
-                Log.i(TAG, message.toString());
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
+            Log.i(TAG, message.toString());
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
         }
     }
+
 
     /**
      * Handles exceptions sent by server. Simply logs them.
      * @param message - exception from server.
      */
-    private void handleException(StompMessage message){
-        Log.e(TAG, message.getPayload());
+    private static void handleException(StompMessage message){
+        Log.e("Server Error", message.getPayload());
     }
 
     /**
      * Called when player leaves the lobby.
      * @param id - self, for server to identify.
      */
-    public void leaveLobby(int id) {
+    public static void leaveLobby(int id) {
         String data = gson.toJson(id);
-        this.client.send("/app/leave", data).subscribe();
-        //disposable.remove(this.currentLobby);
-        //currentLobby.dispose();
+        client.send("/app/leave", data).subscribe();
+        disposable.remove(currentLobby);
+        currentLobby.dispose();
+
         ModelService.getInstance().setGameState(GameState.DONE);
     }
 

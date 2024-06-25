@@ -1,97 +1,94 @@
 package com.example.stratego_app.model;
 
 import android.content.Context;
-import android.util.JsonWriter;
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.Scanner;
 
 public class SaveSetup {
 
     private static String tag = "SaveSetup";
-    private static Board gameBoard = ModelService.getInstance().getGameBoard();
-
     /**
      * serialize the board setup and save it to the storage
-     * @param context
      */
 
     public static boolean saveGameSetup(Context context) {
-        FileOutputStream fileOutStream = null;
-        JsonWriter writer = null;
+        Gson gson = new GsonBuilder().create();
+        String jsonString = gson.toJson(ModelService.getInstance().getGameBoard());
+
+        FileOutputStream fos = null;
+        OutputStreamWriter osw = null;
         try {
-            fileOutStream = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
-            writer = new JsonWriter(new OutputStreamWriter(fileOutStream, "UTF-8"));
-            writer.setIndent("  ");
-            writer.beginObject();
-            for (int y = 0; y < gameBoard.getBoard().length; y++) {
-                for (int x = 0; x < gameBoard.getBoard()[y].length; x++) {
-                    Piece piece = gameBoard.getField(y, x);
-                    if (piece != null) {
-                        writer.name(x + "," + y).value(piece.getRank().toString());
-                    }
-                }
-            }
-            writer.endObject();
-            return true; // saved
-        } catch (Exception e) {
-            //Log.e(tag, "Error saving game setup", e);
-            return false;
+            fos = context.openFileOutput("game_setup.json", Context.MODE_PRIVATE);
+            osw = new OutputStreamWriter(fos);
+            osw.write(jsonString);
+            osw.flush();
+            return true;
+        } catch (IOException e) {
         } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
+            if (osw != null) {
+                try {
+                    osw.close();
+                } catch (IOException e) {
                 }
-                if (fileOutStream != null) {
-                    fileOutStream.close();
+            }
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
                 }
-            } catch (IOException e) {
-                //Log.e(tag, "Error closing streams", e);
             }
         }
+        return false;
     }
 
-    public static Piece[][] readGameSetup(Context context){
-        try (InputStream is = context.openFileInput("game_setup.json")) {
-            Piece[][] savedSetup = new Piece[10][10];
-
-            String jsonString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
-            JSONTokener tokener = new JSONTokener(jsonString);
-            JSONObject jsonObject = new JSONObject(tokener);
-
-            Iterator<?> keys = jsonObject.keys();
-            while (keys.hasNext()) {
-                String key = keys.next().toString();
-                String[] coordinates = key.split(",");
-                int x = Integer.parseInt(coordinates[0]);
-                int y = Integer.parseInt(coordinates[1]);
-                Rank pieceRank = Rank.valueOf(jsonObject.get(key).toString());
-
-                savedSetup[y][x] = new Piece(pieceRank, null);
-
+    public static boolean readGameSetup(Context context){
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            fis = context.openFileInput("game_setup.json");
+            isr = new InputStreamReader(fis);
+            br = new BufferedReader(isr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
             }
-            //Log.i("saveSetup", "done going through list");
-            //check none of the pieces are null
-            for(int y=6; y<10; y++){
-                for(int x=0; x<10; x++){
-                    if(savedSetup[y][x] == null) return null;
+            Gson gson = new Gson();
+            Board b = gson.fromJson(sb.toString(), Board.class);
+            if(b != null && b.getField(9,9) != null){
+                ModelService.getInstance().getGameBoard().setBoard(b);
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
                 }
             }
-            return savedSetup;
-        } catch (Exception e) {
-            //Log.e(tag, "Error reading game setup", e);
-            return null;
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                }
+            }
         }
+        return false;
     }
+
 }

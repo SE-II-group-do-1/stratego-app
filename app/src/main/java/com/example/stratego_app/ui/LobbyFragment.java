@@ -1,11 +1,12 @@
 package com.example.stratego_app.ui;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.example.stratego_app.model.ObserverModelService;
 public class LobbyFragment extends Fragment implements ObserverModelService {
 
     private LinearLayout playersContainer;
+
     public LobbyFragment() {
         // Required empty public constructor
     }
@@ -37,6 +39,7 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         playersContainer = view.findViewById(R.id.playersContainer);
 
         ModelService.subscribe(this);
+        update();
     }
 
     @Override
@@ -45,30 +48,45 @@ public class LobbyFragment extends Fragment implements ObserverModelService {
         super.onDestroyView();
 
     }
+    
 
     @Override
     public void update() {
         if (getActivity() == null) return;
-        Log.i("lobbyUpdate", "in method");
-        String ownName = (ModelService.getInstance().getCurrentPlayer() == null)? "null" : ModelService.getInstance().getCurrentPlayer().getUsername();
-        String oppName = (ModelService.getInstance().getCurrentOpponent() == null)? "null" : ModelService.getInstance().getCurrentOpponent().getUsername();
+
+        String ownName = (ModelService.getInstance().getCurrentPlayer() == null) ? "... waiting to connect." : ModelService.getInstance().getCurrentPlayer().getUsername();
+        String oppName = (ModelService.getInstance().getCurrentOpponent() == null) ? "... waiting to connect." : ModelService.getInstance().getCurrentOpponent().getUsername();
 
         getActivity().runOnUiThread(() -> {
             playersContainer.removeAllViews();
             addPlayerToView(ownName);
             addPlayerToView(oppName);
+
+            // Update the player count in the ViewModel based on current lobby state
+            int playerCount = 0;
+            if (ModelService.getInstance().getCurrentPlayer() != null) playerCount++;
+            if (ModelService.getInstance().getCurrentOpponent() != null) playerCount++;
+            updatePlayerCount(new ViewModelProvider(requireActivity()).get(LobbyViewModel.class), playerCount);
         });
     }
+
+
     private void addPlayerToView(String playerName) {
-        Log.i("lobbyUpdate", "in addplayer");
         TextView playerView = new TextView(getContext());
         playerView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        playerView.setText(String.format("Player: %s     ... is ready to play.", playerName));
+        playerView.setText(String.format("Player: %s", playerName));
+
+        playerView.setTextSize(16);
+        playerView.setTypeface(playerView.getTypeface(), Typeface.BOLD);
+        playerView.setTextColor(getResources().getColor(R.color.black));
 
         playersContainer.addView(playerView);
     }
 
+    private void updatePlayerCount(LobbyViewModel viewModel, int playerCount) {
+        viewModel.setNumberOfPlayers(playerCount);
+    }
 
 }

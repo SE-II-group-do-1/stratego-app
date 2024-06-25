@@ -2,6 +2,7 @@ package com.example.stratego_app.ui;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stratego_app.R;
@@ -10,6 +11,7 @@ import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.ModelService;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +25,12 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        LobbyClient lc = LobbyClient.getInstance();
-        lc.connect();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //deactivate going back
+            }
+        });
     }
 
 }

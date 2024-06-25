@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -16,17 +17,16 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
 import com.example.stratego_app.model.ModelService;
 import com.example.stratego_app.model.ObserverModelService;
 import com.example.stratego_app.model.Piece;
 import com.example.stratego_app.model.Rank;
-import com.example.stratego_app.model.SaveSetup;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class GameBoardView extends View implements ObserverModelService {
+public class GameBoardView extends View  implements ObserverModelService {
     ModelService modelService = ModelService.getInstance();
 
     private static final String TAG = "gbv";
@@ -36,8 +36,8 @@ public class GameBoardView extends View implements ObserverModelService {
     private Map<Rank, Drawable> drawableCache = new HashMap<>();
 
     private Piece selected;
-    private int selectedX;
-    private int selectedY;
+    private int selectedX = -1;
+    private int selectedY = -1;
 
 
     private int cellWidth;
@@ -67,11 +67,13 @@ public class GameBoardView extends View implements ObserverModelService {
         loadDrawableCache();
         setupDragListener();
         setupClickListener();
+        ModelService.getInstance().registerSensorListener();
         ModelService.subscribe(this);
     }
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        ModelService.getInstance().unregisterSensorListener();
         ModelService.unsubscribe(this);
     }
 
@@ -79,6 +81,8 @@ public class GameBoardView extends View implements ObserverModelService {
     public void update() {
         invalidate();
     }
+
+
 
     /**
      * loading and caching drawable pieces associated with different ranks
@@ -101,6 +105,7 @@ public class GameBoardView extends View implements ObserverModelService {
 
     public void setDisplayLowerHalfOnly(boolean displayLowerHalfOnly) {
         this.displayLowerHalfOnly = displayLowerHalfOnly;
+        setConfigMode(false);
         invalidate(); // Redraw the view
     }
 
@@ -134,11 +139,18 @@ public class GameBoardView extends View implements ObserverModelService {
 
         for (int row = startRow; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
-                if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
-                    paint.setColor(Color.parseColor("#4169E1"));
+                if (row == selectedY && col == selectedX) {
+                    paint.setColor(Color.parseColor("#66b5defd")); //color when cell is active
+                } else if ((row == 4 || row == 5) && (col == 2 || col == 3 || col == 6 || col == 7)) {
+                    paint.setColor(Color.parseColor("#4169E1"));//color lakes
+                } else if (modelService.getOldPos() != null && row == modelService.getOldPos().getY() && col == modelService.getOldPos().getX()){
+                    paint.setColor(Color.GRAY);
+                } else if(modelService.getNewPos() != null && row == modelService.getNewPos().getY() && col == modelService.getNewPos().getX()){
+                    paint.setColor(Color.GRAY);
                 } else {
-                    paint.setColor(Color.LTGRAY);
+                    paint.setColor(Color.LTGRAY); // Default cell color
                 }
+
 
                 canvas.drawRect(
                         (float) col * widthCell,
@@ -216,9 +228,20 @@ public class GameBoardView extends View implements ObserverModelService {
                 if (piece == null) {
                     continue;  // Skip drawing if no piece is present
                 }
+
+                if(piece.getColor() != ModelService.getInstance().getPlayerColor() && !piece.isVisible() && !ModelService.getInstance().isCheatingActivated()) {
+                    Drawable drawable = drawableCache.get(Rank.COVER);
+                    if (drawable != null) {
+                        drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
+                        DrawableCompat.setTint(drawable, Color.BLACK);
+                        drawable.draw(canvas);  // Draw the piece
+                    }
+                    continue;
+                }
                 Drawable drawable = drawableCache.get(piece.getRank());
                 if (drawable != null) {
                     drawable.setBounds(col * cellWidth, row * cellHeight, (col + 1) * cellWidth, (row + 1) * cellHeight);
+                    DrawableCompat.setTint(drawable, getAndroidColorFromPiece(piece));
                     drawable.draw(canvas);  // Draw the piece
                 }
             }
@@ -241,7 +264,8 @@ public class GameBoardView extends View implements ObserverModelService {
         });
     }
 
-    private boolean onTouch(MotionEvent e) {
+    private void onTouch(MotionEvent e) {
+        if(!ModelService.getInstance().isCurrentTurn()) return;
 
         int col = (int) (e.getX() / cellWidth);
         int row = (int) (e.getY() / cellHeight);
@@ -254,14 +278,17 @@ public class GameBoardView extends View implements ObserverModelService {
             Log.i(TAG, "click1" + selected);
             selectedX = col;
             selectedY = row;
-            return false;
+            invalidate(); // redraw the cell to add visual feedback
+            return;
         }
         Log.i(TAG, "click2" + selected);
         Log.i(TAG, String.valueOf(selectedX));
         Log.i(TAG, String.valueOf(selectedY));
         modelService.movePiece(selectedY, selectedX, row, col);
         selected = null;
-        return true;
+        selectedX = -1; //reset cell when piece is moved
+        selectedY = -1;
+        invalidate(); //redraw cell to remove visual feedback
     }
 
     /*
@@ -306,7 +333,16 @@ public class GameBoardView extends View implements ObserverModelService {
        int col = (int) (x / cellWidth);
         int row = (int) (y / cellHeight);
 
-        ClipData.Item item = event.getClipData().getItemAt(0);
+       // check first if piece exists at drop position
+       if (modelService.getGameBoard().getField(row, col) != null) {
+           if (dropListener != null && draggedPosition != -1) {
+               dropListener.onDrop(false, draggedPosition);
+           }
+           return false;
+       }
+
+
+       ClipData.Item item = event.getClipData().getItemAt(0);
         String pieceType = item.getText().toString();
         Piece droppedPiece = createPieceFromType(pieceType);
 
@@ -337,5 +373,21 @@ public class GameBoardView extends View implements ObserverModelService {
             loadDrawableCache();
         }
     }
+
+    private static int getAndroidColorFromPiece(Piece piece) {
+        if(piece.getColor() != null) {
+            switch (piece.getColor()) {
+                case RED:
+                    return Color.RED;
+                case BLUE:
+                    return Color.BLUE;
+                default:
+                    return Color.BLACK;
+            }
+        }
+        return Color.BLACK;
+    }
+
+
 
 }

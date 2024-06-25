@@ -9,7 +9,16 @@
     <color name="Gold">#FFD700</color>
     <color name="DeepRed">#8B0000</color>
     <color name="RoyalBlue">#4169E1</color>
+    <color name="LightBlue">#b5defd </color>
     <color name="AshGray">#B2BEB5</color>
     <color name="GreyGreen">#E5F4DD</color>
+    <color name="bluehighlight">#66B5DEFD</color>
+
+    <color name="disabled_text_color">#B0B0B0</color>
+    <color name="gradient_start">#FFCCCCCC</color>
+    <color name="gradient_end">#FF777777</color>
+    <color name="yellow">#3b3720</color>
+
+
 
 </resources>

@@ -1,21 +1,43 @@
 package com.example.stratego_app.model;
 
 
+//import android.util.Log;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+
+import com.example.stratego_app.Stratego;
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ModelService implements ModelServiceI{
+public class ModelService implements ModelServiceI, SensorEventListener {
+    private static final String TAG = "modelservice";
     private static ModelService instance;
     private GameState currentGameState;
     private Board gameBoard;
     private Player currentPlayer;
     private Player currentOpponent;
     private Color playerColor;
+    private boolean currentTurn;
+
+    private boolean cheatingActivated;
+
+    private boolean nuke;
 
     private static List<ObserverModelService> listeners = new ArrayList<>();
+
+    private Position oldPos; //Previous position of last changed piece, opponent and self
+    private Position newPos; //New position of last changed piece
+
+    private SensorManager sensorManager;
+
+    private Sensor sensor;
+
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
@@ -27,6 +49,17 @@ public class ModelService implements ModelServiceI{
     public ModelService() {
         this.gameBoard = new Board();
         this.currentGameState = GameState.WAITING;
+        this.oldPos = new Position(-1,-1);
+        this.newPos = new Position(-1,-1);
+        this.cheatingActivated = false;
+
+        Context context = Stratego.getInstance().getAppContext();
+
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+        if(sensorManager != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
     }
 
     //only for committing data from server
@@ -35,7 +68,12 @@ public class ModelService implements ModelServiceI{
         if (newBoard == null) {
             return;
         }
+        // blue version of board is always right side up (server version)
+        if(playerColor == Color.RED){
+            newBoard.rotateBoard();
+        }
         gameBoard.setBoard(newBoard); //set entire board state
+        this.currentTurn = true;
         notifyUI();
     }
 
@@ -48,7 +86,46 @@ public class ModelService implements ModelServiceI{
     }
 
     public static void notifyUI(){
+        //Log.d(TAG, "notifyUI() called, notifying observers.");
         listeners.forEach(ObserverModelService::update);
+    }
+
+    public static void notifyClient(Board copyForServer){
+        //blue version of board is right way up. if red player -> turn board for server
+        if(instance.currentTurn){
+            LobbyClient.sendUpdate(checkForRotation(copyForServer));
+            instance.currentTurn = false;
+        }
+    }
+
+    public void checkWin(Color winner) {
+        if(winner == null) return;
+        if(winner == playerColor){
+            //Log.i("ModelService", "win");
+            setGameState(GameState.WIN);
+        } else {
+            setGameState(GameState.LOSE);
+            //Log.i("ModelService", "lose");
+        }
+    }
+
+    public static Board checkForRotation(Board copy){
+        if(getInstance().playerColor == Color.BLUE) {
+            return copy;
+        } else {
+            copy.rotateBoard();
+            return copy;
+        }
+    }
+
+    public static Position checkForRotationPos(Position pos){
+        Position ret = new Position(0,0);
+        if(instance.playerColor == Color.RED){
+            ret.setX(9 - pos.x); //9 because length of fields in board
+            ret.setY(9 - pos.y);
+            return ret;
+        }
+        return pos;
     }
 
 
@@ -65,32 +142,34 @@ public class ModelService implements ModelServiceI{
         Piece movingPiece;
         if (validateMove(startX, startY, endX, endY)) {
             movingPiece = gameBoard.getField(startX, startY);
-            // Perform the move
-            gameBoard.setField(endX, endY, movingPiece); // Move the piece to the new position
-            gameBoard.setField(startX, startY, null); // Clear the original position
+            //create copy on which to perform move -> send copy as request to server. only server updates actual board
+            Board copyForRequestToServer = new Board();
+            copyForRequestToServer.setBoard(gameBoard);
+            copyForRequestToServer.setField(endX, endY, movingPiece);
+            copyForRequestToServer.setField(startX, startY, null);
 
-            //TODO: check why this doesnt send shit
-            //speicere method calls in eigenen Variablen und schritt für schritt debuggen
-            //manchmal keine fehlermeldung bei Null objekten
-            //kommt nachricht beim Server an? kommt nur response nicht an?
+            oldPos.setX(startY);
+            oldPos.setY(startX);
+            newPos.setX(endY);
+            newPos.setY(endX);
 
-            LobbyClient.getInstance().sendUpdate(ModelService.getInstance().getGameBoard());
+            notifyClient(copyForRequestToServer);
             notifyUI();
-
-            return true; // Move was successful
+            
+            return true;
         }
         return false;
     }
-    private boolean validateMove(int startX, int startY, int endX, int endY) {
+    public boolean validateMove(int startX, int startY, int endX, int endY) {
 
         Piece movingPiece = gameBoard.getField(startX, startY);
-        //boolean notMyPiece = movingPiece.getColor() != playerColor;
+        boolean notMyPiece = movingPiece.getColor() != playerColor;
         boolean isPieceMovable= movingPiece.isMovable();
-        boolean isMoveDiagonal = startX != endX && startY != endY;;
+        boolean isMoveDiagonal = startX != endX && startY != endY;
         boolean areCoordinatesWithinBounds = startX >= 0 && startX <= 9 && startY >= 0 && startY <= 9 &&
                 endX >= 0 && endX <= 9 && endY >= 0 && endY <= 9;
 
-        if (!areCoordinatesWithinBounds || isMoveDiagonal || !isPieceMovable || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
+        if (!areCoordinatesWithinBounds || notMyPiece|| isMoveDiagonal || !isPieceMovable || !checkStepSize(movingPiece, startX,endX,startY,endY)) {
             return false;
         }
 
@@ -108,9 +187,7 @@ public class ModelService implements ModelServiceI{
         // Check if the piece is a Scout
         if (movingPiece.getRank() == Rank.SCOUT) {
             // Iterate over all intermediate spaces between the start and end points
-            if (!iterateOverAllIntermediateSpaces(startX,endX,startY,endY)){
-                return false;
-            }
+            return iterateOverAllIntermediateSpaces(startX, endX, startY, endY);
         } else {
             // For non-Scout pieces, check if the move exceeds the maximum step size
             int distanceX = Math.abs(endX - startX);
@@ -122,7 +199,16 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-    private boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
+    /*public boolean isValidMove(int startX, int startY, int endX, int endY) {
+        Piece movingPiece = gameBoard.getField(startX, startY);
+        if (movingPiece == null || movingPiece.getColor() != playerColor) return false;
+
+        return validateMove(startX, startY, endX, endY) && checkStepSize(movingPiece, startX, endX, startY, endY);
+    }*/
+
+
+
+    public boolean iterateOverAllIntermediateSpaces(int startX, int endX, int startY, int endY) {
         // Determine the direction of movement (horizontal or vertical)
         boolean isHorizontal = startX == endX;
         boolean isVertical = startY == endY;
@@ -132,7 +218,7 @@ public class ModelService implements ModelServiceI{
         int currentX = startX;
         int currentY = startY;
 
-        while ((isHorizontal && currentY != endY) || (isVertical && currentX != endX)) {
+        while ((isHorizontal && currentY != endY-step) || (isVertical && currentX != endX-step)) {
             // Move to the next intermediate space
             if (isHorizontal) {
                 currentY += step;
@@ -147,11 +233,6 @@ public class ModelService implements ModelServiceI{
         return true;
     }
 
-    @Override
-    public Piece getPieceAtPosition(int x, int y) {
-        return gameBoard.getField(y, x);
-    }
-
     public Board getGameBoard() {
         return gameBoard;
     }
@@ -162,12 +243,26 @@ public class ModelService implements ModelServiceI{
 
     public void setPlayerColor(Color color){
         playerColor = color;
+        this.currentTurn = playerColor == Color.RED;
+        if(gameBoard != null){
+            for(int i=0; i<gameBoard.getBoard().length; i++){
+                for(int j=0; j<gameBoard.getBoard()[0].length; j++){
+                    if(gameBoard.getField(i,j) != null){
+                        gameBoard.getField(i,j).setColor(playerColor);
+                    }
+                }
+            }
+        }
+        notifyUI();
     }
 
     public void setGameState(GameState newState) {
         if (this.currentGameState != newState) {
+            //Log.d(TAG, "Setting game state from " + currentGameState + " to " + newState);
             this.currentGameState = newState;
             notifyUI();
+        } else {
+            //Log.d(TAG, "Attempt to set game state to current state: " + newState);
         }
     }
 
@@ -177,10 +272,12 @@ public class ModelService implements ModelServiceI{
 
     public void Player(Player player){
         currentPlayer = player;
+        notifyUI();
     }
 
     public void Opponent(Player opponent) {
         currentOpponent = opponent;
+        notifyUI();
     }
 
     public Player getCurrentPlayer() {
@@ -189,6 +286,22 @@ public class ModelService implements ModelServiceI{
 
     public Player getCurrentOpponent() {
         return currentOpponent;
+    }
+
+    public Position getOldPos() {
+        return oldPos;
+    }
+
+    public void setOldPos(Position oldPos) {
+        this.oldPos = oldPos;
+    }
+
+    public Position getNewPos() {
+        return newPos;
+    }
+
+    public void setNewPos(Position newPos) {
+        this.newPos = newPos;
     }
 
     /**
@@ -260,9 +373,84 @@ public class ModelService implements ModelServiceI{
         return pieces;
     }
 
+    public boolean isSetupComplete() {
+        for (int y = 6; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (gameBoard.getField(y, x) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public void leaveGame() {
         if(currentGameState == GameState.INGAME){
-            LobbyClient.getInstance().leaveLobby(currentPlayer.getId());
+            LobbyClient.leaveLobby(currentPlayer.getId());
+            newInstance();
         }
+    }
+
+    public boolean isCurrentTurn(){
+        return this.currentTurn;
+    }
+
+    public void newInstance(){
+        ModelService.instance = new ModelService();
+    }
+
+    public boolean isCheatingActivated() {
+        return cheatingActivated;
+    }
+
+    public void setCheatingActivated(boolean cheatingActivated) {
+        this.cheatingActivated = cheatingActivated;
+    }
+    public boolean isNuke() {
+        return nuke;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
+    public void setSensorManager(SensorManager sensorManager) {
+        this.sensorManager  = sensorManager;
+    }
+
+    public void registerSensorListener() {
+        if (sensorManager != null && sensor != null) {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    public void unregisterSensorListener() {
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
+    }
+
+    public void nukeOtherPlayer() {
+        this.nuke = true;
+        notifyClient(this.gameBoard);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            float acceleration = (float) Math.sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH;
+            if (acceleration > 10) { // Threshold for shake detection
+                this.setCheatingActivated(!cheatingActivated);
+
+                notifyUI();
+            }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        throw new UnsupportedOperationException("onAccuracyChanged method is not supported in ModelService");
     }
 }
