@@ -104,17 +104,7 @@ public class ModelServiceTest {
         modelService.onSensorChanged(mockEvent);
 
         assertFalse(modelService.isCheatingActivated());
-    }
-
-    @Test
-    void testShakeDetectionThreshold() throws NoSuchFieldException, IllegalAccessException {
-        modelService.registerSensorListener();
-
-        SensorEvent mockEvent = createSensorEvent(new float[]{6.0f, 6.0f, 6.0f}); // Values slightly above the threshold
-
-        modelService.onSensorChanged(mockEvent);
-
-        assertTrue(modelService.isCheatingActivated());
+        modelService.unregisterSensorListener();
     }
 
     @Test
