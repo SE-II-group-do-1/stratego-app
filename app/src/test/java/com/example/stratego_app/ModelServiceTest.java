@@ -69,6 +69,9 @@ public class ModelServiceTest {
 
         mockSensorManager = mock(SensorManager.class);
         mockSensor = mock(Sensor.class);
+
+        modelService.sensorManager = mockSensorManager;
+        modelService.sensor = mockSensor;
     }
 
     @AfterEach
@@ -82,6 +85,20 @@ public class ModelServiceTest {
         assertNotNull(modelService.getGameBoard());
     }
 
+    @Test
+    public void testRegisterSensorListener() {
+        // Call the method you want to test
+        modelService.registerSensorListener();
+
+        // Verify that registerListener was called on SensorManager with correct arguments
+        verify(mockSensorManager).registerListener(modelService, mockSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Test
+    public void testUnregisterSensorListener() {
+        modelService.unregisterSensorListener();
+
+        verify(mockSensorManager).unregisterListener(modelService);
+    }
     @Test
     void testShakeDetection() throws NoSuchFieldException, IllegalAccessException {
         modelService.registerSensorListener();

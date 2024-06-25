@@ -34,8 +34,8 @@ public class ModelService implements ModelServiceI, SensorEventListener {
     private Position oldPos; //Previous position of last changed piece, opponent and self
     private Position newPos; //New position of last changed piece
 
-    private SensorManager sensorManager;
-    private Sensor sensor;
+    public SensorManager sensorManager;
+    public Sensor sensor;
 
 
     public static synchronized ModelService getInstance() {
