@@ -70,8 +70,8 @@ public class ModelServiceTest {
         mockSensorManager = mock(SensorManager.class);
         mockSensor = mock(Sensor.class);
 
-        modelService.sensorManager = mockSensorManager;
-        modelService.sensor = mockSensor;
+        modelService.setSensorManager(mockSensorManager);
+        modelService.setSensor(mockSensor);
     }
 
     @AfterEach

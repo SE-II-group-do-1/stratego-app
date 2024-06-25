@@ -34,8 +34,9 @@ public class ModelService implements ModelServiceI, SensorEventListener {
     private Position oldPos; //Previous position of last changed piece, opponent and self
     private Position newPos; //New position of last changed piece
 
-    public SensorManager sensorManager;
-    public Sensor sensor;
+    private SensorManager sensorManager;
+
+    private Sensor sensor;
 
 
     public static synchronized ModelService getInstance() {
@@ -407,6 +408,14 @@ public class ModelService implements ModelServiceI, SensorEventListener {
     }
     public boolean isNuke() {
         return nuke;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
+    public void setSensorManager(SensorManager sensorManager) {
+        this.sensorManager  = sensorManager;
     }
 
     public void registerSensorListener() {
