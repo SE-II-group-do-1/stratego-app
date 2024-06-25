@@ -74,6 +74,12 @@ public class InfoDialogFragment extends DialogFragment {
             pieceImage.setImageResource(pieceImages[i]);
             pieceName.setText(pieceNames[i]);
 
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            itemLayout.setLayoutParams(params);
+
             gridLayout.addView(itemLayout);
         }
     }
