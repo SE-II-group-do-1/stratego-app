@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -15,6 +16,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.Color;
@@ -31,6 +37,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.lang.reflect.Field;
 
 
 public class ModelServiceTest {
@@ -38,14 +48,30 @@ public class ModelServiceTest {
     private ModelService modelService;
     private Board board = new Board();
     private ObserverModelService mockObserver;
-
+    private SensorManager mockSensorManager;
+    private Sensor mockSensor;
+    @Mock
+    private Context mockContext;
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        Stratego mockStratego = mock(Stratego.class);
+        when(mockStratego.getAppContext()).thenReturn(mockContext);
+
+        Stratego.setInstance(mockStratego);
+
         modelService = ModelService.getInstance();
         board = modelService.getGameBoard();
         mockObserver = mock(ObserverModelService.class);
         ModelService.subscribe(mockObserver);
+
+        mockSensorManager = mock(SensorManager.class);
+        mockSensor = mock(Sensor.class);
+
+        modelService.setSensorManager(mockSensorManager);
+        modelService.setSensor(mockSensor);
     }
 
     @AfterEach
@@ -57,6 +83,67 @@ public class ModelServiceTest {
     @Test
     void getBoard() {
         assertNotNull(modelService.getGameBoard());
+    }
+
+    @Test
+    public void testRegisterSensorListener() {
+        // Call the method you want to test
+        modelService.registerSensorListener();
+
+        // Verify that registerListener was called on SensorManager with correct arguments
+        verify(mockSensorManager).registerListener(modelService, mockSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Test
+    public void testUnregisterSensorListener() {
+        modelService.unregisterSensorListener();
+
+        verify(mockSensorManager).unregisterListener(modelService);
+    }
+    @Test
+    void testShakeDetection() throws NoSuchFieldException, IllegalAccessException {
+        modelService.registerSensorListener();
+
+        SensorEvent mockEvent = createSensorEvent(new float[]{12.0f, 12.0f, 12.0f});
+
+        modelService.onSensorChanged(mockEvent);
+
+        assertEquals(true, modelService.isCheatingActivated());
+
+        modelService.onSensorChanged(mockEvent);
+        assertFalse(modelService.isCheatingActivated());
+    }
+
+    @Test
+    void testNoShakeDetection() throws NoSuchFieldException, IllegalAccessException {
+        modelService.registerSensorListener();
+
+        SensorEvent mockEvent = createSensorEvent(new float[]{1.0f, 1.0f, 1.0f}); // Example values below threshold
+
+        modelService.onSensorChanged(mockEvent);
+
+        assertFalse(modelService.isCheatingActivated());
+        modelService.unregisterSensorListener();
+    }
+
+    @Test
+    void testNukeOtherPlayerPositiveCase() {
+        modelService.nukeOtherPlayer();
+        assertEquals(true, ModelService.getInstance().isNuke());
+    }
+
+    @Test
+    void testNukeOtherPlayerNegativeCase() {
+        assertEquals(false, ModelService.getInstance().isNuke());
+    }
+
+    @Test
+    public void testOnAccuracyChangedUnsupported() {
+        // Mock Sensor object for the test
+        Sensor mockSensor = mock(Sensor.class);
+
+        // Call onAccuracyChanged method and expect UnsupportedOperationException
+        assertThrows(UnsupportedOperationException.class,
+                () -> modelService.onAccuracyChanged(mockSensor, SensorManager.SENSOR_STATUS_ACCURACY_HIGH));
     }
 
     @Test
@@ -394,6 +481,14 @@ public class ModelServiceTest {
         Position p = new Position(3,4);
         modelService.setNewPos(p);
         assertEquals(p, modelService.getNewPos());
+    }
+
+    private SensorEvent createSensorEvent(float[] values) throws NoSuchFieldException, IllegalAccessException {
+        SensorEvent event = mock(SensorEvent.class);
+        Field valuesField = SensorEvent.class.getDeclaredField("values");
+        valuesField.setAccessible(true);
+        valuesField.set(event, values);
+        return event;
     }
 
 }
