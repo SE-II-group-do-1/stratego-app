@@ -27,6 +27,8 @@ public class ModelService implements ModelServiceI, SensorEventListener {
 
     private boolean cheatingActivated;
 
+    private boolean nuke;
+
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
     private Position oldPos; //Previous position of last changed piece, opponent and self
@@ -403,6 +405,9 @@ public class ModelService implements ModelServiceI, SensorEventListener {
     public void setCheatingActivated(boolean cheatingActivated) {
         this.cheatingActivated = cheatingActivated;
     }
+    public boolean isNuke() {
+        return nuke;
+    }
 
     public void registerSensorListener() {
         if (sensorManager != null && sensor != null) {
@@ -416,6 +421,11 @@ public class ModelService implements ModelServiceI, SensorEventListener {
         }
     }
 
+    public void nukeOtherPlayer() {
+        this.nuke = true;
+        notifyClient(this.gameBoard);
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
             float x = event.values[0];
@@ -425,6 +435,7 @@ public class ModelService implements ModelServiceI, SensorEventListener {
             float acceleration = (float) Math.sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH;
             if (acceleration > 10) { // Threshold for shake detection
                 this.setCheatingActivated(!cheatingActivated);
+
                 notifyUI();
             }
     }

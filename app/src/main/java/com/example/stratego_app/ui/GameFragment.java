@@ -71,6 +71,9 @@
 
             Button btnLeaveGame = view.findViewById(R.id.leaveGameButton);
             btnLeaveGame.setOnClickListener(v -> showConfirmLeaveDialog());
+
+            Button btnNukeOtherPlayer = view.findViewById(R.id.nuke);
+            btnNukeOtherPlayer.setOnClickListener(v -> modelService.nukeOtherPlayer());
         }
 
         private void showConfirmLeaveDialog() {
