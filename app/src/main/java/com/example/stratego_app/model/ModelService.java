@@ -451,6 +451,5 @@ public class ModelService implements ModelServiceI, SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        throw new UnsupportedOperationException("onAccuracyChanged method is not supported in ModelService");
     }
 }
