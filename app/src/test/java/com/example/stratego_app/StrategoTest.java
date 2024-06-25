@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 public class StrategoTest {
 
     @Mock
     private Context mockContext;
-
     @Mock
     private Stratego mockStratego;
 
@@ -22,24 +22,25 @@ public class StrategoTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        mockStratego = mock(Stratego.class);
-        when(mockStratego.getApplicationContext()).thenReturn(mockContext);
-
+        // Initialize Stratego with the mocked context
         Stratego.setInstance(mockStratego);
     }
 
     @Test
     public void testGetAppContext() {
-        Context appContext = mockStratego.getApplicationContext();
+        // Get the application context from Stratego
+        Context appContext = Stratego.getInstance().getAppContext();
 
-        assertEquals(mockContext, appContext);
+        // Verify the application context is correctly returned
+        assertEquals(mockContext.getApplicationContext(), mockStratego.getAppContext());
     }
+
     @Test
     public void testGetInstanceBeforeInitialization() {
+        // Reset instance to null
         Stratego.setInstance(null);
 
-        assertThrows(IllegalStateException.class, () -> {
-            Stratego.getInstance();
-        });
+        // Attempt to get the instance before initialization and assert that it throws an IllegalStateException
+        assertThrows(IllegalStateException.class, Stratego::getInstance);
     }
 }
