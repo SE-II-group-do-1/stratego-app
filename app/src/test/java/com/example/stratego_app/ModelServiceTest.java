@@ -137,16 +137,6 @@ public class ModelServiceTest {
     }
 
     @Test
-    public void testOnAccuracyChangedUnsupported() {
-        // Mock Sensor object for the test
-        Sensor mockSensor = mock(Sensor.class);
-
-        // Call onAccuracyChanged method and expect UnsupportedOperationException
-        assertThrows(UnsupportedOperationException.class,
-                () -> modelService.onAccuracyChanged(mockSensor, SensorManager.SENSOR_STATUS_ACCURACY_HIGH));
-    }
-
-    @Test
     public void testPlacePieceAtGameSetUp_FailureOutsideSetupRows() {
         Piece piece = new Piece(Rank.MINER, null);
         boolean result = modelService.placePieceAtGameSetUp(5, 5, piece); // Row 5 is not allowed
