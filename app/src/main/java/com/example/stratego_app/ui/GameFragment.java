@@ -71,6 +71,13 @@
 
             Button btnLeaveGame = view.findViewById(R.id.leaveGameButton);
             btnLeaveGame.setOnClickListener(v -> showConfirmLeaveDialog());
+          
+            //TODO Test Info Button
+            Button infoButton = view.findViewById(R.id.info);
+            infoButton.setOnClickListener(v -> {
+                InfoDialogFragment infoDialogFragment = InfoDialogFragment.newInstance();
+                infoDialogFragment.show(getChildFragmentManager(), "infoDialog");
+            });
 
             Button btnNukeOtherPlayer = view.findViewById(R.id.nuke);
             btnNukeOtherPlayer.setOnClickListener(v -> modelService.nukeOtherPlayer());
