@@ -2,13 +2,20 @@ package com.example.stratego_app.model;
 
 
 //import android.util.Log;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+
+import com.example.stratego_app.Stratego;
 import com.example.stratego_app.connection.LobbyClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ModelService implements ModelServiceI{
+public class ModelService implements ModelServiceI, SensorEventListener {
     private static final String TAG = "modelservice";
     private static ModelService instance;
     private GameState currentGameState;
@@ -18,10 +25,19 @@ public class ModelService implements ModelServiceI{
     private Color playerColor;
     private boolean currentTurn;
 
+    private boolean cheatingActivated;
+
+    private boolean nuke;
+
     private static List<ObserverModelService> listeners = new ArrayList<>();
 
     private Position oldPos; //Previous position of last changed piece, opponent and self
     private Position newPos; //New position of last changed piece
+
+    private SensorManager sensorManager;
+
+    private Sensor sensor;
+
 
     public static synchronized ModelService getInstance() {
         if (instance == null) {
@@ -35,6 +51,15 @@ public class ModelService implements ModelServiceI{
         this.currentGameState = GameState.WAITING;
         this.oldPos = new Position(-1,-1);
         this.newPos = new Position(-1,-1);
+        this.cheatingActivated = false;
+
+        Context context = Stratego.getInstance().getAppContext();
+
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+        if(sensorManager != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
     }
 
     //only for committing data from server
@@ -372,5 +397,60 @@ public class ModelService implements ModelServiceI{
 
     public void newInstance(){
         ModelService.instance = new ModelService();
+    }
+
+    public boolean isCheatingActivated() {
+        return cheatingActivated;
+    }
+
+    public void setCheatingActivated(boolean cheatingActivated) {
+        this.cheatingActivated = cheatingActivated;
+    }
+    public boolean isNuke() {
+        return nuke;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
+    public void setSensorManager(SensorManager sensorManager) {
+        this.sensorManager  = sensorManager;
+    }
+
+    public void registerSensorListener() {
+        if (sensorManager != null && sensor != null) {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    public void unregisterSensorListener() {
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
+    }
+
+    public void nukeOtherPlayer() {
+        this.nuke = true;
+        notifyClient(this.gameBoard);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            float acceleration = (float) Math.sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH;
+            if (acceleration > 10) { // Threshold for shake detection
+                this.setCheatingActivated(!cheatingActivated);
+
+                notifyUI();
+            }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        throw new UnsupportedOperationException("onAccuracyChanged method is not supported in ModelService");
     }
 }
