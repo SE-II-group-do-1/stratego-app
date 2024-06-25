@@ -35,14 +35,14 @@ public class InfoDialogFragment extends DialogFragment {
         TextView specialRules = view.findViewById(R.id.special_rules);
 
         int[] pieceImages = {
-                R.drawable.flag, R.drawable.marshal, R.drawable.general, R.drawable.colonel, R.drawable.major, R.drawable.captain, R.drawable.lieutenant, R.drawable.sergeant, R.drawable.miner,R.drawable.scout, R.drawable.spy,
+                R.drawable.flag, R.drawable.marshal, R.drawable.general, R.drawable.colonel, R.drawable.major, R.drawable.captain, R.drawable.lieutenant, R.drawable.sergeant, R.drawable.miner,R.drawable.scout, R.drawable.spy, R.drawable.bomb
         };
 
         String[] pieceNames = {
-                "Flag", "Marshal", "General", "Colonel", "Major", "Captain", "Lieutenant", "Sergeant", "Miner", "Scout", "Spy",
+                "Flag(0)", "Marshal(10)", "General(9)", "Colonel(8)", "Major(7)", "Captain(6)", "Lieutenant(5)", "Sergeant(4)", "Miner(3)", "Scout(2)", "Spy(1)", "Bomb(B)"
         };
         // Set strengths and defeats info
-        pieceStrengthInfo.setText("Piece Strengths:\nMarshal (10), General (9), Colonel(8), Major(7), Captain(6), Lieutenant(5), Sergent(4), Miner(3), Scout(2), Spy(1) \n\nDefeats:\nMarshal > General, ...");
+        pieceStrengthInfo.setText("Defeats:\nMarshal > General, General > Colonel, Colonel > Major, Major > Captain, Captain > Lieutenant, Lieutenant > Sergeant, Sergeant > Miner, Miner > Scout, Scout > Spy");
 
         // Set special rules
         specialRules.setText("Special Rules:\n1. Only the Miner can defeat the bomb, everyone else loses\n2. The Spy can defeat the marshal if he attacks first\n3. Every moving piece can capture the flag and win the game");

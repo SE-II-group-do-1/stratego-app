@@ -30,7 +30,7 @@
         android:id="@+id/piece_strength_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Piece Strengths:\nMarshal (10), General (9), Colonel(8), Major(7), Captain(6), Lieutenant(5), Sergent(4), Miner(3), Scout(2), Spy(1) \n\nDefeats:\nMarshal > General, ..."
+        android:text="Defeats:\nMarshal > General, General > Colonel, Colonel > Major, \nMajor > Captain, Captain > Lieutenant, Lieutenant > Sergeant, Sergeant > Miner, Miner > Scout, Scout > Spy"
         android:paddingTop="16dp"/>
 
     <TextView
