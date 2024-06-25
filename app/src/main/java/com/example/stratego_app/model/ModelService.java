@@ -442,6 +442,5 @@ public class ModelService implements ModelServiceI, SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 }

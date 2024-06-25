@@ -16,6 +16,11 @@ import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
+
 import com.example.stratego_app.connection.LobbyClient;
 import com.example.stratego_app.model.Color;
 import com.example.stratego_app.model.GameState;
@@ -31,6 +36,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.lang.reflect.Field;
 
 
 public class ModelServiceTest {
@@ -38,14 +47,27 @@ public class ModelServiceTest {
     private ModelService modelService;
     private Board board = new Board();
     private ObserverModelService mockObserver;
-
+    private SensorManager mockSensorManager;
+    private Sensor mockSensor;
+    @Mock
+    private Context mockContext;
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        Stratego mockStratego = mock(Stratego.class);
+        when(mockStratego.getAppContext()).thenReturn(mockContext);
+
+        Stratego.setInstance(mockStratego);
+
         modelService = ModelService.getInstance();
         board = modelService.getGameBoard();
         mockObserver = mock(ObserverModelService.class);
         ModelService.subscribe(mockObserver);
+
+        mockSensorManager = mock(SensorManager.class);
+        mockSensor = mock(Sensor.class);
     }
 
     @AfterEach
@@ -57,6 +79,25 @@ public class ModelServiceTest {
     @Test
     void getBoard() {
         assertNotNull(modelService.getGameBoard());
+    }
+
+    @Test
+    public void testShakeDetection() throws NoSuchFieldException, IllegalAccessException {
+        // Register sensor listener
+        modelService.registerSensorListener();
+
+        // Create a mock sensor event
+        SensorEvent mockEvent = createSensorEvent(new float[]{12.0f, 12.0f, 12.0f});
+
+        // Simulate sensor event
+        modelService.onSensorChanged(mockEvent);
+
+        // Verify that cheatingActivated is toggled
+        assertEquals(true, modelService.isCheatingActivated());
+
+        // Simulate sensor event again to toggle off
+        modelService.onSensorChanged(mockEvent);
+        assertFalse(modelService.isCheatingActivated());
     }
 
     @Test
@@ -394,6 +435,14 @@ public class ModelServiceTest {
         Position p = new Position(3,4);
         modelService.setNewPos(p);
         assertEquals(p, modelService.getNewPos());
+    }
+
+    private SensorEvent createSensorEvent(float[] values) throws NoSuchFieldException, IllegalAccessException {
+        SensorEvent event = mock(SensorEvent.class);
+        Field valuesField = SensorEvent.class.getDeclaredField("values");
+        valuesField.setAccessible(true);
+        valuesField.set(event, values);
+        return event;
     }
 
 }
