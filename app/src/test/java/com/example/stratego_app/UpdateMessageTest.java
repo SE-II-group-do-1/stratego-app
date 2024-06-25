@@ -40,4 +40,39 @@ public class UpdateMessageTest {
         updateMessage.setWinner(winner);
         assertEquals(Color.RED,updateMessage.getWinner());
     }
+
+    @Test
+    void testSetCheat() {
+        updateMessage.setCheat(true);
+        assertTrue(updateMessage.getCheat());
+    }
+
+    @Test
+    void testSetCheck() {
+        updateMessage.setCheck(true);
+        assertTrue(updateMessage.getCheck());
+    }
+
+    @Test
+    void testResetCheat() {
+        updateMessage.setCheat(true);
+        updateMessage.setCheat(false);
+        assertFalse(updateMessage.getCheat());
+    }
+
+    @Test
+    void testResetCheck() {
+        updateMessage.setCheck(true);
+        updateMessage.setCheck(false);
+        assertFalse(updateMessage.getCheck());
+    }
+
+    @Test
+    void testSetAndGetClose() {
+        updateMessage.setClose(true);
+        assertTrue(updateMessage.getClose());
+
+        updateMessage.setClose(false);
+        assertFalse(updateMessage.getClose());
+    }
 }
